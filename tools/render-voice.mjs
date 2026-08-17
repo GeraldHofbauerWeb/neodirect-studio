@@ -1,0 +1,267 @@
+/**
+ * Renders narration with ElevenLabs and measures what came back.
+ *
+ *   node tools/render-voice.mjs audition script/pilot.beats.json b1   # one beat, several voices
+ *   node tools/render-voice.mjs render   script/pilot.beats.json      # all beats, the chosen voice
+ *
+ * The measured durations are the point. A beat's real length is what the timeline is built from —
+ * the `plannedMs` in the beats file is only a hand estimate to get a first take shot. `render`
+ * writes the measured value back, so regenerating the timeline is a mechanical step rather than a
+ * guess.
+ *
+ * Uses the `with-timestamps` endpoint, which returns character-level alignment alongside the
+ * audio. That alignment becomes the subtitle track, so subtitles are exact rather than
+ * interpolated from a word count.
+ */
+
+import { execFile } from 'node:child_process';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { promisify } from 'node:util';
+
+const exec = promisify(execFile);
+
+const MODEL = process.env.ELEVENLABS_MODEL ?? 'eleven_multilingual_v2';
+const OUTPUT_FORMAT = 'mp3_44100_128';
+
+/** Voices worth hearing for an English build tutorial: clear educators plus one casual reader. */
+export const AUDITION_VOICES = [
+  { id: 'Xb7hH8MSUJpSbSDYk0k2', name: 'Alice', note: 'British, professional educator' },
+  { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matilda', note: 'American, upbeat educator' },
+  { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Daniel', note: 'British, steady broadcaster' },
+  { id: 'iP95p4xoKVk53GoZ742B', name: 'Chris', note: 'American, casual and down-to-earth' },
+];
+
+async function apiKey() {
+  if (process.env.ELEVENLABS_API_KEY) return process.env.ELEVENLABS_API_KEY;
+  const file = join(homedir(), '.config', 'neodirect', 'elevenlabs.env');
+  const text = await readFile(file, 'utf8').catch(() => {
+    throw new Error(`no ELEVENLABS_API_KEY and could not read ${file}`);
+  });
+  const match = /^\s*ELEVENLABS_API_KEY\s*=\s*(.+)$/m.exec(text);
+  if (!match || !match[1].trim()) throw new Error(`${file} has no ELEVENLABS_API_KEY value`);
+  return match[1].trim();
+}
+
+/** Returns { path, durationMs, alignment }. */
+export async function speak({ text, voiceId, out, key }) {
+  const response = await fetch(
+    `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/with-timestamps?output_format=${OUTPUT_FORMAT}`,
+    {
+      method: 'POST',
+      headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, model_id: MODEL }),
+    },
+  );
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`ElevenLabs ${response.status}: ${detail.slice(0, 300)}`);
+  }
+  const body = await response.json();
+
+  await mkdir(join(out, '..'), { recursive: true }).catch(() => {});
+  await writeFile(out, Buffer.from(body.audio_base64, 'base64'));
+
+  const { stdout } = await exec('ffprobe', [
+    '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out,
+  ]);
+  return {
+    path: out,
+    durationMs: Math.round(parseFloat(stdout.trim()) * 1000),
+    alignment: body.alignment ?? null,
+  };
+}
+
+/**
+ * Character-level alignment folded into readable subtitle lines.
+ *
+ * @param offsetSeconds where this beat starts in the finished episode — each beat's alignment is
+ *                      relative to its own audio file, so without this every beat's subtitles
+ *                      would start at zero and stack on top of one another
+ * @param firstIndex    running cue number, since .srt numbering is continuous across the file
+ */
+export function toSrt(alignment, { maxChars = 90, offsetSeconds = 0, firstIndex = 1 } = {}) {
+  if (!alignment) return '';
+  const chars = alignment.characters;
+  const starts = alignment.character_start_times_seconds;
+  const ends = alignment.character_end_times_seconds;
+
+  const cues = [];
+  let text = '';
+  let start = starts[0] ?? 0;
+
+  const flush = (end) => {
+    const trimmed = text.trim();
+    if (trimmed) cues.push({ start, end, text: trimmed });
+    text = '';
+  };
+
+  for (let i = 0; i < chars.length; i++) {
+    text += chars[i];
+    const atSentenceEnd = /[.!?]/.test(chars[i]) && !/\d/.test(chars[i + 1] ?? '');
+    if (atSentenceEnd || text.length >= maxChars) {
+      // Break on the sentence if we can; otherwise fall back to the last space so a word is
+      // never split across two cues.
+      if (!atSentenceEnd) {
+        const lastSpace = text.lastIndexOf(' ');
+        if (lastSpace > 20) {
+          const carry = text.slice(lastSpace + 1);
+          text = text.slice(0, lastSpace);
+          flush(ends[i - carry.length] ?? ends[i]);
+          start = starts[i - carry.length + 1] ?? ends[i];
+          text = carry;
+          continue;
+        }
+      }
+      flush(ends[i]);
+      start = starts[i + 1] ?? ends[i];
+    }
+  }
+  flush(ends[ends.length - 1] ?? 0);
+
+  const stamp = (s) => {
+    const ms = Math.max(0, Math.round(s * 1000));
+    const h = String(Math.floor(ms / 3600000)).padStart(2, '0');
+    const m = String(Math.floor(ms / 60000) % 60).padStart(2, '0');
+    const sec = String(Math.floor(ms / 1000) % 60).padStart(2, '0');
+    return `${h}:${m}:${sec},${String(ms % 1000).padStart(3, '0')}`;
+  };
+
+  return cues
+    .map((c, i) => `${firstIndex + i}\n${stamp(c.start + offsetSeconds)} --> ${stamp(c.end + offsetSeconds)}\n${c.text}\n`)
+    .join('\n');
+}
+
+/**
+ * The audible gaps in a rendered beat: where the voice actually stopped, and for how long.
+ *
+ * <p>Phrasing is otherwise the one part of the pipeline that can only be judged by ear. The
+ * alignment already says when every character was spoken, so a requested pause is checkable —
+ * "there should be a break after 'made of'" becomes a number rather than another listen-through.
+ *
+ * <p>The silence is held *by* a character, not left between two: ElevenLabs returns a contiguous
+ * timeline, and a pause shows up as a space or a comma that lasts 700 ms. Measuring the gaps
+ * between characters instead finds nothing at all, in a beat that pauses seven times.
+ *
+ * @param minMs ignore anything shorter; below ~150 ms nothing reads as a pause
+ */
+export function pauses(alignment, { minMs = 200, context = 18 } = {}) {
+  if (!alignment) return [];
+  const chars = alignment.characters;
+  const starts = alignment.character_start_times_seconds;
+  const ends = alignment.character_end_times_seconds;
+  const text = chars.join('');
+
+  const found = [];
+  for (let i = 0; i < chars.length; i++) {
+    if (!/[\s,.;:—–-]/.test(chars[i])) continue;
+    const heldMs = Math.round((ends[i] - starts[i]) * 1000);
+    if (heldMs < minMs) continue;
+    // Runs of silence spanning "., " land on several characters in a row; keep the longest.
+    const previous = found[found.length - 1];
+    if (previous && i - previous.index <= 2) {
+      if (heldMs <= previous.ms) continue;
+      found.pop();
+    }
+    found.push({
+      index: i,
+      ms: heldMs,
+      atMs: Math.round(starts[i] * 1000),
+      after: text.slice(Math.max(0, i - context), i).trim(),
+      before: text.slice(i + 1, i + 1 + context).trim(),
+    });
+  }
+  return found;
+}
+
+/** How many cues a subtitle block contains, so the next beat can carry on numbering. */
+export function countSrtCues(srt) {
+  return srt ? srt.split('\n\n').filter((block) => block.trim()).length : 0;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const [mode, beatsPath, beatId] = process.argv.slice(2);
+  if (!mode || !beatsPath) {
+    throw new Error('usage: node tools/render-voice.mjs <audition|render> <beats.json> [beatId]');
+  }
+
+  const key = await apiKey();
+  const beats = JSON.parse(await readFile(beatsPath, 'utf8'));
+
+  if (mode === 'audition') {
+    const beat = beatId ? beats.beats.find((b) => b.id === beatId) : beats.beats[0];
+    if (!beat) throw new Error(`no beat ${beatId} in ${beatsPath}`);
+    await mkdir('out/audition', { recursive: true });
+    console.log(`auditioning beat "${beat.id}" (${beat.text.length} characters) with ${AUDITION_VOICES.length} voices\n`);
+    for (const voice of AUDITION_VOICES) {
+      const out = `out/audition/${beat.id}-${voice.name}.mp3`;
+      const result = await speak({ text: beat.text, voiceId: voice.id, out, key });
+      console.log(`  ${voice.name.padEnd(9)} ${String(result.durationMs).padStart(6)} ms  ${voice.note}`);
+    }
+    console.log('\nfiles in out/audition/');
+    process.exit(0);
+  }
+
+  if (mode === 'render') {
+    const voiceId = beats.voiceId ?? process.env.ELEVENLABS_VOICE_ID;
+    if (!voiceId) throw new Error(`set "voiceId" in ${beatsPath} (or ELEVENLABS_VOICE_ID) first`);
+    await mkdir('out/voice', { recursive: true });
+
+    // Naming a beat re-speaks only that one. Text-to-speech is not deterministic, so re-rendering
+    // the whole episode to fix one sentence rerolls every other beat's phrasing and length for no
+    // reason — and the point of the project is that changing a sentence is a small operation.
+    const toRender = beatId ? beats.beats.filter((b) => b.id === beatId) : beats.beats;
+    if (!toRender.length) throw new Error(`no beat ${beatId} in ${beatsPath}`);
+    if (beatId) console.log(`re-rendering ${beatId} only; other beats keep their measured audio\n`);
+
+    for (const beat of toRender) {
+      const out = `out/voice/${beat.id}.mp3`;
+      const result = await speak({ text: beat.text, voiceId, out, key });
+      beat.measuredMs = result.durationMs;
+      const drift = result.durationMs - beat.plannedMs;
+      console.log(`${beat.id}: ${result.durationMs} ms (estimate ${beat.plannedMs} ms, ${drift >= 0 ? '+' : ''}${drift})  -> ${out}`);
+
+      // Kept alongside the audio so phrasing can be inspected later without spending another
+      // render — the alignment is the only record of where the voice actually breathed, and it is
+      // what lets an untouched beat keep its subtitles when a neighbour is re-rendered.
+      await writeFile(`out/voice/${beat.id}.alignment.json`, JSON.stringify(result.alignment));
+      for (const p of pauses(result.alignment, { minMs: 300 })) {
+        console.log(`      ${String(p.ms).padStart(4)} ms pause after "…${p.after}" before "${p.before}…"`);
+      }
+    }
+
+    // Offsets and subtitles are rebuilt across every beat, rendered or not: one beat growing by a
+    // second moves everything after it.
+    let srt = '';
+    let offsetMs = 0;
+    let cueIndex = 1;
+    for (const beat of beats.beats) {
+      const alignmentPath = `out/voice/${beat.id}.alignment.json`;
+      const alignment = JSON.parse(await readFile(alignmentPath, 'utf8').catch(() => {
+        throw new Error(`${alignmentPath} is missing — run a full render (no beat id) once`);
+      }));
+      beat.startMs = offsetMs;
+      const block = toSrt(alignment, { offsetSeconds: offsetMs / 1000, firstIndex: cueIndex });
+      cueIndex += countSrtCues(block);
+      srt += block;
+      offsetMs += beat.measuredMs;
+    }
+    beats.totalMs = offsetMs;
+    console.log(`\ntotal narration: ${offsetMs} ms`);
+
+    // One continuous track, so the take can be muxed in a single ffmpeg call.
+    const listPath = 'out/voice/beats.txt';
+    await writeFile(listPath, beats.beats.map((b) => `file '${process.cwd()}/out/voice/${b.id}.mp3'`).join('\n'));
+    await exec('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error',
+      '-f', 'concat', '-safe', '0', '-i', listPath, '-c', 'copy', 'out/voice/narration.mp3']);
+    console.log('joined narration in out/voice/narration.mp3');
+    await writeFile(beatsPath, JSON.stringify(beats, null, 2) + '\n');
+    await writeFile('out/voice/subtitles.srt', srt);
+    console.log(`\nmeasured durations written back to ${beatsPath}`);
+    console.log('subtitles in out/voice/subtitles.srt');
+    process.exit(0);
+  }
+
+  throw new Error(`unknown mode: ${mode}`);
+}

@@ -1,0 +1,444 @@
+{
+  "take": "episode",
+  "_generated": "from pilot.beats.json — do not edit by hand, edit the storyboard and re-run make-timeline.mjs",
+  "schematic": "mining_drill_1.nbt",
+  "origin": [
+    0,
+    -60,
+    0
+  ],
+  "clearStage": true,
+  "presentation": {
+    "heldItem": true,
+    "swing": true,
+    "sound": true,
+    "particles": true
+  },
+  "cues": [
+    {
+      "atMs": 0,
+      "type": "materialsChest",
+      "pos": [
+        -4,
+        0,
+        8
+      ],
+      "facing": "north",
+      "large": false,
+      "_what": "single chest — the whole bill is 15 stacks and a single chest is 27 slots"
+    },
+    {
+      "type": "camera",
+      "_what": "slow push-in on the chest, well inside the eight blocks a container screen tolerates",
+      "keyframes": [
+        {
+          "pos": [
+            -3.8,
+            -57.4,
+            14
+          ],
+          "yaw": -171.7,
+          "pitch": 20.7
+        },
+        {
+          "pos": [
+            -3.4,
+            -57.9,
+            12.5
+          ],
+          "yaw": -174.3,
+          "pitch": 21.7
+        },
+        {
+          "pos": [
+            -3,
+            -58.4,
+            11.2
+          ],
+          "yaw": -180,
+          "pitch": 22.2
+        }
+      ],
+      "atMs": 0,
+      "durationMs": 23917
+    },
+    {
+      "type": "screen",
+      "action": "open",
+      "pos": [
+        -4,
+        0,
+        8
+      ],
+      "_what": "the real stack counts, read off the inventory rather than asserted",
+      "atMs": 2392
+    },
+    {
+      "type": "screen",
+      "action": "close",
+      "atMs": 22243
+    },
+    {
+      "type": "camera",
+      "_what": "close on the track line, where the assembler goes down first",
+      "keyframes": [
+        {
+          "pos": [
+            -1.6,
+            -56.6,
+            9.4
+          ],
+          "yaw": -146.3,
+          "pitch": 22.1
+        },
+        {
+          "pos": [
+            2,
+            -56.6,
+            9.4
+          ],
+          "yaw": -167,
+          "pitch": 25
+        },
+        {
+          "pos": [
+            5.5,
+            -56.6,
+            9.4
+          ],
+          "yaw": 172,
+          "pitch": 24
+        }
+      ],
+      "atMs": 23917,
+      "durationMs": 17369
+    },
+    {
+      "type": "place",
+      "blocks": [
+        11
+      ],
+      "_what": "cart assembler — the one block that is not optional",
+      "atMs": 27391
+    },
+    {
+      "type": "place",
+      "blocks": [
+        12,
+        13
+      ],
+      "_what": "rail either side",
+      "atMs": 34686
+    },
+    {
+      "type": "place",
+      "blocks": [
+        9
+      ],
+      "_what": "first linear chassis",
+      "atMs": 38681
+    },
+    {
+      "type": "camera",
+      "_what": "swing round to the drill face as it widens out",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -56,
+            9
+          ],
+          "yaw": 153.4,
+          "pitch": 6.4
+        },
+        {
+          "pos": [
+            13,
+            -55,
+            7
+          ],
+          "yaw": 110,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            16,
+            -54,
+            5
+          ],
+          "yaw": 90,
+          "pitch": 16.4
+        }
+      ],
+      "atMs": 41286,
+      "durationMs": 36177
+    },
+    {
+      "type": "place",
+      "blocks": [
+        15
+      ],
+      "_what": "one drill",
+      "atMs": 44180
+    },
+    {
+      "type": "place",
+      "blocks": [
+        14
+      ],
+      "_what": "one deployer behind it",
+      "atMs": 47798
+    },
+    {
+      "type": "place",
+      "blocks": {
+        "ofType": "create:mechanical_drill"
+      },
+      "_what": "the full 54-wide face",
+      "atMs": 63716
+    },
+    {
+      "type": "place",
+      "blocks": {
+        "ofType": "create:linear_chassis"
+      },
+      "_what": "chassis extended to match",
+      "atMs": 72398
+    },
+    {
+      "type": "camera",
+      "_what": "the deployer wall while the stone filter is explained",
+      "keyframes": [
+        {
+          "pos": [
+            11,
+            -55.5,
+            9
+          ],
+          "yaw": 131.6,
+          "pitch": 14
+        },
+        {
+          "pos": [
+            12.5,
+            -55,
+            7.5
+          ],
+          "yaw": 115,
+          "pitch": 17
+        },
+        {
+          "pos": [
+            13.5,
+            -54.5,
+            6.5
+          ],
+          "yaw": 102.1,
+          "pitch": 19.2
+        }
+      ],
+      "atMs": 77463,
+      "durationMs": 18725
+    },
+    {
+      "type": "showFilter",
+      "block": 14,
+      "_what": "the stone filter: cobblestone, cobbled deepslate, netherrack, blackstone",
+      "atMs": 79960
+    },
+    {
+      "type": "screen",
+      "action": "close",
+      "atMs": 89322
+    },
+    {
+      "type": "place",
+      "blocks": {
+        "ofType": "create:deployer"
+      },
+      "_what": "all 85 deployers, while the narration explains what they are for",
+      "atMs": 91195
+    },
+    {
+      "type": "camera",
+      "_what": "swing to the middle for the one downward deployer — routed round the south side at z>=11.5, because a straight line from the drill side goes through the deployer wall",
+      "keyframes": [
+        {
+          "pos": [
+            10,
+            -55,
+            13.5
+          ],
+          "yaw": 148,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            7.5,
+            -55.6,
+            12.5
+          ],
+          "yaw": 160.3,
+          "pitch": 15.1
+        },
+        {
+          "pos": [
+            5.5,
+            -56.2,
+            11.6
+          ],
+          "yaw": 175.3,
+          "pitch": 12.9
+        }
+      ],
+      "atMs": 96188,
+      "durationMs": 12483
+    },
+    {
+      "type": "showFilter",
+      "block": 90,
+      "_what": "the odd one out at [5,2,5], facing down, filtered to rail — camera is on it by now",
+      "atMs": 102429
+    },
+    {
+      "type": "screen",
+      "action": "close",
+      "atMs": 107735
+    },
+    {
+      "type": "camera",
+      "_what": "close on the chest in the middle; a container screen needs the camera within eight blocks",
+      "keyframes": [
+        {
+          "pos": [
+            3,
+            -56.2,
+            11.5
+          ],
+          "yaw": -180,
+          "pitch": 13.1
+        },
+        {
+          "pos": [
+            3,
+            -56.6,
+            10
+          ],
+          "yaw": -180,
+          "pitch": 12.5
+        },
+        {
+          "pos": [
+            3,
+            -57,
+            9
+          ],
+          "yaw": -180,
+          "pitch": 9.7
+        }
+      ],
+      "atMs": 108671,
+      "durationMs": 23266
+    },
+    {
+      "type": "place",
+      "blocks": {
+        "rest": true,
+        "except": [
+          "create:item_vault"
+        ]
+      },
+      "_what": "plough, storage interface, lever and the middle chest — everything except the vaults, which the closing beat places",
+      "atMs": 109834
+    },
+    {
+      "type": "fill",
+      "pos": [
+        3,
+        2,
+        5
+      ],
+      "items": [
+        {
+          "id": "minecraft:rail",
+          "count": 32
+        },
+        {
+          "id": "minecraft:charcoal",
+          "count": 48
+        }
+      ],
+      "_what": "rail and fuel — the load everybody forgets",
+      "atMs": 115651
+    },
+    {
+      "type": "screen",
+      "action": "open",
+      "pos": [
+        3,
+        2,
+        5
+      ],
+      "atMs": 117512
+    },
+    {
+      "type": "screen",
+      "action": "close",
+      "atMs": 130541
+    },
+    {
+      "type": "camera",
+      "_what": "pull back as the storage closes the machine in, and hold on the finished thing — the build is only 8x8x11, so the old ending at 26 blocks out left it a speck; 15 is far enough to see all of it and near enough for it to read",
+      "keyframes": [
+        {
+          "pos": [
+            4,
+            -56,
+            13
+          ],
+          "yaw": 176.4,
+          "pitch": 3.6
+        },
+        {
+          "pos": [
+            -1.5,
+            -53,
+            16.5
+          ],
+          "yaw": -156.5,
+          "pitch": 15.6
+        },
+        {
+          "pos": [
+            4,
+            -51,
+            19.5
+          ],
+          "yaw": 178,
+          "pitch": 20.8
+        }
+      ],
+      "atMs": 131937,
+      "durationMs": 27539
+    },
+    {
+      "type": "place",
+      "blocks": {
+        "ofType": "create:item_vault"
+      },
+      "_what": "two vaults, 6x3x3 each — the very last blocks, because they wall off everything else",
+      "atMs": 139648
+    },
+    {
+      "type": "entities",
+      "filter": "",
+      "_what": "the 14 glue bonds plus the furnace minecart",
+      "atMs": 151765
+    },
+    {
+      "atMs": 159476,
+      "type": "marker",
+      "label": "end of narration"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "episode": "create-mining-train",
+  "language": "en",
+  "voiceId": "iP95p4xoKVk53GoZ742B",
+  "voiceName": "Chris - Charming, Down-to-Earth",
+  "_note": "plannedMs are hand estimates. `node tools/render-voice.mjs render` measures each beat and writes measuredMs and startMs back; tools/make-timeline.mjs then resolves the storyboard against those. Chris runs about 20% faster than a 150 wpm estimate, so treat plannedMs as scaffolding only.",
+  "beats": [
+    {
+      "id": "b0",
+      "text": "Here is everything this machine is made of. All of it fits in a single chest, and it is worth a look before we start. A hundred and eight item vaults. Eighty-five deployers, and eighty-five filters to go in them. Fifty-four mechanical drills. Sixteen chassis blocks, and then a handful of singles: an assembler, a plough, some rail, a lever. Nothing here is expensive. There is just a lot of it.",
+      "plannedMs": 24000,
+      "measuredMs": 23917,
+      "startMs": 0
+    },
+    {
+      "id": "b1",
+      "text": "Start with the cart assembler. Every other block on this machine is optional; that one is not. It sits on the track line, and it is what turns a pile of machinery into something that actually drives. Rail either side of it, and a linear chassis to hang the rest of the build on.",
+      "plannedMs": 17000,
+      "measuredMs": 17369,
+      "startMs": 23917
+    },
+    {
+      "id": "b2",
+      "text": "Now the working head: a mechanical drill to cut the stone, and a deployer behind it. The drill does the obvious job. The deployer's job is less obvious, and we will come back to it. What matters first is that this pair is a unit, and here is the part people miss: the head can be exactly as wide as you want the tunnel to be. One drill for a corridor, or fifty-four of them across the full face, like this one. Extend the chassis to match, because anything not attached to it stays behind when the train leaves.",
+      "plannedMs": 25000,
+      "measuredMs": 36177,
+      "startMs": 41286
+    },
+    {
+      "id": "b3",
+      "text": "Every deployer carries a filter, and this is what most of them are set to: cobblestone, cobbled deepslate, netherrack, blackstone. Those are not decoration. A deployer will seal a hole in the tunnel wall with one of them, which is how you stop a water or lava source pouring in and jamming the drills. And because the drills are mining exactly that stone, the filter refills itself as you go. One deployer is different: the one pointing straight down, filtered to rail. That is the one laying track in front of the minecart.",
+      "plannedMs": 26000,
+      "measuredMs": 31208,
+      "startMs": 77463
+    },
+    {
+      "id": "b4",
+      "text": "This is the chest in the middle, and it is the one everybody forgets to load. Put some rail in it, and coal or charcoal. The fuel powers the furnace minecart that pulls the whole thing along, and the rail is what that downward deployer hands out until the vaults start supplying the rest. Load it once, and the machine feeds itself from the chest and the vaults from there on.",
+      "plannedMs": 22000,
+      "measuredMs": 23266,
+      "startMs": 108671
+    },
+    {
+      "id": "b5",
+      "text": "Storage goes on last, and you can have as much of it as you like. This one carries two item vaults, six by three by three each, one on either side of the track. Go bigger if you are heading a long way out, smaller if you would rather keep the train light. Then glue the whole thing together, because until you do, none of it moves: super glue is what tells the assembler which blocks belong to the contraption. Throw the lever, and that is a Create mining train.",
+      "plannedMs": 30000,
+      "measuredMs": 27539,
+      "startMs": 131937
+    }
+  ],
+  "totalMs": 159476
+}

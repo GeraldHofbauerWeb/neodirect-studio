@@ -1,0 +1,19 @@
+{
+  "_what": "Deliberate changes applied to Gerry's export before filming. Replay with tools/schematic_edit.py; the export in ~/.minecraft-instances/sebsmodpack4/schematics is never written to.",
+  "source": "~/.minecraft-instances/sebsmodpack4/schematics/mining_drill_1.nbt",
+
+  "edits": [
+    {
+      "op": "add",
+      "pos": [4, 0, 5],
+      "block": "minecraft:rail",
+      "properties": { "shape": "east_west", "waterlogged": "false" },
+      "why": "the track line had a hole between the cart assembler at x=3 and the rail at x=5, so it did not actually connect"
+    },
+    {
+      "op": "remove",
+      "pos": [3, 4, 5],
+      "why": "wall torch — decorative, and it put a stray item in the materials chest for no reason"
+    }
+  ]
+}

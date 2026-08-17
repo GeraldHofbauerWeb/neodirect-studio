@@ -1,0 +1,81 @@
+{
+  "take": "full-build",
+  "_what": "Not an episode \u2014 the correctness harness. Builds the entire contraption, glue included, so /verify can compare the result against the schematic block for block. Run this after any change to placement.",
+  "schematic": "mining_drill_1.nbt",
+  "origin": [
+    0,
+    -60,
+    0
+  ],
+  "presentation": {
+    "heldItem": false,
+    "swing": false,
+    "sound": false,
+    "particles": false
+  },
+  "cues": [
+    {
+      "atMs": 0,
+      "type": "camera",
+      "durationMs": 12000,
+      "_what": "Pulled back far enough to hold the whole 8x8x11 build in frame.",
+      "keyframes": [
+        {
+          "pos": [
+            -6.0,
+            -47.0,
+            22.0
+          ],
+          "yaw": -168.0,
+          "pitch": 24.0
+        },
+        {
+          "pos": [
+            4.0,
+            -45.0,
+            24.0
+          ],
+          "yaw": -180.0,
+          "pitch": 26.0
+        },
+        {
+          "pos": [
+            14.0,
+            -47.0,
+            22.0
+          ],
+          "yaw": 168.0,
+          "pitch": 24.0
+        }
+      ]
+    },
+    {
+      "atMs": 500,
+      "type": "materialsChest",
+      "pos": [
+        -4,
+        0,
+        8
+      ],
+      "facing": "north",
+      "_what": "double chest with the whole bill of materials, counted from the schematic"
+    },
+    {
+      "atMs": 1000,
+      "type": "place",
+      "blocks": "all",
+      "_what": "every block of the schematic at once"
+    },
+    {
+      "atMs": 2000,
+      "type": "entities",
+      "filter": "",
+      "_what": "all schematic entities: the 14 glue bonds plus the furnace minecart"
+    },
+    {
+      "atMs": 12000,
+      "type": "marker",
+      "label": "build complete"
+    }
+  ]
+}

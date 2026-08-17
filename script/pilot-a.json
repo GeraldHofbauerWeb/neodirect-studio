@@ -1,0 +1,35 @@
+{
+  "take": "A",
+  "_what": "Bare placement. No held item, no swing, no sound, no particles — blocks simply appear. This is the control take.",
+  "schematic": "mining_drill_1.nbt",
+  "origin": [0, -60, 0],
+
+  "presentation": {
+    "heldItem": false,
+    "swing": false,
+    "sound": false,
+    "particles": false
+  },
+
+  "cues": [
+    {
+      "atMs": 0,
+      "type": "camera",
+      "durationMs": 28000,
+      "_what": "One continuous track left to right along the pilot row at z=5, easing in and out.",
+      "keyframes": [
+        { "pos": [-1.6, -56.6, 9.4], "yaw": -146.3, "pitch": 22.1 },
+        { "pos": [3.5, -56.6, 9.4], "yaw": -180.0, "pitch": 26.0 },
+        { "pos": [8.6, -56.6, 9.4], "yaw": 151.7, "pitch": 23.2 }
+      ]
+    },
+
+    { "atMs": 5000,  "type": "place", "blocks": [9],  "_what": "linear chassis at x=0" },
+    { "atMs": 11500, "type": "place", "blocks": [11], "_what": "cart assembler at x=3" },
+    { "atMs": 17500, "type": "place", "blocks": [12, 13], "_what": "the two rails at x=4 and x=5, closing the gap to the assembler" },
+    { "atMs": 21500, "type": "place", "blocks": [14], "_what": "deployer at x=6" },
+    { "atMs": 25500, "type": "place", "blocks": [15], "_what": "mechanical drill at x=7" },
+
+    { "atMs": 28000, "type": "marker", "label": "end of beat 1" }
+  ]
+}

@@ -1,0 +1,97 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.gradle.userdev' version '7.0.192'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+// Mojang ships Java 21 with 1.21, so the mod targets Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', ''
+        systemProperty 'forge.logging.console.level', 'info'
+        modSource project.sourceSets.main
+    }
+
+    // The recording instance. Deliberately NOT a launcher profile: this run config gives us a
+    // real rendering client with exactly two mods (Create + NeoDirect) and no modpack ballast.
+    // Working directory is ./run — schematics go in run/schematics/.
+    client {
+        // Shoot at the delivery resolution rather than scaling up afterwards.
+        arguments.addAll '--width', '1920', '--height', '1080'
+        systemProperty 'neodirect.control.port', '8777'
+        // Create/open the reproducible recording world straight from the title screen, so a take
+        // never depends on somebody clicking through World Creation the same way twice.
+        systemProperty 'neodirect.autoworld', 'true'
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+
+    // Create is a runtime dependency only. The Director reads Create schematics through *vanilla*
+    // StructureTemplate (Create writes plain structure NBT), so we never compile against Create.
+    localRuntime files("libs/create-${minecraft_version}-${create_version}.jar")
+
+    // Quark, because the pilot schematic contains a quark:oak_chest. Without it that block reads
+    // as air and vanishes from the build without a word — the kind of silent loss /verify now
+    // reports. Zeta is Quark's required library; Biolith ships inside Quark as jar-in-jar and
+    // needs no entry here.
+    localRuntime files("libs/${quark_jar}", "libs/${zeta_jar}")
+
+    // Create ships Registrate/Flywheel/Ponder as jar-in-jar; FML unpacks those at runtime.
+    // They are listed here only so a future compileOnly need has them at hand — not on any
+    // runtime configuration, which would double-load them.
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// Copies the pilot schematic into the dev client's schematics folder. The source of truth stays
+// in the modpack instance — we never write back to it.
+// NeoGradle runs the client in runs/<runName>, so that is where Create (and the director) look.
+// Source is the project's own schematics/ — a patched copy of the export from the modpack
+// instance (added the connecting rail at x=4). The instance's file is never written to.
+tasks.register('installPilotSchematic', Copy) {
+    description = 'Copy the pilot Create schematic into runs/client/schematics/'
+    group = 'neodirect'
+    from layout.projectDirectory.dir('schematics')
+    include 'mining_drill_1.nbt'
+    into layout.projectDirectory.dir('runs/client/schematics')
+}
+
+tasks.named('compileJava', JavaCompile) {
+    options.compilerArgs << '-Xlint:deprecation'
+}
