@@ -1,6 +1,14 @@
 build/
 .gradle/
 runs/
-out/
+
+# Takes, voice and stills are products, not sources. Two exceptions: the character alignments and
+# the finished subtitles are what make timings and .srt reproducible without an ElevenLabs key,
+# and they are a few kilobytes against the audio's several megabytes.
+out/*
+!out/voice/
+out/voice/*
+!out/voice/*.alignment.json
+!out/voice/subtitles.srt
 libs/*.jar
 libs/create-nested/
