@@ -7,7 +7,38 @@ pre-rendered narration, so an episode is *reproducible*. Change a sentence, re-r
 re-run the take — and the build, the camera and the subtitles all follow. Nothing is performed by
 hand, so nothing has to be performed again.
 
-NeoForge 1.21.1 · Java 21 · Create 6.0.10 · MIT licensed · runs only in a local recording instance.
+NeoForge 1.21.1 · Java 21 · no compile-time mod dependencies · MIT licensed · runs only in a local
+recording instance.
+
+---
+
+## The tool, and the example in it
+
+Two separable things live in this repository.
+
+**The director** is the tool: a mod plus a handful of Node scripts that play a timeline against a
+wall clock. It knows about structure NBT, block states, cameras and containers — all vanilla. It
+does not know what Create is. `SchematicSource` reads schematics with `NbtUtils.readBlockState`,
+Create is declared `optional` in `neoforge.mods.toml` and sits on `localRuntime` in the build, and
+nothing anywhere compiles against it. Point it at a vanilla redstone contraption and it works the
+same.
+
+**The example** is everything about a Create mining train: `schematics/mining_drill_1.nbt`, the six
+beats in `script/pilot.beats.json`, the storyboard, and the `libs/` list. It is a worked episode
+rather than a fixture — the thing that proved the tool does what it claims, and a template to copy
+when writing your own.
+
+Where the line falls in practice:
+
+| | |
+|---|---|
+| Vanilla, works with any build | `place`, `camera`, `entities`, `screen`, `fill`, `materialsChest`, `marker`, the verifier, the whole recording pipeline |
+| Carries an assumption about the mod being filmed | `showFilter` — it reads a `Filter` compound out of a block entity's saved NBT, which is how Create stores filters. Generic NBT, but a Create-shaped idea |
+| Purely the example | the schematic, the beats, the storyboard, the `libs/` list |
+
+Everything below describes the tool unless it says otherwise; the example is used throughout for
+concrete numbers, because "270 blocks placed in didactic order" is easier to picture than "some
+blocks".
 
 ---
 
@@ -36,11 +67,11 @@ It reads as a tutorial, and the reason is a detail that contradicted the initial
 hand attached to it. That only works because the camera is the player in creative flight — a
 spectator renders neither the hand nor the held item.
 
-## What it produces
+## What the example produces
 
-A single 2:42 episode building a Create mining train, from an empty flat world to a glued,
-complete contraption: narration by ElevenLabs, subtitles from the same character alignment that
-timed the beats, and 270 blocks placed in didactic order.
+A 2:42 episode building a Create mining train, from an empty flat world to a glued, complete
+contraption: narration by ElevenLabs, subtitles from the same character alignment that timed the
+beats, and 270 blocks placed in didactic order.
 
 Every take is checked against the schematic when it finishes:
 
@@ -67,9 +98,12 @@ something you reliably catch by watching.
 | ffmpeg | duration measurement and muxing |
 | OBS 28+ | recording, over the built-in obs-websocket |
 | ElevenLabs API key | narration; optional if you bring your own audio |
-| Create 6.0.10 | plus whatever else your schematic touches — see below |
 
-**Mod jars are not in this repository.** Drop them into `libs/` yourself:
+No mod beyond NeoForge is required by the director itself. What *is* required is every mod your
+schematic touches — a block whose mod is absent reads as air and vanishes from the build without a
+word.
+
+**Mod jars are not in this repository.** For the example episode, drop these into `libs/`:
 
 ```
 libs/create-1.21.1-6.0.10.jar
@@ -81,8 +115,8 @@ libs/Zeta-1.1-40.jar            # Quark's dependency
 ```
 
 Create ships Flywheel, Ponder and Registrate as jar-in-jar; extract them into `libs/create-nested/`
-(they are plain zip entries). The recording instance needs **every mod your schematic touches** —
-see the field note about blocks silently becoming air.
+(they are plain zip entries). For your own episode this list is whatever your build needs instead —
+edit the `localRuntime` lines in `build.gradle`.
 
 ## Quick start
 
@@ -97,7 +131,8 @@ node tools/obs-setup.mjs            # scene, source, 1920x1080@60, x264
 node tools/take.mjs script/pilot-b.json --capture obs
 ```
 
-`runClient` *is* the recording instance: Create plus NeoDirect, no modpack ballast, a flat creative
+`runClient` *is* the recording instance: NeoDirect plus whatever the build needs — Create, for the
+example — and no modpack ballast beyond that. A flat creative
 world with the daylight cycle, weather and mob spawning switched off, and the pause-on-lost-focus
 option disabled so the take does not freeze when the window loses focus.
 
@@ -186,6 +221,29 @@ into the yaw/pitch a keyframe needs. Everything is scheduled against a wall cloc
 narration and the recorder are on wall clocks too — counting ticks would drift the moment the game
 stutters.
 
+## Filming your own build
+
+Nothing here is specific to the example except the example. To shoot something else:
+
+1. **Export a schematic** — Create's schematic table, or a vanilla structure block; both write the
+   same format. Put it in `schematics/` and run `./gradlew installPilotSchematic`.
+2. **Put the mods it needs on `localRuntime`** in `build.gradle`, with the jars in `libs/`. If your
+   build is vanilla, delete those lines entirely.
+3. **Write the beats** — copy `script/pilot.beats.json`, replace the text, set a `voiceId`, and run
+   `render`. The durations come back measured; you do not estimate them.
+4. **Write the storyboard** — copy `script/episode.storyboard.json` and say what happens inside each
+   beat as a fraction of it. `tools/aim.mjs` gives you the yaw/pitch for camera keyframes;
+   `tools/preview.mjs` grabs stills at chosen milliseconds so framing can be iterated without
+   recording anything.
+5. **Find your block indices** — `tools/verify.mjs` reports what is in the schematic, and cues can
+   name types rather than indices, so most beats never need an index at all.
+6. **Shoot it**, then let `verify` tell you whether the world matches the schematic and whether the
+   camera flew through anything.
+
+The one cue with an assumption baked in is `showFilter`, which expects a `Filter` compound in the
+block entity's NBT. If the mod you are filming stores its filters differently, that cue is where to
+look.
+
 ## How it fits together
 
 **Control server** — `127.0.0.1:8777`, built on the JDK's own `com.sun.net.httpserver`, so the mod
@@ -210,23 +268,28 @@ flight; smoothness is vanilla's, since `Camera#setup` interpolates between `enti
 current position by partial tick, so writing the previous pose before each tick's update is all a
 smooth 200 fps pan requires. Positions follow a Catmull-Rom spline with smoothstep easing.
 
-**Schematic** — Create writes plain vanilla structure NBT, so `SchematicSource` reads it with
-`NbtUtils.readBlockState` and needs no Create API at all. Block states *and* block-entity data come
-across for free: rail shape, chassis axis, drill and deployer facing, deployer filters. The
-`entities` list carries the 14 `create:super_glue` bonds — without them the assembler has nothing to
-pick up — plus a furnace minecart.
+**Schematic** — the loader is vanilla. Structure NBT is a documented format, and Create's schematics
+are exactly that format, so `SchematicSource` reads them with `NbtUtils.readBlockState` and needs no
+mod API at all. Any tool that writes structure NBT — the vanilla structure block included — produces
+files this reads. Block states *and* block-entity data come across for free, which for the example
+means rail shape, chassis axis, drill and deployer facing, and the deployer filters; the `entities`
+list carries the 14 super-glue bonds and a furnace minecart.
 
-`schematics/mining_drill_1.nbt` is *not* a raw export. It is an export plus the edits recorded in
-`schematics/edits.json` and replayed by `tools/schematic_edit.py`; the original in the modpack
-instance is only ever read from. Keeping the edits as data rather than as a one-off script is the
+The one thing the loader adds on top of vanilla is a registry check. `NbtUtils.readBlockState`
+returns air for a block whose mod is missing, which is indistinguishable from real air, so unknown
+names are collected and reported instead of silently dropped.
+
+*Example-specific:* `schematics/mining_drill_1.nbt` is not a raw export. It is an export plus the
+edits recorded in `schematics/edits.json` and replayed by `tools/schematic_edit.py`; the original
+export is only ever read from. Keeping the edits as data rather than as a one-off script is the
 difference between a derived asset and a mystery file.
 
 **Materials chest** — a `materialsChest` cue places a chest holding the whole bill of materials,
 counted from the schematic rather than listed in the script, so it cannot drift out of step with
-the build it supplies. That count includes items held *inside* block entities, which is how the 85
-configured deployer filters made it into the chest — they go in configured, not blank. A `screen`
+the build it supplies. That count includes items held *inside* block entities — in the example, the
+85 configured deployer filters, which go into the chest configured rather than blank. A `screen`
 cue then opens it on camera, so the viewer reads the stack counts off the real inventory instead of
-being told them. For this contraption the whole bill is 14 stacks: 108 item vaults, 85 deployers,
+being told them. For that contraption the whole bill is 14 stacks: 108 item vaults, 85 deployers,
 54 drills, 16 chassis, and a handful of singles.
 
 **Verifier** — block states compared exactly, entity counts per type, loose item entities (litter
