@@ -34,6 +34,14 @@
 
   "_keep": "Deliberately kept even though they look like scenery: redstone_block and redstone_lamp drive the stockpile switch and the content observers, chests and barrels are the machine's own buffers, and the rail, plough and cart assembler belong to the vault bank that docks on portable storage interfaces.",
 
+  "_clearContainers": "Emptied on the way out. The plant had been running for a while and its chests held 1365 quartz, 444 experience nuggets and 299 lapis — the source machine's takings. The bill of materials counts items inside block entities (that is how the pilot's deployers arrive with their filters), so leaving them in would put the whole warehouse in the materials chest and call it a building cost. Filters live in their own key and are untouched.",
+  "clearContainers": [
+    "minecraft:chest",
+    "minecraft:barrel",
+    "quark:oak_chest",
+    "create:item_vault"
+  ],
+
   "out": "schematics/ore_plant.nbt",
   "report": "schematics/ore_plant.report.json"
 }

@@ -325,7 +325,30 @@ def select_box(world, lo, hi, drop, extra_natural, extra_machine):
     return selected
 
 
-def build_structure(world, selected, data_version, drop_entities):
+def empty_container(nbt):
+    """Throws away what a container holds, and keeps what configures it.
+
+    A machine cloned off a running server arrives with its output still in it — this one carried
+    1365 quartz and 444 experience nuggets. That is the source machine's takings, not the
+    episode's, and it matters more than it sounds: the bill of materials counts items held inside
+    block entities, on purpose, because a deployer without its filter is not the same deployer. So
+    a full chest would put the whole warehouse in the materials chest and claim you need it to
+    build the thing.
+
+    Filters live in their own key and stay. Only the inventories go.
+    """
+    out = {}
+    for key, value in nbt.items():
+        if key in ('Items', 'inventory'):
+            continue
+        if key == 'Inventory' and isinstance(value, dict):
+            out[key] = {k: v for k, v in value.items() if k != 'Items'}
+            continue
+        out[key] = value
+    return out
+
+
+def build_structure(world, selected, data_version, drop_entities, clear_containers=()):
     xs = [p[0] for p in selected]
     ys = [p[1] for p in selected]
     zs = [p[2] for p in selected]
@@ -351,7 +374,10 @@ def build_structure(world, selected, data_version, drop_entities):
         be = world.block_entities.get(pos)
         if be is not None:
             # Strip the absolute coordinates; the structure loader supplies its own.
-            block['nbt'] = {k: v for k, v in be.items() if k not in ('x', 'y', 'z', 'keepPacked')}
+            nbt = {k: v for k, v in be.items() if k not in ('x', 'y', 'z', 'keepPacked')}
+            if name in clear_containers:
+                nbt = empty_container(nbt)
+            block['nbt'] = nbt
         blocks.append(block)
 
     entities = []
@@ -439,7 +465,7 @@ def main():
         raise SystemExit('nothing selected')
 
     root, lo, hi, dropped = build_structure(
-        world, selected, world.data_version, drop_entities)
+        world, selected, world.data_version, drop_entities, set(spec.get('clearContainers', [])))
 
     histogram = Counter(name for name, _ in selected.values())
     namespaces = Counter(name.split(':', 1)[0] for name, _ in selected.values())

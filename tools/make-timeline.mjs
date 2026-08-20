@@ -88,6 +88,7 @@ const timeline = {
   take: storyboard.take,
   _generated: `from ${storyboard.beats} — do not edit by hand, edit the storyboard and re-run make-timeline.mjs`,
   schematic: storyboard.schematic,
+  parts: storyboard.parts,
   origin: storyboard.origin,
   clearStage: storyboard.clearStage ?? true,
   presentation: storyboard.presentation,

@@ -1,0 +1,61 @@
+{
+  "episode": "create-ore-processing",
+  "language": "en",
+  "voiceId": "iP95p4xoKVk53GoZ742B",
+  "voiceName": "Chris - Charming, Down-to-Earth",
+  "_note": "plannedMs are estimates and nothing else. `node tools/render-voice.mjs render script/ore-plant.beats.json` measures each beat and writes measuredMs and startMs back; make-timeline then resolves the storyboard against those. Chris runs about 20% faster than 150 wpm, so these are deliberately generous.",
+  "_source": "Every number in here is read out of schematics/ore_plant.report.json and the filters in schematics/ore_plant.nbt. If the schematic is re-cut, check them before re-rendering.",
+
+  "beats": [
+    {
+      "id": "b0",
+      "plannedMs": 26000,
+      "text": "Two hundred and thirty-four blocks, and it takes a double chest to hold them. Forty-six belts. Twenty-eight encased chain drives, which is the single largest item on the list and the part you never see in a screenshot. Twenty-seven item vaults. Sixteen display boards. And twenty filters. Twenty filters, and no two of them set the same way. Hold on to that, because the blocks in this machine are ordinary and the filters are the entire trick."
+    },
+    {
+      "id": "b1",
+      "plannedMs": 24000,
+      "text": "Rotation goes in first. Everything else in this build hangs off it, so it is easier to run the line once and then hang machines on it than to work backwards later. Chain drives down the length of the floor, gearboxes at the corners, and a speed controller so the whole plant runs at one pace. On the server this line is fed from the rest of the base. Standing on its own it needs a motor, so there is one on the open end, and a stressometer to watch what the load does as the rest goes in."
+    },
+    {
+      "id": "b2",
+      "plannedMs": 34000,
+      "text": "This end is where the ore arrives. A mining train parks here and empties itself through a portable storage interface. That is the machine from the last episode, and it has no idea what happens next. What happens next is two smart chutes. Both are set to the same eight things: cobblestone, cobbled deepslate, gravel, flint, basalt, soul sand, netherrack and blackstone. One of them allows that list. The other denies it. Same list, opposite switch. Everything the train dropped goes down exactly one of the two, no priority rule, nothing left over, nothing jammed. Learn that shape now, because it turns up three more times before the end of this build."
+    },
+    {
+      "id": "b3",
+      "plannedMs": 25000,
+      "text": "Two crushing wheels with the controller between them, fed over a short belt loop. Ore in, crushed ore out, and the wheels do not care what you feed them, which is a problem, because plain stone from the tunnel goes in as well and comes out as gravel. So the head of the crusher is that shape again: one funnel allowing crushed iron, gold, copper and zinc, and the funnel beside it denying exactly those four. The ore carries on. Everything else turns off."
+    },
+    {
+      "id": "b4",
+      "plannedMs": 27000,
+      "text": "Washing next, and the fan looks wrong. A fan washes what it blows over only if it blows through water, and there is no water in front of this one. There is a leaf block. It is waterlogged, and Create reads the fluid rather than the block, so as far as the fan is concerned it is looking at a pond. The whole stage is a fan, a leaf and a water wheel to turn it. Washing gravel gives clay, clay is not ore, so it comes off here the same way as everything else does: allow clay on one funnel, deny clay on the next."
+    },
+    {
+      "id": "b5",
+      "plannedMs": 33000,
+      "text": "Six belts side by side, a funnel over each, and one filter per funnel. Experience nuggets on the first. Lapis, emerald and diamond on the second, and note that each of those is listed twice, as the ore and as the gem, because a wheel that is fed a stone block hands you the ore instead of what is inside it. Gunpowder and quartz. Redstone and coal. Copper and zinc nuggets. Iron and gold nuggets. Six lanes, and anything that matches none of them stays on the belt and comes back around. Adding a metal later means adding a lane, not rebuilding the sorter."
+    },
+    {
+      "id": "b6",
+      "plannedMs": 23000,
+      "text": "Nuggets are awkward to store and awkward to carry, so they get pressed. Three basins with a mechanical press over each, and the filter on the basin decides which metals meet: redstone and coal in the first, copper and zinc in the second, iron and gold in the third. Keeping them apart matters more than it sounds. A basin with two metals in it will happily give you the wrong thing. The funnel over each output is set to the finished block, so nothing half-pressed leaves."
+    },
+    {
+      "id": "b7",
+      "plannedMs": 18000,
+      "text": "Storage is twenty-seven item vaults and a row of twelve chests underneath. The vaults take the bulk and the chests are the working face, the part a hopper or a hand can actually reach. Both are boring on purpose. Everything clever in this machine happened before the item got here."
+    },
+    {
+      "id": "b8",
+      "plannedMs": 21000,
+      "text": "Under each chest sits a content observer, and above them a run of display links up to a wall of sixteen display boards. That reads the stock and puts it on the wall, which sounds like decoration until the first time a lane silently stops. A number that has not moved all evening tells you which filter to go and look at, and on a machine with twenty of them, that is worth the eight blocks it costs."
+    },
+    {
+      "id": "b9",
+      "plannedMs": 22000,
+      "text": "Motor on. Ore into the crusher, crushed ore onto the washer, nuggets onto the sorter, all at once, because a full pass end to end takes longer than we have and a plant working in only its first third looks broken rather than busy. Give it a moment and every lane is moving. That is a Create ore plant."
+    }
+  ]
+}

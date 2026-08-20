@@ -192,6 +192,7 @@ Every cue carries an `atMs`; the storyboard generator fills it in from `beat` + 
 | `fill` | put specific items into a container that is part of the build |
 | `showFilter` | hold up a block's filter and open it, so the camera can read what the machine accepts |
 | `screen` | open or close a container's screen on camera |
+| `setBlocks` | put down blocks the schematic does not contain — a creative motor for a drive whose power came from off-schematic, say. The value is a block state spelled the way `/setblock` spells it, NBT included |
 | `marker` | a no-op that shows up in the take log, for lining video up against narration |
 
 ### Naming blocks
@@ -206,6 +207,7 @@ across the whole face", not "blocks 118 through 171":
 | `{"ofType": "create:deployer"}` | every block of a type, in the schematic's own order |
 | `"rest"` | everything no earlier cue has claimed |
 | `{"rest": true, "except": ["create:item_vault"]}` | …minus types a later beat is built around |
+| `{"part": "crushing"}` | a named assembly out of the schematic's parts manifest |
 | `"all"` | everything |
 
 The exception list earns its keep. "Everything else now" and "the storage goes on last" are both
@@ -215,6 +217,32 @@ the machine, while the closing beat that was supposed to place them set blocks t
 there. Nothing looks wrong in a log where every cue ran. Holding a type back is therefore paired
 with a warning at load time naming any block that no cue places, so excluding something and then
 forgetting to place it is loud rather than invisible.
+
+### Parts
+
+A type is not an assembly. The crusher in the ore plant is two crushing wheels, a controller, ten
+belt segments, four gearboxes and three funnels, and every one of those types also appears
+somewhere else in the same machine — so `ofType` cannot name it and a list of indices stops being
+true the moment the schematic is re-cut.
+
+So a schematic can carry a **parts manifest** next to it: rules, not indices.
+
+```json
+{ "name": "drive",
+  "match": [{ "ids": ["create:encased_chain_drive", "create:shaft", "create:gearbox"] }] }
+```
+
+A rule matches on `ids`, on a `box` of local coordinates, on an exact `pos`, or on any combination
+of those. Parts are matched in order and the first to claim a block keeps it, which is what lets
+"the drive is every shaft anywhere" sit next to a washing station that owns its own gearbox.
+
+`tools/parts.py` resolves the manifest and **fails while any block belongs to no part** — a block
+nobody claims is a block no beat ever builds, and nothing in a take log would say so. It writes
+what it resolved to a `*.groups.json` that the timeline names in its `parts` field.
+
+That file holds positions rather than indices, on purpose. An index only means something for one
+particular cut of a schematic; a stale one quietly addresses a different block, while a position
+that no longer exists refuses the take by name.
 
 `camera` cues carry keyframes and a duration; `tools/aim.mjs` turns "camera here, looking at there"
 into the yaw/pitch a keyframe needs. Everything is scheduled against a wall clock, because the
@@ -226,7 +254,19 @@ stutters.
 Nothing here is specific to the example except the example. To shoot something else:
 
 1. **Export a schematic** — Create's schematic table, or a vanilla structure block; both write the
-   same format. Put it in `schematics/` and run `./gradlew installPilotSchematic`.
+   same format. Put it in `schematics/` and run `./gradlew installSchematics`.
+
+   Or take it off a server, which needs no in-game step at all: `tools/pull-world-region.sh` copies
+   the region files around a coordinate, and `tools/world_clip.py` cuts the build out of them. Two
+   things it does that a naive clipper would not — it reads the *separate* `entities/` region
+   storage, without which a Create contraption arrives with no super glue and quietly refuses to
+   assemble, and it takes along fluids that touch a machine block without letting them spread, so a
+   washing setup keeps its water and a cave lake stays out.
+
+   Once a machine is built inside a room, expect to give it a box and a drop list rather than a
+   flood fill: the walls were placed by hand too, and the kinetic network runs on into the next
+   machine. Both live in a `*.clip.json` beside the schematic, so what was cut and what was left
+   out stays readable.
 2. **Put the mods it needs on `localRuntime`** in `build.gradle`, with the jars in `libs/`. If your
    build is vanilla, delete those lines entirely.
 3. **Write the beats** — copy `script/pilot.beats.json`, replace the text, set a `voiceId`, and run
@@ -314,6 +354,11 @@ checks it, so a shot cannot pass the check and then fly something else.
 | `tools/preview.mjs` | runs a take and grabs stills at chosen milliseconds, for iterating on framing without recording |
 | `tools/framegrab.mjs` | builds a take from the game's own framebuffer — no capture stack at all, but ~19 fps |
 | `tools/capture.mjs` | ffmpeg `x11grab`; correct on X11, useless under Wayland (see below) |
+| `tools/pull-world-region.sh` | fetches the region and entity files around a coordinate off a server |
+| `tools/world_clip.py` | cuts a build out of a saved world and writes it as structure NBT |
+| `tools/parts.py` | resolves a parts manifest, and refuses while any block belongs to no part |
+| `tools/check-storyboard.py` | checks a storyboard against its schematic before anything is rendered |
+| `tools/nbtio.py` | NBT with the tag types kept intact |
 | `tools/schematic_edit.py` | replays `schematics/edits.json` against an untouched export |
 
 ## Recording
