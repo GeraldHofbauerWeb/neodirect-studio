@@ -13,3 +13,4 @@ out/voice/*
 libs/*.jar
 libs/create-nested/
 scratch/
+__pycache__/
