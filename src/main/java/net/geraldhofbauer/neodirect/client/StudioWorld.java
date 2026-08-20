@@ -36,7 +36,14 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 @EventBusSubscriber(modid = NeoDirect.MOD_ID, value = Dist.CLIENT)
 public final class StudioWorld {
 
-    public static final String LEVEL_ID = "neodirect-studio";
+    /**
+     * Which world to shoot in, from {@code -Dneodirect.world}.
+     *
+     * <p>One world per episode rather than one world forever. The pilot's contraption still stands
+     * in {@code neodirect-studio}, and a second machine built into the same flat world would share
+     * its stage bounds, its litter and its lighting — none of which belong to this episode.
+     */
+    public static final String LEVEL_ID = System.getProperty("neodirect.world", "neodirect-studio");
 
     private StudioWorld() {
     }

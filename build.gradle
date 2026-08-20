@@ -30,6 +30,9 @@ runs {
         // Create/open the reproducible recording world straight from the title screen, so a take
         // never depends on somebody clicking through World Creation the same way twice.
         systemProperty 'neodirect.autoworld', 'true'
+        // One world per episode: ./gradlew runClient -Pneodirect.world=neodirect-ore-plant
+        systemProperty 'neodirect.world', providers.gradleProperty('neodirect.world')
+                .getOrElse('neodirect-studio')
     }
 }
 
@@ -84,12 +87,22 @@ tasks.withType(JavaCompile).configureEach {
 // NeoGradle runs the client in runs/<runName>, so that is where Create (and the director) look.
 // Source is the project's own schematics/ — a patched copy of the export from the modpack
 // instance (added the connecting rail at x=4). The instance's file is never written to.
-tasks.register('installPilotSchematic', Copy) {
-    description = 'Copy the pilot Create schematic into runs/client/schematics/'
+tasks.register('installSchematics', Copy) {
+    description = 'Copy schematics and their resolved parts into runs/client/schematics/'
     group = 'neodirect'
     from layout.projectDirectory.dir('schematics')
-    include 'mining_drill_1.nbt'
+    // The .nbt is what the director builds from; the .groups.json is how a cue says "the crusher"
+    // instead of listing thirty-eight indices. The manifest that generates it stays in the project
+    // — the game has no use for the rules, only for what they resolved to.
+    include '*.nbt', '*.groups.json'
     into layout.projectDirectory.dir('runs/client/schematics')
+}
+
+// The old name, kept because the README and a year of muscle memory both use it.
+tasks.register('installPilotSchematic') {
+    group = 'neodirect'
+    description = 'Alias for installSchematics'
+    dependsOn 'installSchematics'
 }
 
 tasks.named('compileJava', JavaCompile) {

@@ -22,6 +22,7 @@ import java.util.List;
 public record Timeline(
         String take,
         String schematic,
+        String parts,
         BlockPos origin,
         Presentation presentation,
         boolean clearStage,
@@ -38,6 +39,10 @@ public record Timeline(
 
         String take = GsonHelper.getAsString(root, "take", "untitled");
         String schematic = GsonHelper.getAsString(root, "schematic", null);
+        // Written by tools/parts.py out of the parts manifest. The mod reads resolved positions
+        // rather than the manifest's rules: the rules belong to the authoring tool, and a mod that
+        // re-implemented them would be a second implementation to keep in step with the first.
+        String parts = GsonHelper.getAsString(root, "parts", null);
         BlockPos origin = readPos(root, "origin");
 
         Presentation presentation = Presentation.NONE;
@@ -62,7 +67,7 @@ public record Timeline(
         // The director walks cues in time order; do not make the script author responsible for that.
         cues.sort(Comparator.comparingLong(Cue::atMs));
 
-        return new Timeline(take, schematic, origin, presentation, clearStage, List.copyOf(cues));
+        return new Timeline(take, schematic, parts, origin, presentation, clearStage, List.copyOf(cues));
     }
 
     private static BlockPos readPos(JsonObject obj, String key) {

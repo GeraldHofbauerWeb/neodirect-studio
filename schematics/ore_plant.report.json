@@ -4,7 +4,7 @@
     [
       -3303,
       5,
-      -2139
+      -2141
     ],
     [
       -3289,
@@ -39,19 +39,19 @@
   "origin": [
     -3303,
     5,
-    -2139
+    -2140
   ],
   "size": [
     15,
     11,
-    16
+    17
   ],
-  "blocks": 237,
-  "blockEntities": 224,
+  "blocks": 241,
+  "blockEntities": 226,
   "entities": {},
   "namespaces": {
-    "create": 208,
-    "minecraft": 27,
+    "create": 210,
+    "minecraft": 29,
     "quark": 2
   },
   "types": {
@@ -63,12 +63,12 @@
     "minecraft:chest": 12,
     "create:shaft": 9,
     "create:andesite_belt_funnel": 9,
+    "create:gearbox": 8,
     "create:display_link": 8,
-    "create:gearbox": 7,
     "create:brass_funnel": 7,
+    "minecraft:water": 7,
     "create:content_observer": 6,
     "create:andesite_encased_shaft": 5,
-    "minecraft:water": 5,
     "create:andesite_encased_large_cogwheel": 4,
     "minecraft:redstone_lamp": 4,
     "minecraft:redstone_block": 4,
@@ -77,11 +77,11 @@
     "create:smart_chute": 3,
     "create:andesite_encased_cogwheel": 2,
     "minecraft:barrel": 2,
+    "create:water_wheel": 2,
     "create:crushing_wheel": 2,
     "quark:oak_chest": 2,
     "create:stressometer": 1,
     "create:rotation_speed_controller": 1,
-    "create:water_wheel": 1,
     "create:large_cogwheel": 1,
     "create:stockpile_switch": 1,
     "create:crushing_wheel_controller": 1,

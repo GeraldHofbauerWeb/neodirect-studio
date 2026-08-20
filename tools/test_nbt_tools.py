@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import nbtio  # noqa: E402
 from nbtio import Byte, ByteArray, Double, Float, Int, IntArray, List, Long, LongArray, Short  # noqa: E402
 import world_clip  # noqa: E402
+import parts as parts_tool  # noqa: E402
 
 FAILURES = []
 
@@ -237,6 +238,37 @@ def test_clip():
                    ['create:filter_items_blacklist']) is Byte)
 
 
+def test_parts():
+    """A manifest has to account for every block, and say so when it does not."""
+    print('parts manifest')
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        build_world(root)
+        world = world_clip.World(root)
+        start = world_clip.find_seed(world, (2, 6, 1))
+        selected, _ = world_clip.flood(world, start, 20000, set(), set())
+        structure, _, _, _ = world_clip.build_structure(
+            world, selected, 3955, world_clip.DROP_ENTITIES)
+        out = root / 'clip.nbt'
+        nbtio.save(structure, out)
+        _, blocks = parts_tool.load_blocks(out)
+
+        manifest = {'parts': [
+            {'name': 'wheel', 'match': [{'ids': ['create:crushing_wheel']}]},
+            {'name': 'rest', 'match': [{'box': [[0, 0, 0], [9, 9, 9]]}]},
+        ]}
+        groups, unclaimed, contested = parts_tool.resolve(blocks, manifest)
+        check('every block claimed', not unclaimed, [b['pos'] for b in unclaimed])
+        check('the wheel went to the specific rule', len(groups['wheel']) == 1, groups)
+        check('the rest went to the box', len(groups['rest']) == 3, groups)
+        check('the overlap is reported', len(contested) == 1, contested)
+
+        # A manifest that forgets something has to fail, not quietly build less than the machine.
+        thin = {'parts': [{'name': 'wheel', 'match': [{'ids': ['create:crushing_wheel']}]}]}
+        _, missed, _ = parts_tool.resolve(blocks, thin)
+        check('an incomplete manifest is caught', len(missed) == 3, missed)
+
+
 def test_pilot_schematic_round_trip():
     """The committed example is the best real-world fixture there is."""
     print('pilot schematic')
@@ -253,6 +285,7 @@ if __name__ == '__main__':
     test_plain_python_defaults()
     test_region_reader()
     test_clip()
+    test_parts()
     test_pilot_schematic_round_trip()
     print()
     if FAILURES:

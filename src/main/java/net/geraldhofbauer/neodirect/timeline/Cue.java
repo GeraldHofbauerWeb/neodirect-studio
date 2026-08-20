@@ -3,6 +3,7 @@ package net.geraldhofbauer.neodirect.timeline;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
  * game stutters.
  */
 public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.MaterialsChest, Cue.Fill,
-        Cue.ShowFilter, Cue.Screen, Cue.Marker {
+        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks {
 
     long atMs();
 
@@ -44,7 +45,7 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
          * through 171". {@code ofType} and {@code rest} let the script say that directly, and they
          * keep working when the contraption is edited.
          */
-        sealed interface Selector permits Indices, Range, OfType, Rest {}
+        sealed interface Selector permits Indices, Range, OfType, Rest, Part {}
 
         record Indices(List<Integer> values) implements Selector {}
 
@@ -54,6 +55,18 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
 
         /** Every block of the named type(s), in the schematic's own order. */
         record OfType(List<String> blockIds) implements Selector {}
+
+        /**
+         * Named assemblies out of the schematic's parts manifest.
+         *
+         * <p>The reason this exists rather than more {@code ofType} cues: an assembly is not a
+         * block type. The crusher is two crushing wheels, a controller, ten belt segments, four
+         * gearboxes and three funnels, and every one of those types also appears somewhere else in
+         * the machine. Naming it by geometry belongs in a file next to the schematic, not spread
+         * through the storyboard as index lists that stop being true the moment the schematic is
+         * re-cut.
+         */
+        record Part(List<String> names) implements Selector {}
 
         /**
          * Everything earlier cues in this timeline have not already placed, minus the types named
@@ -113,9 +126,30 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * slot on the block, and it is that item which opens a menu. So this copies the filter out of
      * the block's saved data, puts it in the player's hand, and uses it.
      *
-     * @param blockIndex which schematic block to take the filter from
+     * <p>Addressable by schematic index or by position relative to the origin. Position is what a
+     * script actually wants: this machine has twenty-two configured filters, and every one of them
+     * is somewhere a human can point at, while its index is a number that changes whenever the
+     * schematic is re-cut.
+     *
+     * @param blockIndex which schematic block to take the filter from, or -1 when {@code relPos}
+     *                   names it instead
+     * @param relPos     position relative to the timeline origin, or null when the index is used
      */
-    record ShowFilter(long atMs, int blockIndex) implements Cue {}
+    record ShowFilter(long atMs, int blockIndex, BlockPos relPos) implements Cue {}
+
+    /**
+     * Set blocks that are not in the schematic.
+     *
+     * <p>Everything the schematic knows is what stood on the server, and on the server this
+     * machine was driven by the rest of the factory. A take has to supply that itself, so the
+     * closing beat puts a creative motor on the open end of the drive. Vanilla and generic on
+     * purpose: the value is a block state in the same spelling {@code /setblock} takes, NBT
+     * included, so the script names the block and the mod stays ignorant of Create.
+     */
+    record SetBlocks(long atMs, List<BlockSpec> blocks) implements Cue {}
+
+    /** One block for {@link SetBlocks}: a position, and what {@code /setblock} would be given. */
+    record BlockSpec(int x, int y, int z, String block) {}
 
     /**
      * Open or close a container's screen on camera.
@@ -177,7 +211,33 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                 yield new Fill(atMs, pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt(),
                         List.copyOf(items));
             }
-            case "showFilter" -> new ShowFilter(atMs, GsonHelper.getAsInt(obj, "block"));
+            case "showFilter" -> {
+                if (obj.has("pos")) {
+                    JsonArray pos = GsonHelper.getAsJsonArray(obj, "pos");
+                    if (pos.size() != 3) {
+                        throw new IllegalArgumentException("showFilter 'pos' must have exactly 3 entries");
+                    }
+                    yield new ShowFilter(atMs, -1, new BlockPos(
+                            pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt()));
+                }
+                yield new ShowFilter(atMs, GsonHelper.getAsInt(obj, "block"), null);
+            }
+            case "setBlocks" -> {
+                List<BlockSpec> blocks = new ArrayList<>();
+                for (JsonElement el : GsonHelper.getAsJsonArray(obj, "blocks")) {
+                    JsonObject b = el.getAsJsonObject();
+                    JsonArray pos = GsonHelper.getAsJsonArray(b, "pos");
+                    if (pos.size() != 3) {
+                        throw new IllegalArgumentException("setBlocks 'pos' must have exactly 3 entries");
+                    }
+                    blocks.add(new BlockSpec(pos.get(0).getAsInt(), pos.get(1).getAsInt(),
+                            pos.get(2).getAsInt(), GsonHelper.getAsString(b, "block")));
+                }
+                if (blocks.isEmpty()) {
+                    throw new IllegalArgumentException("setBlocks cue has no blocks");
+                }
+                yield new SetBlocks(atMs, List.copyOf(blocks));
+            }
             case "screen" -> {
                 String action = GsonHelper.getAsString(obj, "action");
                 if (!action.equals("open") && !action.equals("close")) {
@@ -206,6 +266,7 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * Reads the several shapes 'blocks' accepts:
      * {@code [1,2,3]}, {@code "all"}, {@code "rest"},
      * {@code {"from":a,"to":b}}, {@code {"ofType":"create:deployer"}} or a list of type ids,
+     * {@code {"part":"crushing"}} or a list of part names,
      * and {@code {"rest":true,"except":["create:item_vault"]}}.
      */
     private static Place parsePlace(long atMs, JsonObject obj) {
@@ -227,6 +288,10 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
             JsonObject o = spec.getAsJsonObject();
             if (o.has("ofType")) {
                 return new Place(atMs, new Place.OfType(typeIds(o.get("ofType"))));
+            }
+            if (o.has("part") || o.has("parts")) {
+                return new Place(atMs, new Place.Part(
+                        typeIds(o.has("part") ? o.get("part") : o.get("parts"))));
             }
             if (o.has("rest")) {
                 return new Place(atMs, new Place.Rest(

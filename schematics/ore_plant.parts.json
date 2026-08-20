@@ -1,0 +1,89 @@
+{
+  "_what": "The ore plant, cut into the assemblies the episode builds one at a time. Resolved by tools/parts.py, which fails if a block belongs to no part — a block nobody claims is a block no beat ever builds, and nothing in a take log would say so.",
+  "_order": "Parts are matched in order and the first one to claim a block keeps it. That is what lets 'drive' be written as 'every shaft and every gearbox, anywhere' without it stealing the gearbox that belongs to the washing station: the specific assemblies come first, the backbone last. Overlaps are reported, not forbidden — they are how the rules stay short.",
+  "schematic": "ore_plant.nbt",
+
+  "parts": [
+    {
+      "name": "washing",
+      "letter": "W",
+      "title": "Washing",
+      "_what": "A water wheel of its own, a gearbox, and a fan pointing south. What the fan blows through is a waterlogged leaf block — which is why there is no water to be seen and the stage still counts as washing. The two clay funnels downstream are the same allow/deny pair as everywhere else in this machine.",
+      "match": [
+        { "box": [[6, 3, 0], [10, 5, 2]] },
+        { "ids": ["create:brass_funnel"], "box": [[8, 3, 5], [8, 3, 5]] },
+        { "ids": ["create:brass_belt_funnel"], "box": [[8, 4, 6], [8, 4, 6]] }
+      ]
+    },
+    {
+      "name": "dock",
+      "letter": "D",
+      "title": "The unloading dock",
+      "_what": "Where the mining train from the last episode parks. Two smart chutes carry the same eight stone types, one allowing and one denying, and that is the whole ore-from-spoil split.",
+      "match": [
+        { "box": [[9, 0, 6], [14, 6, 12]] },
+        { "box": [[8, 0, 7], [8, 2, 10]] }
+      ]
+    },
+    {
+      "name": "readout",
+      "letter": "R",
+      "title": "The stock readout",
+      "_what": "Content observers under the chest row, display links up to a wall of display boards. Matched by block id rather than by box because the chain runs the length of the machine.",
+      "match": [
+        { "ids": ["create:display_board", "create:display_link", "create:content_observer",
+                  "create:stockpile_switch"] }
+      ]
+    },
+    {
+      "name": "compacting",
+      "letter": "P",
+      "title": "Basins and presses",
+      "_what": "Three basins with a press over each, one per metal group. Nuggets in, blocks out; the filter on the basin is what keeps the groups from mixing.",
+      "match": [
+        { "box": [[4, 4, 11], [9, 7, 13]] }
+      ]
+    },
+    {
+      "name": "sorting",
+      "letter": "S",
+      "title": "The sorter",
+      "_what": "Six belts side by side, a funnel over each, one filter per ore. The longest beat in the episode.",
+      "match": [
+        { "box": [[3, 3, 10], [8, 4, 14]] }
+      ]
+    },
+    {
+      "name": "crushing",
+      "letter": "C",
+      "title": "The crusher",
+      "_what": "Two crushing wheels with the controller between them, fed over a short belt loop.",
+      "match": [
+        { "box": [[2, 2, 3], [8, 6, 7]] }
+      ]
+    },
+    {
+      "name": "storage",
+      "letter": "V",
+      "title": "Storage",
+      "_what": "The vault wall and the chest row beneath it.",
+      "match": [
+        { "ids": ["create:item_vault", "minecraft:chest", "quark:oak_chest", "minecraft:barrel"] },
+        { "pos": [2, 4, 8] }
+      ]
+    },
+    {
+      "name": "drive",
+      "letter": "=",
+      "title": "The drive",
+      "_what": "Everything that carries rotation, plus the water the wheels sit in. Built first, because every other part hangs off it — and it is the one assembly whose power comes from outside the schematic: on the server the chain drives run on into the next machine, so a studio take has to feed them from a creative motor.",
+      "match": [
+        { "ids": ["create:encased_chain_drive", "create:shaft", "create:andesite_encased_shaft",
+                  "create:gearbox", "create:cogwheel", "create:large_cogwheel",
+                  "create:andesite_encased_cogwheel", "create:andesite_encased_large_cogwheel",
+                  "create:water_wheel", "create:rotation_speed_controller", "create:stressometer",
+                  "minecraft:water"] }
+      ]
+    }
+  ]
+}

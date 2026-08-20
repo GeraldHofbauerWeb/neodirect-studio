@@ -69,10 +69,14 @@ DROP_ENTITIES = {'minecraft:player', 'minecraft:item', 'minecraft:experience_orb
 
 
 def is_natural(name):
+    base = name.split(':', 1)[1] if ':' in name else name
+    # Ore is worldgen whoever registered it — Create adds zinc ore to the same stone a machine is
+    # dug into, and two stray blocks of it in a wall look exactly like part of the build.
+    if base.endswith('_ore') or base == 'ancient_debris':
+        return True
     if not name.startswith('minecraft:'):
-        return False  # every modded block is something somebody placed
-    base = name.split(':', 1)[1]
-    return base in NATURAL or base.endswith('_ore') or base == 'ancient_debris'
+        return False  # every other modded block is something somebody placed
+    return base in NATURAL
 
 
 class Region:

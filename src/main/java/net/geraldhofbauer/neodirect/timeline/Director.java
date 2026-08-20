@@ -1,11 +1,14 @@
 package net.geraldhofbauer.neodirect.timeline;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.geraldhofbauer.neodirect.NeoDirect;
 import net.geraldhofbauer.neodirect.client.ClientBridge;
 import net.geraldhofbauer.neodirect.schematic.BillOfMaterials;
 import net.geraldhofbauer.neodirect.schematic.SchematicSource;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +23,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -43,6 +47,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,8 +149,9 @@ public final class Director {
 
         List<Step> steps;
         try {
-            steps = expand(timeline, schematic, player.serverLevel(), player);
-        } catch (RuntimeException e) {
+            steps = expand(timeline, schematic, loadParts(timeline, schematic.blocks()),
+                    player.serverLevel(), player);
+        } catch (IOException | RuntimeException e) {
             failure.completeExceptionally(e);
             return failure;
         }
@@ -245,18 +253,36 @@ public final class Director {
             throw new IllegalStateException("no player in the world");
         }
         SchematicSource.Schematic full = loadSchematic(server, timeline);
-        JsonObject report = Verifier.verify(player.serverLevel(), timeline.origin(), scopeToTimeline(timeline, full));
+
+        // Whatever a setBlocks cue put down is not in the schematic and must not be compared
+        // against it: the creative motor that drives the finished machine would otherwise read as
+        // a block in the wrong state, every single take.
+        Set<BlockPos> extras = new LinkedHashSet<>();
+        boolean running = false;
+        for (Cue cue : timeline.cues()) {
+            if (cue instanceof Cue.SetBlocks setBlocks) {
+                running = true;
+                for (Cue.BlockSpec spec : setBlocks.blocks()) {
+                    extras.add(timeline.origin().offset(spec.x(), spec.y(), spec.z()));
+                }
+            }
+        }
+
+        JsonObject report = Verifier.verify(player.serverLevel(), timeline.origin(),
+                scopeToTimeline(timeline, full), extras, running);
         report.add("cameraClearance", Verifier.checkCameraClearance(player.serverLevel(), timeline, 240));
         return report;
     }
 
     /** Narrows a schematic to just the blocks and entities a given timeline actually places. */
     private static SchematicSource.Schematic scopeToTimeline(Timeline timeline,
-                                                             SchematicSource.Schematic full) {
+                                                             SchematicSource.Schematic full)
+            throws IOException {
+        Map<String, List<Integer>> parts = loadParts(timeline, full.blocks());
         Set<Integer> claimed = new LinkedHashSet<>();
         for (Cue cue : timeline.cues()) {
             if (cue instanceof Cue.Place place) {
-                resolve(place, full.blocks(), claimed);
+                resolve(place, full.blocks(), parts, claimed);
             }
         }
         List<SchematicSource.SchematicBlock> blocks = claimed.stream()
@@ -283,6 +309,7 @@ public final class Director {
      */
     private static List<Integer> resolve(Cue.Place place,
                                          List<SchematicSource.SchematicBlock> schematic,
+                                         Map<String, List<Integer>> parts,
                                          Set<Integer> alreadyPlaced) {
         List<Integer> resolved = new ArrayList<>();
 
@@ -305,6 +332,16 @@ public final class Director {
                     throw new IllegalArgumentException("no blocks of type " + ofType.blockIds() + " in the schematic");
                 }
             }
+            case Cue.Place.Part part -> {
+                for (String name : part.names()) {
+                    List<Integer> indices = parts.get(name);
+                    if (indices == null) {
+                        throw new IllegalArgumentException(
+                                "no part named \"" + name + "\" — the manifest has " + parts.keySet());
+                    }
+                    resolved.addAll(indices);
+                }
+            }
             case Cue.Place.Rest rest -> {
                 Set<String> held = Set.copyOf(rest.exceptTypes());
                 for (int i = 0; i < schematic.size(); i++) {
@@ -321,6 +358,52 @@ public final class Director {
 
         alreadyPlaced.addAll(resolved);
         return resolved;
+    }
+
+    /**
+     * Named assemblies out of the file tools/parts.py writes, mapped onto schematic indices.
+     *
+     * <p>The file lists positions rather than indices on purpose. An index is only meaningful for
+     * one particular cut of the schematic, and this one has already been re-cut three times as the
+     * box moved; a position that no longer exists is a loud failure, while an index that has
+     * quietly come to mean a different block is not a failure at all until somebody watches the
+     * video.
+     */
+    private static Map<String, List<Integer>> loadParts(Timeline timeline,
+                                                        List<SchematicSource.SchematicBlock> schematic)
+            throws IOException {
+        if (timeline.parts() == null) {
+            return Map.of();
+        }
+        Path file = schematicDir().resolve(timeline.parts());
+        if (!Files.isRegularFile(file)) {
+            throw new IllegalArgumentException("parts file not found: " + file.toAbsolutePath());
+        }
+
+        Map<BlockPos, Integer> byPos = new LinkedHashMap<>();
+        for (int i = 0; i < schematic.size(); i++) {
+            byPos.put(schematic.get(i).relPos(), i);
+        }
+
+        JsonObject root = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+        JsonObject parts = GsonHelper.getAsJsonObject(root, "parts");
+        Map<String, List<Integer>> out = new LinkedHashMap<>();
+        for (String name : parts.keySet()) {
+            List<Integer> indices = new ArrayList<>();
+            for (JsonElement el : parts.getAsJsonArray(name)) {
+                JsonArray pos = el.getAsJsonArray();
+                BlockPos at = new BlockPos(pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt());
+                Integer index = byPos.get(at);
+                if (index == null) {
+                    throw new IllegalArgumentException("part \"" + name + "\" names " + at
+                            + ", which is not in " + timeline.schematic()
+                            + " — re-run tools/parts.py after re-cutting the schematic");
+                }
+                indices.add(index);
+            }
+            out.put(name, List.copyOf(indices));
+        }
+        return Map.copyOf(out);
     }
 
     private static SchematicSource.Schematic loadSchematic(MinecraftServer server, Timeline timeline)
@@ -360,6 +443,7 @@ public final class Director {
      */
     private static List<Step> expand(Timeline timeline,
                                      SchematicSource.Schematic schematicData,
+                                     Map<String, List<Integer>> parts,
                                      ServerLevel level,
                                      ServerPlayer player) {
         List<SchematicSource.SchematicBlock> schematic = schematicData.blocks();
@@ -378,7 +462,7 @@ public final class Director {
         Set<Integer> claimed = new LinkedHashSet<>();
         for (Cue cue : timeline.cues()) {
             if (cue instanceof Cue.Place place) {
-                placements.put(place, resolve(place, schematic, claimed));
+                placements.put(place, resolve(place, schematic, parts, claimed));
             }
         }
         warnAboutUnplaced(schematic, claimed);
@@ -446,10 +530,20 @@ public final class Director {
                         () -> stored.get() + " stacks into " + fill.x() + "," + fill.y() + "," + fill.z()));
 
             } else if (cue instanceof Cue.ShowFilter showFilter) {
-                if (showFilter.blockIndex() < 0 || showFilter.blockIndex() >= schematic.size()) {
-                    throw new IllegalArgumentException("showFilter block index out of range: " + showFilter.blockIndex());
+                SchematicSource.SchematicBlock source;
+                if (showFilter.relPos() != null) {
+                    source = schematic.stream()
+                            .filter(block -> block.relPos().equals(showFilter.relPos()))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalArgumentException(
+                                    "showFilter: no schematic block at " + showFilter.relPos()));
+                } else {
+                    if (showFilter.blockIndex() < 0 || showFilter.blockIndex() >= schematic.size()) {
+                        throw new IllegalArgumentException(
+                                "showFilter block index out of range: " + showFilter.blockIndex());
+                    }
+                    source = schematic.get(showFilter.blockIndex());
                 }
-                SchematicSource.SchematicBlock source = schematic.get(showFilter.blockIndex());
                 steps.add(new Step(showFilter.atMs(), "showFilter",
                         () -> showFilter(level, player, source),
                         itemName(source.state())));
@@ -458,6 +552,12 @@ public final class Director {
                 steps.add(new Step(screen.atMs(), "screen",
                         () -> toggleScreen(level, player, timeline.origin(), screen),
                         screen.action()));
+
+            } else if (cue instanceof Cue.SetBlocks setBlocks) {
+                BlockPos origin = timeline.origin();
+                steps.add(new Step(setBlocks.atMs(), "setBlocks",
+                        () -> setBlocks.blocks().forEach(spec -> setBlock(level, origin, spec)),
+                        setBlocks.blocks().size() + " blocks"));
 
             } else if (cue instanceof Cue.Marker marker) {
                 steps.add(new Step(marker.atMs(), "marker", () -> {
@@ -519,6 +619,38 @@ public final class Director {
         if (!missed.isEmpty()) {
             NeoDirect.LOGGER.warn("{} schematic block(s) no cue places: {}",
                     schematic.size() - claimed.size(), missed);
+        }
+    }
+
+    /**
+     * Puts down a block the schematic does not contain, spelled the way {@code /setblock} spells it.
+     *
+     * <p>Parsed with the game's own {@link BlockStateParser}, so properties and NBT come for free
+     * and the syntax is one a Minecraft player already knows. Clearable first for the same reason
+     * every other placement does it: replacing a block entity without emptying it scatters its
+     * contents across the floor.
+     */
+    private static void setBlock(ServerLevel level, BlockPos origin, Cue.BlockSpec spec) {
+        BlockPos pos = origin.offset(spec.x(), spec.y(), spec.z());
+        BlockStateParser.BlockResult parsed;
+        try {
+            parsed = BlockStateParser.parseForBlock(
+                    level.holderLookup(Registries.BLOCK), new StringReader(spec.block()), true);
+        } catch (CommandSyntaxException e) {
+            throw new IllegalArgumentException("setBlocks: cannot parse \"" + spec.block() + "\": " + e.getMessage());
+        }
+
+        Clearable.tryClear(level.getBlockEntity(pos));
+        level.setBlock(pos, parsed.blockState(), Block.UPDATE_ALL);
+        CompoundTag nbt = parsed.nbt();
+        if (nbt != null) {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity != null) {
+                CompoundTag merged = entity.saveWithId(level.registryAccess());
+                merged.merge(nbt);
+                entity.loadWithComponents(merged, level.registryAccess());
+                entity.setChanged();
+            }
         }
     }
 

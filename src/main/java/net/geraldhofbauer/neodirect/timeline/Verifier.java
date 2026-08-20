@@ -13,6 +13,7 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -34,9 +35,19 @@ public final class Verifier {
     private Verifier() {
     }
 
+    /**
+     * @param extras  positions a {@code setBlocks} cue filled that the schematic knows nothing
+     *                about — a creative motor on the open end of the drive, say. They are excluded
+     *                from the comparison rather than counted as wrong.
+     * @param running true when the take ends with the machine working. A machine that works puts
+     *                items on belts and drops some of them, and the litter count stops being a
+     *                signal that something was destroyed.
+     */
     public static JsonObject verify(ServerLevel level,
                                     BlockPos origin,
-                                    SchematicSource.Schematic schematic) {
+                                    SchematicSource.Schematic schematic,
+                                    Set<BlockPos> extras,
+                                    boolean running) {
         JsonArray mismatches = new JsonArray();
         int matched = 0;
         int missing = 0;
@@ -44,6 +55,9 @@ public final class Verifier {
 
         for (SchematicSource.SchematicBlock block : schematic.blocks()) {
             BlockPos pos = origin.offset(block.relPos());
+            if (extras.contains(pos)) {
+                continue;
+            }
             BlockState actual = level.getBlockState(pos);
             BlockState expected = block.state();
 
@@ -79,11 +93,19 @@ public final class Verifier {
         result.addProperty("wrongState", wrongState);
         result.add("mismatches", mismatches);
 
+        if (!extras.isEmpty()) {
+            result.addProperty("extraBlocks", extras.size());
+        }
+
         AABB area = bounds(origin, schematic);
         if (area != null) {
             result.add("entities", entityReport(level, area, schematic));
-            result.addProperty("looseItems",
-                    level.getEntitiesOfClass(ItemEntity.class, area).size());
+            int loose = level.getEntitiesOfClass(ItemEntity.class, area).size();
+            result.addProperty("looseItems", loose);
+            // Litter normally means a block entity was destroyed and spilled. It stops meaning
+            // that the moment the machine is running: a belt carrying ore is a belt with items on
+            // it, and some of them fall off the end. Reported either way, judged only when still.
+            result.addProperty("looseItemsExpected", running);
         }
 
         result.addProperty("ok", missing == 0 && wrongState == 0 && schematic.unknownBlocks().isEmpty());
