@@ -1,0 +1,98 @@
+{
+  "spec": "schematics/ore_plant.clip.json",
+  "box": [
+    [
+      -3303,
+      5,
+      -2139
+    ],
+    [
+      -3289,
+      15,
+      -2124
+    ]
+  ],
+  "seed": [
+    -3295,
+    9,
+    -2122
+  ],
+  "dropped": [
+    "create:copycat_panel",
+    "create:cut_deepslate_brick_stairs",
+    "create:cut_deepslate_bricks",
+    "minecraft:black_stained_glass",
+    "minecraft:cobbled_deepslate",
+    "minecraft:cobblestone",
+    "minecraft:cracked_deepslate_bricks",
+    "minecraft:deepslate_brick_slab",
+    "minecraft:deepslate_brick_stairs",
+    "minecraft:deepslate_bricks",
+    "minecraft:deepslate_tiles",
+    "minecraft:glowstone",
+    "minecraft:infested_deepslate",
+    "minecraft:infested_stone",
+    "minecraft:lava_cauldron",
+    "minecraft:wall_torch",
+    "quark:azalea_leaf_carpet"
+  ],
+  "origin": [
+    -3303,
+    5,
+    -2139
+  ],
+  "size": [
+    15,
+    11,
+    16
+  ],
+  "blocks": 237,
+  "blockEntities": 224,
+  "entities": {},
+  "namespaces": {
+    "create": 208,
+    "minecraft": 27,
+    "quark": 2
+  },
+  "types": {
+    "create:belt": 46,
+    "create:encased_chain_drive": 28,
+    "create:item_vault": 27,
+    "create:display_board": 16,
+    "create:brass_belt_funnel": 15,
+    "minecraft:chest": 12,
+    "create:shaft": 9,
+    "create:andesite_belt_funnel": 9,
+    "create:display_link": 8,
+    "create:gearbox": 7,
+    "create:brass_funnel": 7,
+    "create:content_observer": 6,
+    "create:andesite_encased_shaft": 5,
+    "minecraft:water": 5,
+    "create:andesite_encased_large_cogwheel": 4,
+    "minecraft:redstone_lamp": 4,
+    "minecraft:redstone_block": 4,
+    "create:basin": 3,
+    "create:mechanical_press": 3,
+    "create:smart_chute": 3,
+    "create:andesite_encased_cogwheel": 2,
+    "minecraft:barrel": 2,
+    "create:crushing_wheel": 2,
+    "quark:oak_chest": 2,
+    "create:stressometer": 1,
+    "create:rotation_speed_controller": 1,
+    "create:water_wheel": 1,
+    "create:large_cogwheel": 1,
+    "create:stockpile_switch": 1,
+    "create:crushing_wheel_controller": 1,
+    "create:encased_fan": 1,
+    "create:portable_storage_interface": 1
+  },
+  "filters": {
+    "?": 22,
+    "create:filter": 20,
+    "minecraft:clay_ball": 1,
+    "create:experience_nugget": 1
+  },
+  "truncated": false
+}

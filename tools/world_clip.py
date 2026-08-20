@@ -279,6 +279,48 @@ def flood(world, start, limit, extra_natural, extra_machine):
     return selected, truncated
 
 
+def select_box(world, lo, hi, drop, extra_natural, extra_machine):
+    """Every built block inside a box, minus the ones named in `drop`.
+
+    A flood fill is the wrong tool once a machine is embedded in a building: the walls are built
+    too, so "everything connected that is not worldgen" is the whole base, and the kinetic network
+    happily bridges into the next room. A box says where the machine is; the drop list says which
+    of the blocks in it are housing rather than machine, and both are recorded rather than
+    guessed at from the block id.
+    """
+
+    def built(name):
+        if name in drop:
+            return False
+        if name in extra_machine:
+            return True
+        if name in extra_natural:
+            return False
+        return not is_natural(name)
+
+    selected = {}
+    for x in range(lo[0], hi[0] + 1):
+        for y in range(lo[1], hi[1] + 1):
+            for z in range(lo[2], hi[2] + 1):
+                block = world.block(x, y, z)
+                if block and built(block[0]):
+                    selected[(x, y, z)] = block
+
+    # Fluids come second, and only where they touch something kept: the machine's water, not the
+    # puddle it stands in.
+    for x in range(lo[0], hi[0] + 1):
+        for y in range(lo[1], hi[1] + 1):
+            for z in range(lo[2], hi[2] + 1):
+                if (x, y, z) in selected:
+                    continue
+                block = world.block(x, y, z)
+                if not block or block[0] not in FLUIDS:
+                    continue
+                if any((x + dx, y + dy, z + dz) in selected for dx, dy, dz in NEIGHBOURS):
+                    selected[(x, y, z)] = block
+    return selected
+
+
 def build_structure(world, selected, data_version, drop_entities):
     xs = [p[0] for p in selected]
     ys = [p[1] for p in selected]
@@ -336,9 +378,14 @@ def build_structure(world, selected, data_version, drop_entities):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('world', help='directory holding region/ and entities/')
-    ap.add_argument('--seed', nargs=3, type=int, required=True, metavar=('X', 'Y', 'Z'),
-                    help='a block coordinate inside or next to the build')
+    ap.add_argument('world', nargs='?', help='directory holding region/ and entities/')
+    ap.add_argument('--spec', help='JSON file holding world, box, drop and seed')
+    ap.add_argument('--seed', nargs=3, type=int, metavar=('X', 'Y', 'Z'),
+                    help='a block coordinate inside or next to the build (flood fill)')
+    ap.add_argument('--box', nargs=6, type=int, metavar=('X0', 'Y0', 'Z0', 'X1', 'Y1', 'Z1'),
+                    help='clip this box instead of flood filling')
+    ap.add_argument('--drop', action='append', default=[],
+                    help='block id to leave behind, e.g. housing (repeatable)')
     ap.add_argument('--out', help='write the structure file here')
     ap.add_argument('--report', help='write the JSON report here')
     ap.add_argument('--limit', type=int, default=20000, help='stop after this many blocks')
@@ -351,22 +398,44 @@ def main():
     ap.add_argument('--dry-run', action='store_true', help='report only, write nothing')
     args = ap.parse_args()
 
-    world = World(args.world)
-    seed = tuple(args.seed)
+    spec = json.loads(Path(args.spec).read_text()) if args.spec else {}
+    world_dir = args.world or spec.get('world')
+    if not world_dir:
+        raise SystemExit('need a world directory, on the command line or in the spec')
+    box = args.box or ([*spec['box']['from'], *spec['box']['to']] if 'box' in spec else None)
+    seed = tuple(args.seed) if args.seed else tuple(spec['seed']) if 'seed' in spec else None
+    drop = set(args.drop) | set(spec.get('drop', []))
+    extra_natural = set(args.natural) | set(spec.get('natural', []))
+    extra_machine = set(args.machine) | set(spec.get('machine', []))
+    drop_entities = DROP_ENTITIES | set(args.drop_entity) | set(spec.get('dropEntities', []))
+    out = args.out or spec.get('out')
+    report_path = args.report or spec.get('report')
 
-    start = find_seed(world, seed)
-    if start is None:
-        raise SystemExit(f'no built block within 6 blocks of {seed} — wrong coordinate, '
-                         f'or the chunk was never saved (/save-all flush)')
-    print(f'seed {seed} -> nearest built block {start}  {world.block(*start)[0]}')
+    world = World(world_dir)
+    truncated = False
 
-    selected, truncated = flood(world, start, args.limit,
-                                set(args.natural), set(args.machine))
-    if truncated:
-        print(f'!! stopped at --limit {args.limit} blocks; the selection is incomplete')
+    if box:
+        lo_box = (min(box[0], box[3]), min(box[1], box[4]), min(box[2], box[5]))
+        hi_box = (max(box[0], box[3]), max(box[1], box[4]), max(box[2], box[5]))
+        print(f'box {lo_box} .. {hi_box}, dropping {len(drop)} block types')
+        selected = select_box(world, lo_box, hi_box, drop, extra_natural, extra_machine)
+    elif seed:
+        start = find_seed(world, seed)
+        if start is None:
+            raise SystemExit(f'no built block within 6 blocks of {seed} — wrong coordinate, '
+                             f'or the chunk was never saved (/save-all flush)')
+        print(f'seed {seed} -> nearest built block {start}  {world.block(*start)[0]}')
+        selected, truncated = flood(world, start, args.limit, extra_natural, extra_machine)
+        if truncated:
+            print(f'!! stopped at --limit {args.limit} blocks; the selection is incomplete')
+    else:
+        raise SystemExit('need --box or --seed')
+
+    if not selected:
+        raise SystemExit('nothing selected')
 
     root, lo, hi, dropped = build_structure(
-        world, selected, world.data_version, DROP_ENTITIES | set(args.drop_entity))
+        world, selected, world.data_version, drop_entities)
 
     histogram = Counter(name for name, _ in selected.values())
     namespaces = Counter(name.split(':', 1)[0] for name, _ in selected.values())
@@ -407,13 +476,15 @@ def main():
         print('\n--dry-run: nothing written')
         return
 
-    if args.out:
-        nbt_save(root, args.out)
-        print(f'\n-> {args.out}')
-    if args.report:
+    if out:
+        nbt_save(root, out)
+        print(f'\n-> {out}')
+    if report_path:
         report = {
-            'seed': list(seed),
-            'start': list(start),
+            'spec': args.spec,
+            'box': [list(lo_box), list(hi_box)] if box else None,
+            'seed': list(seed) if seed else None,
+            'dropped': sorted(drop),
             'origin': list(lo),
             'size': size,
             'blocks': len(selected),
@@ -424,8 +495,8 @@ def main():
             'filters': filters,
             'truncated': truncated,
         }
-        Path(args.report).write_text(json.dumps(report, indent=2) + '\n')
-        print(f'-> {args.report}')
+        Path(report_path).write_text(json.dumps(report, indent=2) + '\n')
+        print(f'-> {report_path}')
 
 
 if __name__ == '__main__':

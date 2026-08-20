@@ -34,7 +34,9 @@ RX=$1; RZ=$2; R=$3
 rm -rf /tmp/mcclip
 mkdir -p /tmp/mcclip
 
-docker run --rm \
+# -i or the container gets no stdin and `sh -s` reads the script as an empty file: it
+# succeeds, copies nothing, and the only symptom is an empty scratch directory.
+docker run --rm -i \
   -v /home/amp:/amp:ro \
   -v /tmp/mcclip:/out \
   alpine:latest sh -s -- "$RX" "$RZ" "$R" <<'INNER'

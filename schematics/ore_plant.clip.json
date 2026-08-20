@@ -1,0 +1,39 @@
+{
+  "_what": "How schematics/ore_plant.nbt was cut out of the server world. Replay with tools/world_clip.py --spec. The world files themselves are not in the repository (scratch/ is ignored); tools/pull-world-region.sh fetches them again.",
+  "_where": "games2.geraldhofbauer.net:25567, the ore processing plant Gerry was standing in front of at -3294.8 / 8.8 / -2122.2.",
+
+  "world": "scratch/world",
+  "seed": [-3295, 9, -2122],
+
+  "_box": "A flood fill is useless here: the machine is built inside a deepslate-brick room, and the kinetic network runs on into the next machine, so 'everything connected that was placed by hand' is the entire base. The box is the cluster of ore-processing blocks, measured rather than eyeballed.\n\nThe east edge sits at -3289, one block past the docking station, and that is deliberate. The cluster runs on to -3280, but what continues there is 108 item vaults, 85 deployers, 54 drills, 16 chassis, a cart assembler and a plough — the mining train from the pilot episode, parked at its unloading point. Cutting at the cluster boundary would have put 142 of its blocks in the schematic and left 132 outside, which is how ten unexplained deployers and a vault wall with no purpose ended up in the first cut.",
+  "box": {
+    "from": [-3303, 5, -2139],
+    "to":   [-3289, 15, -2124]
+  },
+
+  "_drop": "The housing. 1026 of the 1397 built blocks in the box are the room the machine stands in, and an episode that builds them is an episode that spends two minutes on a wall. Every id is listed rather than matched by pattern, because '_slab' would also throw away something that turns out to matter.",
+  "drop": [
+    "create:cut_deepslate_bricks",
+    "create:cut_deepslate_brick_stairs",
+    "create:copycat_panel",
+    "minecraft:deepslate_bricks",
+    "minecraft:cracked_deepslate_bricks",
+    "minecraft:deepslate_tiles",
+    "minecraft:deepslate_brick_slab",
+    "minecraft:deepslate_brick_stairs",
+    "minecraft:cobbled_deepslate",
+    "minecraft:cobblestone",
+    "minecraft:black_stained_glass",
+    "minecraft:glowstone",
+    "minecraft:wall_torch",
+    "minecraft:lava_cauldron",
+    "minecraft:infested_stone",
+    "minecraft:infested_deepslate",
+    "quark:azalea_leaf_carpet"
+  ],
+
+  "_keep": "Deliberately kept even though they look like scenery: redstone_block and redstone_lamp drive the stockpile switch and the content observers, chests and barrels are the machine's own buffers, and the rail, plough and cart assembler belong to the vault bank that docks on portable storage interfaces.",
+
+  "out": "schematics/ore_plant.nbt",
+  "report": "schematics/ore_plant.report.json"
+}
