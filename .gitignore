@@ -12,3 +12,4 @@ out/voice/*
 !out/voice/subtitles.srt
 libs/*.jar
 libs/create-nested/
+scratch/
