@@ -1,12 +1,12 @@
 {
   "take": "ore-plant-build",
-  "_what": "A build with no narration, for checking the clone is complete and that it reads as somebody building rather than as a machine appearing.",
+  "_what": "A build with no narration, for checking the clone is complete, that it holds itself up, and that the boiler actually turns the plant. The housing goes first, then the boiler, then the machine it drives.",
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
-    -1,
+    0,
     -61,
-    -1
+    0
   ],
   "clearStage": true,
   "presentation": {
@@ -19,91 +19,91 @@
     {
       "atMs": 0,
       "type": "camera",
-      "durationMs": 48000,
+      "durationMs": 62000,
       "keyframes": [
         {
           "pos": [
-            -1.0,
-            -46.0,
+            2.6,
+            -44.1,
             -5.5
           ],
-          "yaw": -30.0,
-          "pitch": 30.9
+          "yaw": -20.0,
+          "pitch": 27.2
         },
         {
           "pos": [
-            -8.0,
-            -46.0,
-            3.6
+            -8.9,
+            -44.1,
+            4.9
           ],
-          "yaw": -74.9,
-          "pitch": 30.9
+          "yaw": -64.9,
+          "pitch": 27.1
         },
         {
           "pos": [
-            -6.5,
-            -46.0,
-            15.0
+            -9.5,
+            -44.1,
+            20.4
           ],
-          "yaw": -120.0,
-          "pitch": 30.9
+          "yaw": -110.0,
+          "pitch": 27.2
+        },
+        {
+          "pos": [
+            0.9,
+            -44.1,
+            31.9
+          ],
+          "yaw": -154.9,
+          "pitch": 27.1
+        },
+        {
+          "pos": [
+            16.4,
+            -44.1,
+            32.5
+          ],
+          "yaw": 160.0,
+          "pitch": 27.2
+        },
+        {
+          "pos": [
+            27.9,
+            -44.1,
+            22.1
+          ],
+          "yaw": 115.1,
+          "pitch": 27.1
+        },
+        {
+          "pos": [
+            28.5,
+            -44.1,
+            6.6
+          ],
+          "yaw": 70.0,
+          "pitch": 27.2
+        },
+        {
+          "pos": [
+            18.1,
+            -44.1,
+            -4.9
+          ],
+          "yaw": 25.1,
+          "pitch": 27.1
         },
         {
           "pos": [
             2.6,
-            -46.0,
-            22.0
-          ],
-          "yaw": -164.9,
-          "pitch": 30.9
-        },
-        {
-          "pos": [
-            14.0,
-            -46.0,
-            20.5
-          ],
-          "yaw": 150.0,
-          "pitch": 30.9
-        },
-        {
-          "pos": [
-            21.0,
-            -46.0,
-            11.4
-          ],
-          "yaw": 105.1,
-          "pitch": 30.9
-        },
-        {
-          "pos": [
-            19.5,
-            -46.0,
-            0.0
-          ],
-          "yaw": 60.0,
-          "pitch": 30.9
-        },
-        {
-          "pos": [
-            10.4,
-            -46.0,
-            -7.0
-          ],
-          "yaw": 15.1,
-          "pitch": 30.9
-        },
-        {
-          "pos": [
-            -1.0,
-            -46.0,
+            -44.1,
             -5.5
           ],
-          "yaw": -30.0,
-          "pitch": 30.9
+          "yaw": -20.0,
+          "pitch": 27.2
         }
       ],
-      "_what": "one orbit at 15 blocks and 9 above centre \u2014 steep enough to look down into the machine rather than at the wall around it"
+      "_what": "one orbit for the whole build"
     },
     {
       "atMs": 800,
@@ -111,83 +111,92 @@
       "blocks": {
         "part": "shell"
       },
-      "spanMs": 7000,
-      "_what": "floor and the walls things hang on"
+      "spanMs": 9000,
+      "_what": "shell"
     },
     {
-      "atMs": 9300,
+      "atMs": 11400,
+      "type": "place",
+      "blocks": {
+        "part": "boiler"
+      },
+      "spanMs": 3600,
+      "_what": "boiler"
+    },
+    {
+      "atMs": 16600,
       "type": "place",
       "blocks": {
         "part": "drive"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "drive"
     },
     {
-      "atMs": 13900,
+      "atMs": 21800,
       "type": "place",
       "blocks": {
         "part": "dock"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "dock"
     },
     {
-      "atMs": 18500,
+      "atMs": 27000,
       "type": "place",
       "blocks": {
         "part": "crushing"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "crushing"
     },
     {
-      "atMs": 23100,
+      "atMs": 32200,
       "type": "place",
       "blocks": {
         "part": "washing"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "washing"
     },
     {
-      "atMs": 27700,
+      "atMs": 37400,
       "type": "place",
       "blocks": {
         "part": "sorting"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "sorting"
     },
     {
-      "atMs": 32300,
+      "atMs": 42600,
       "type": "place",
       "blocks": {
         "part": "compacting"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "compacting"
     },
     {
-      "atMs": 36900,
+      "atMs": 47800,
       "type": "place",
       "blocks": {
         "part": "storage"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "storage"
     },
     {
-      "atMs": 41500,
+      "atMs": 53000,
       "type": "place",
       "blocks": {
         "part": "readout"
       },
-      "spanMs": 3400,
+      "spanMs": 3600,
       "_what": "readout"
     },
     {
-      "atMs": 46100,
+      "atMs": 58200,
       "type": "marker",
       "label": "built"
     }

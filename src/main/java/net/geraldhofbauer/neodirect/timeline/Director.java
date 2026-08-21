@@ -12,6 +12,7 @@ import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -451,6 +452,13 @@ public final class Director {
         Timeline.Presentation presentation = timeline.presentation();
         List<Step> steps = new ArrayList<>();
 
+        // How far this build has moved from where it was cut. Block entity NBT is full of absolute
+        // world positions — a display link points at the container it counts — and they have to
+        // move with it or the machine arrives pointing at the coordinates it used to occupy.
+        BlockPos sourceOrigin = schematicData.sourceOrigin();
+        BlockPos shift = sourceOrigin == null ? null : timeline.origin().subtract(sourceOrigin);
+        net.minecraft.core.Vec3i sourceSize = schematicData.sourceSize();
+
         // Every take starts from bare ground. Without this, take B would be shot on top of take A's
         // leftovers and the two would not be comparable — and comparing them is the entire point.
         // With clearStage on (the default) the whole schematic footprint is wiped, not just the
@@ -607,7 +615,8 @@ public final class Director {
                     steps.add(new Step(place.atMs(), "place",
                             () -> {
                                 for (SchematicSource.SchematicBlock block : targets) {
-                                    placeBlock(level, origin.offset(block.relPos()), block, presentation);
+                                    placeBlock(level, origin.offset(block.relPos()), block,
+                                            presentation, shift, sourceOrigin, sourceSize);
                                 }
                             },
                             describePlacement(targets)));
@@ -631,7 +640,8 @@ public final class Director {
                                     itemName(block.state())));
                         }
                         steps.add(new Step(at, "place",
-                                () -> placeBlock(level, origin.offset(block.relPos()), block, presentation),
+                                () -> placeBlock(level, origin.offset(block.relPos()), block,
+                                        presentation, shift, sourceOrigin, sourceSize),
                                 itemName(block.state())));
                     }
 
@@ -649,7 +659,8 @@ public final class Director {
                                 for (SchematicSource.SchematicBlock block : targets) {
                                     BlockPos pos = origin.offset(block.relPos());
                                     if (!level.getBlockState(pos).equals(block.state())) {
-                                        placeBlock(level, pos, block, Timeline.Presentation.NONE);
+                                        placeBlock(level, pos, block, Timeline.Presentation.NONE,
+                                                shift, sourceOrigin, sourceSize);
                                     }
                                 }
                             },
@@ -804,10 +815,83 @@ public final class Director {
         return removed;
     }
 
+    /**
+     * Moves the absolute world positions that live inside block entity NBT.
+     *
+     * <p>A Create display link remembers the block it counts as a world position, and a flap
+     * display remembers the link that feeds it the same way. Clone the machine into a studio world
+     * and those coordinates still name the server, where in the studio there is nothing at all —
+     * so the boards come up blank while every block sits exactly where the verifier expects it.
+     * Nothing about that failure is visible until somebody looks at the screen.
+     *
+     * <p>Found by bounds rather than by name: three ints that land inside the box this schematic
+     * was cut from are a reference into it, and anything outside is left alone. Keying off known
+     * field names instead would work for the two fields we know about today and quietly fail for
+     * whatever the next mod stores.
+     */
+    private static void translatePositions(CompoundTag tag, BlockPos delta,
+                                           BlockPos from, net.minecraft.core.Vec3i size) {
+        for (String key : tag.getAllKeys()) {
+            Tag value = tag.get(key);
+            if (value instanceof CompoundTag nested) {
+                translatePositions(nested, delta, from, size);
+            } else if (value instanceof ListTag list) {
+                if (looksLikePos(list, from, size)) {
+                    tag.put(key, intList(list.getInt(0) + delta.getX(),
+                            list.getInt(1) + delta.getY(), list.getInt(2) + delta.getZ()));
+                    continue;
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i) instanceof CompoundTag nested) {
+                        translatePositions(nested, delta, from, size);
+                    }
+                }
+            } else if (value instanceof net.minecraft.nbt.IntArrayTag array && array.size() == 3) {
+                int[] xyz = array.getAsIntArray();
+                if (inside(xyz[0], xyz[1], xyz[2], from, size)) {
+                    tag.put(key, new net.minecraft.nbt.IntArrayTag(new int[]{
+                            xyz[0] + delta.getX(), xyz[1] + delta.getY(), xyz[2] + delta.getZ()}));
+                }
+            }
+        }
+    }
+
+    private static boolean looksLikePos(ListTag list, BlockPos from, net.minecraft.core.Vec3i size) {
+        if (list.size() != 3 || list.getElementType() != Tag.TAG_INT) {
+            return false;
+        }
+        return inside(list.getInt(0), list.getInt(1), list.getInt(2), from, size);
+    }
+
+    /** Generous by one block on every side: a link may well point at a block just outside the cut. */
+    private static boolean inside(int x, int y, int z, BlockPos from, net.minecraft.core.Vec3i size) {
+        return x >= from.getX() - 1 && x <= from.getX() + size.getX()
+                && y >= from.getY() - 1 && y <= from.getY() + size.getY()
+                && z >= from.getZ() - 1 && z <= from.getZ() + size.getZ();
+    }
+
+    private static ListTag intList(int x, int y, int z) {
+        ListTag out = new ListTag();
+        out.add(net.minecraft.nbt.IntTag.valueOf(x));
+        out.add(net.minecraft.nbt.IntTag.valueOf(y));
+        out.add(net.minecraft.nbt.IntTag.valueOf(z));
+        return out;
+    }
+
     private static void placeBlock(ServerLevel level,
                                    BlockPos target,
                                    SchematicSource.SchematicBlock block,
                                    Timeline.Presentation presentation) {
+        placeBlock(level, target, block, presentation, null, null, null);
+    }
+
+    private static void placeBlock(ServerLevel level,
+                                   BlockPos target,
+                                   SchematicSource.SchematicBlock block,
+                                   Timeline.Presentation presentation,
+                                   BlockPos delta,
+                                   BlockPos sourceOrigin,
+                                   net.minecraft.core.Vec3i sourceSize) {
         BlockState state = block.state();
         // Same reasoning as clearBlock: whatever is already here must not drop its inventory.
         Clearable.tryClear(level.getBlockEntity(target));
@@ -817,6 +901,9 @@ public final class Director {
             BlockEntity be = level.getBlockEntity(target);
             if (be != null) {
                 var tag = block.blockEntityNbt().copy();
+                if (delta != null && sourceOrigin != null) {
+                    translatePositions(tag, delta, sourceOrigin, sourceSize);
+                }
                 tag.putInt("x", target.getX());
                 tag.putInt("y", target.getY());
                 tag.putInt("z", target.getZ());
@@ -924,7 +1011,8 @@ public final class Director {
             level.setBlock(right, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         }
 
-        List<ItemStack> bill = BillOfMaterials.stacks(schematic, level.registryAccess());
+        List<ItemStack> bill = BillOfMaterials.stacks(schematic, level.registryAccess(),
+                Set.copyOf(cue.ignoreContentsOf()));
         int stored = 0;
         // Right half first: ChestBlock.getBlockType maps ChestType.RIGHT to BlockType.FIRST, so the
         // right chest's slots are the ones the combined screen shows at the top. Filling left-first

@@ -1,6 +1,7 @@
 package net.geraldhofbauer.neodirect.schematic;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -74,7 +75,16 @@ public final class SchematicSource {
      */
     public record Schematic(List<SchematicBlock> blocks,
                             List<SchematicEntity> entities,
-                            List<String> unknownBlocks) {}
+                            List<String> unknownBlocks,
+                            BlockPos sourceOrigin,
+                            Vec3i sourceSize) {
+
+        public Schematic(List<SchematicBlock> blocks,
+                         List<SchematicEntity> entities,
+                         List<String> unknownBlocks) {
+            this(blocks, entities, unknownBlocks, null, Vec3i.ZERO);
+        }
+    }
 
     /**
      * Loads all blocks of a schematic, ordered bottom-up then by distance from the corner. That is
@@ -139,7 +149,18 @@ public final class SchematicSource {
             return byZ != 0 ? byZ : Integer.compare(a.relPos().getX(), b.relPos().getX());
         });
 
-        return new Schematic(List.copyOf(out), readEntities(root), List.copyOf(unknown));
+        BlockPos sourceOrigin = null;
+        if (root.contains("neodirect:sourceOrigin", Tag.TAG_LIST)) {
+            ListTag origin = root.getList("neodirect:sourceOrigin", Tag.TAG_INT);
+            if (origin.size() == 3) {
+                sourceOrigin = new BlockPos(origin.getInt(0), origin.getInt(1), origin.getInt(2));
+            }
+        }
+        ListTag sizeTag = root.getList("size", Tag.TAG_INT);
+        Vec3i size = sizeTag.size() == 3
+                ? new Vec3i(sizeTag.getInt(0), sizeTag.getInt(1), sizeTag.getInt(2))
+                : Vec3i.ZERO;
+        return new Schematic(List.copyOf(out), readEntities(root), List.copyOf(unknown), sourceOrigin, size);
     }
 
     private static List<SchematicEntity> readEntities(CompoundTag root) {

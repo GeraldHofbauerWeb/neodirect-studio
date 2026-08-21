@@ -1,13 +1,13 @@
 {
   "take": "ore-plant",
-  "_what": "The episode as choreography: what happens where inside each beat, as a fraction of it. Absolute times come from the measured narration via tools/make-timeline.mjs — edit this file, never the generated script/ore-plant.json.",
+  "_what": "The episode as choreography: what happens where inside each beat, as a fraction of it. Absolute times come from the measured narration via tools/make-timeline.mjs — edit this file, never the generated script/ore-plant.json. Camera keyframes started as tools/frame-parts.mjs output and are tuned by hand from tools/preview.mjs stills.",
   "beats": "ore-plant.beats.json",
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
-    -1,
+    0,
     -61,
-    -1
+    0
   ],
   "clearStage": true,
   "presentation": {
@@ -23,65 +23,72 @@
       "blocks": {
         "part": "shell"
       },
-      "spanMs": 6000,
-      "_what": "floor, walls, and the box around every fluid"
+      "spanMs": 9000,
+      "_what": "floor and the walls things hang on"
     },
     {
-      "atMs": 6500,
+      "atMs": 9500,
       "type": "materialsChest",
       "pos": [
-        8,
+        22,
         1,
-        21
+        8
       ],
-      "facing": "north",
+      "facing": "west",
       "large": true,
-      "_what": "34 kinds, 34 stacks — a single chest is 27 slots, so this one has to be double"
+      "ignoreContentsOf": [
+        "create:item_vault",
+        "minecraft:chest",
+        "quark:oak_chest",
+        "minecraft:barrel"
+      ],
+      "_what": "49 kinds, 49 stacks — and the chests in the machine are full of product, which is stock and not a building cost"
     },
     {
       "beat": "b0",
       "at": 0,
+      "until": 1,
       "type": "camera",
-      "_what": "chest",
+      "_what": "the chest",
       "keyframes": [
         {
           "pos": [
-            7.5,
-            -57.2,
-            26.5
+            29,
+            -58,
+            8
           ],
-          "yaw": -180,
-          "pitch": 20.1
+          "yaw": 85.6,
+          "pitch": 12.1
         },
         {
           "pos": [
-            7.5,
-            -57.8,
-            23.5
+            26,
+            -58.6,
+            8
           ],
-          "yaw": -180,
-          "pitch": 28.1
+          "yaw": 81.9,
+          "pitch": 12.8
         },
         {
           "pos": [
-            7.5,
-            -58.2,
-            22.2
+            24.6,
+            -59,
+            8
           ],
-          "yaw": -180,
-          "pitch": 35.2
+          "yaw": 76.6,
+          "pitch": 10.5
         }
       ]
     },
     {
       "beat": "b0",
-      "at": 0.08,
+      "at": 0.1,
       "type": "screen",
       "action": "open",
       "pos": [
-        8,
+        22,
         1,
-        21
+        8
       ]
     },
     {
@@ -90,88 +97,90 @@
       "type": "screen",
       "action": "close",
       "pos": [
-        8,
+        22,
         1,
-        21
+        8
       ]
     },
     {
       "beat": "b1",
       "at": 0,
+      "until": 1,
       "type": "camera",
-      "_what": "drive",
+      "_what": "boiler",
       "keyframes": [
         {
           "pos": [
-            -6,
-            -54,
-            3
+            -6.8,
+            -44.8,
+            13.2
           ],
-          "yaw": -45,
-          "pitch": 4.5
+          "yaw": -54.9,
+          "pitch": 28.1
         },
         {
           "pos": [
-            -7,
-            -53,
-            10
+            -5.5,
+            -44.8,
+            17.5
           ],
-          "yaw": -78.7,
-          "pitch": 11.1
+          "yaw": -69.1,
+          "pitch": 34.4
         },
         {
           "pos": [
-            -6,
-            -55,
-            18
+            -3,
+            -44.8,
+            20.5
           ],
-          "yaw": -123.7,
-          "pitch": 0
+          "yaw": -82.9,
+          "pitch": 43.7
         }
       ]
     },
     {
       "beat": "b1",
-      "at": 0.12,
+      "at": 0.1,
       "type": "place",
       "blocks": {
-        "part": "drive"
+        "part": "boiler"
       },
-      "spanMs": 4000,
-      "_what": "42 blocks: chain drives, gearboxes, shafts, cogwheels, the two water wheels"
+      "spanMs": 6000,
+      "_what": "86 blocks: tanks, magma, engines, pumps, wheels"
     },
     {
       "beat": "b2",
       "at": 0,
+      "until": 1,
       "type": "camera",
-      "_what": "dock",
+      "_what": "drive",
       "keyframes": [
         {
           "pos": [
-            21,
-            -55,
-            3
+            4.1,
+            -47,
+            -1
           ],
-          "yaw": 55.6,
-          "pitch": 9.9
+          "yaw": -19.9,
+          "pitch": 26
         },
         {
           "pos": [
-            19,
-            -56,
-            9
+            2.7,
+            -47,
+            3.2
           ],
-          "yaw": 86.2,
-          "pitch": 7.6
+          "yaw": -34.1,
+          "pitch": 31.9
         },
         {
           "pos": [
-            20,
-            -55,
-            15
+            3,
+            -47,
+            7.1
           ],
-          "yaw": 122.9,
-          "pitch": 11.2
+          "yaw": -48,
+          "pitch": 40.9
         }
       ]
     },
@@ -180,534 +189,507 @@
       "at": 0.1,
       "type": "place",
       "blocks": {
+        "part": "drive"
+      },
+      "spanMs": 5000,
+      "_what": "chain drives, gearboxes, the speed controller"
+    },
+    {
+      "beat": "b3",
+      "at": 0,
+      "until": 1,
+      "type": "camera",
+      "_what": "dock",
+      "keyframes": [
+        {
+          "pos": [
+            26.2,
+            -52.8,
+            4.4
+          ],
+          "yaw": 60,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            22.8,
+            -52.8,
+            3.9
+          ],
+          "yaw": 45.9,
+          "pitch": 25.6
+        },
+        {
+          "pos": [
+            19.8,
+            -52.8,
+            4.7
+          ],
+          "yaw": 31.9,
+          "pitch": 33.9
+        }
+      ]
+    },
+    {
+      "beat": "b3",
+      "at": 0.08,
+      "type": "place",
+      "blocks": {
         "part": "dock"
       },
       "spanMs": 4000,
-      "_what": "belt, chutes, the portable storage interface the train unloads through"
+      "_what": "belt, chutes, the interface the train unloads through"
     },
     {
-      "beat": "b2",
-      "at": 0.55,
+      "beat": "b3",
+      "at": 0.62,
       "type": "showFilter",
       "pos": [
-        15,
+        19,
         3,
         10
       ],
       "_what": "allow: the eight stone types"
     },
     {
-      "beat": "b2",
-      "at": 0.72,
+      "beat": "b3",
+      "at": 0.8,
       "type": "showFilter",
       "pos": [
-        14,
+        18,
         3,
         10
       ],
       "_what": "deny: the same eight"
     },
     {
-      "beat": "b3",
+      "beat": "b4",
       "at": 0,
+      "until": 1,
       "type": "camera",
       "_what": "crushing",
       "keyframes": [
         {
           "pos": [
-            -4,
-            -54,
-            -4
+            0.8,
+            -52,
+            12.1
           ],
-          "yaw": -43.5,
-          "pitch": 6.5
+          "yaw": -120,
+          "pitch": 17.4
         },
         {
           "pos": [
-            1,
-            -55,
-            -6
+            4.2,
+            -52,
+            12.6
           ],
-          "yaw": -19.2,
-          "pitch": 2.4
+          "yaw": -134.1,
+          "pitch": 21.8
         },
         {
           "pos": [
-            6,
-            -55,
-            -6
+            7.2,
+            -52,
+            11.8
           ],
-          "yaw": 5,
-          "pitch": 2.5
+          "yaw": -148.1,
+          "pitch": 29.3
         }
       ]
     },
     {
-      "beat": "b3",
+      "beat": "b4",
       "at": 0.08,
       "type": "place",
       "blocks": {
         "part": "crushing"
       },
       "spanMs": 4000,
-      "_what": "two wheels, the controller, the belt loop that feeds them"
+      "_what": "two wheels, the controller, the belt loop"
     },
     {
-      "beat": "b3",
+      "beat": "b4",
       "at": 0.6,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         5,
         4
       ],
       "_what": "allow: crushed iron, gold, copper, zinc"
     },
     {
-      "beat": "b3",
-      "at": 0.78,
+      "beat": "b4",
+      "at": 0.8,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         5,
         5
       ],
       "_what": "deny: the same four"
     },
     {
-      "beat": "b4",
+      "beat": "b5",
       "at": 0,
+      "until": 1,
       "type": "camera",
       "_what": "washing",
       "keyframes": [
         {
           "pos": [
-            14,
-            -54,
-            -6
+            9.2,
+            -53,
+            15
           ],
-          "yaw": 38.7,
-          "pitch": 11.8
+          "yaw": -160.1,
+          "pitch": 15
         },
         {
           "pos": [
-            10,
-            -55,
-            -6
+            12.1,
+            -53,
+            13.2
           ],
-          "yaw": 14.9,
-          "pitch": 7.3
+          "yaw": -174.1,
+          "pitch": 18.9
         },
         {
           "pos": [
-            8,
-            -55.5,
-            -4.5
+            13.9,
+            -53,
+            10.7
           ],
-          "yaw": 0,
-          "pitch": 4.8
+          "yaw": 171.7,
+          "pitch": 25.6
         }
       ]
     },
     {
-      "beat": "b4",
+      "beat": "b5",
       "at": 0.1,
       "type": "place",
       "blocks": {
         "part": "washing"
       },
-      "spanMs": 4000,
-      "_what": "fan, water wheel, and the two clay funnels"
+      "spanMs": 3000,
+      "_what": "fan, leaf, water wheel, and the clay pair"
     },
     {
-      "beat": "b4",
-      "at": 0.7,
+      "beat": "b5",
+      "at": 0.72,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         4,
         6
       ],
       "_what": "allow: clay"
     },
     {
-      "beat": "b4",
-      "at": 0.85,
+      "beat": "b5",
+      "at": 0.87,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         5,
         7
       ],
       "_what": "deny: clay"
     },
     {
-      "beat": "b5",
+      "beat": "b6",
       "at": 0,
+      "until": 1,
       "type": "camera",
       "_what": "sorting",
       "keyframes": [
         {
           "pos": [
-            -3,
-            -51,
-            20
+            1.6,
+            -53,
+            10.1
           ],
-          "yaw": -131.4,
-          "pitch": 23.8
+          "yaw": -70.1,
+          "pitch": 16.7
         },
         {
           "pos": [
-            0,
-            -52,
-            20
+            3,
+            -53,
+            12.7
           ],
-          "yaw": -143.7,
-          "pitch": 23.3
+          "yaw": -84.3,
+          "pitch": 20.5
         },
         {
           "pos": [
-            4,
-            -52.5,
-            20
+            5.1,
+            -53,
+            14.3
           ],
-          "yaw": -168.7,
-          "pitch": 24.6
+          "yaw": -97.7,
+          "pitch": 26.7
         }
       ]
     },
     {
-      "beat": "b5",
+      "beat": "b6",
       "at": 0.06,
       "type": "place",
       "blocks": {
         "part": "sorting"
       },
-      "spanMs": 4000,
+      "spanMs": 5000,
       "_what": "six belts, six funnels"
     },
     {
-      "beat": "b5",
-      "at": 0.22,
+      "beat": "b6",
+      "at": 0.24,
       "type": "showFilter",
       "pos": [
-        4,
+        8,
         5,
         11
       ],
       "_what": "lane 1"
     },
     {
-      "beat": "b5",
-      "at": 0.34,
+      "beat": "b6",
+      "at": 0.36,
       "type": "showFilter",
       "pos": [
-        5,
+        9,
         5,
         11
       ],
       "_what": "lane 2"
     },
     {
-      "beat": "b5",
-      "at": 0.46,
+      "beat": "b6",
+      "at": 0.47,
       "type": "showFilter",
       "pos": [
-        6,
+        10,
         5,
         11
       ],
       "_what": "lane 3"
     },
     {
-      "beat": "b5",
-      "at": 0.56,
+      "beat": "b6",
+      "at": 0.57,
       "type": "showFilter",
       "pos": [
-        7,
+        11,
         5,
         11
       ],
       "_what": "lane 4"
     },
     {
-      "beat": "b5",
-      "at": 0.66,
+      "beat": "b6",
+      "at": 0.67,
       "type": "showFilter",
       "pos": [
-        8,
+        12,
         5,
         11
       ],
       "_what": "lane 5"
     },
     {
-      "beat": "b5",
-      "at": 0.76,
+      "beat": "b6",
+      "at": 0.77,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         5,
         11
       ],
       "_what": "lane 6"
     },
     {
-      "beat": "b6",
+      "beat": "b7",
       "at": 0,
+      "until": 1,
       "type": "camera",
       "_what": "compacting",
       "keyframes": [
         {
           "pos": [
-            14,
-            -52,
-            18
+            6.5,
+            -51,
+            4.8
           ],
-          "yaw": 130.6,
-          "pitch": 15.2
+          "yaw": -29.9,
+          "pitch": 16.6
         },
         {
           "pos": [
-            13,
-            -53,
-            15
+            5.9,
+            -51,
+            7.7
           ],
-          "yaw": 116.6,
-          "pitch": 12.6
+          "yaw": -44,
+          "pitch": 20.4
         },
         {
           "pos": [
-            12,
-            -53.5,
-            12
+            6.4,
+            -51,
+            10.3
           ],
-          "yaw": 90,
-          "pitch": 11.3
+          "yaw": -57.9,
+          "pitch": 26.5
         }
       ]
     },
     {
-      "beat": "b6",
+      "beat": "b7",
       "at": 0.08,
       "type": "place",
       "blocks": {
         "part": "compacting"
       },
-      "spanMs": 4000,
+      "spanMs": 3500,
       "_what": "three basins, three presses"
     },
     {
-      "beat": "b6",
+      "beat": "b7",
       "at": 0.45,
       "type": "showFilter",
       "pos": [
-        7,
+        11,
         5,
         13
       ],
       "_what": "basin: redstone and coal"
     },
     {
-      "beat": "b6",
+      "beat": "b7",
       "at": 0.6,
       "type": "showFilter",
       "pos": [
-        8,
+        12,
         5,
         13
       ],
       "_what": "basin: copper and zinc"
     },
     {
-      "beat": "b6",
+      "beat": "b7",
       "at": 0.74,
       "type": "showFilter",
       "pos": [
-        9,
+        13,
         5,
         13
       ],
       "_what": "basin: iron and gold"
     },
     {
-      "beat": "b7",
+      "beat": "b8",
       "at": 0,
+      "until": 1,
       "type": "camera",
       "_what": "storage",
       "keyframes": [
         {
           "pos": [
-            -5,
-            -55,
-            20
+            8,
+            -53,
+            -0.7
           ],
-          "yaw": -127.3,
-          "pitch": 6.5
+          "yaw": -10,
+          "pitch": 11.8
         },
         {
           "pos": [
-            -3,
-            -55,
-            19
+            5.9,
+            -53,
+            3.2
           ],
-          "yaw": -129.5,
-          "pitch": 7.8
+          "yaw": -24.1,
+          "pitch": 14.9
         },
         {
           "pos": [
-            0,
-            -55.5,
-            19
+            5.5,
+            -53,
+            7.1
           ],
-          "yaw": -141.8,
-          "pitch": 6.4
+          "yaw": -38,
+          "pitch": 20.3
         }
       ]
     },
     {
-      "beat": "b7",
-      "at": 0.1,
+      "beat": "b8",
+      "at": 0.06,
       "type": "place",
       "blocks": {
         "part": "storage"
       },
-      "spanMs": 4000,
+      "spanMs": 3500,
       "_what": "27 vaults, 12 chests"
     },
     {
       "beat": "b8",
-      "at": 0,
-      "type": "camera",
-      "_what": "readout",
-      "keyframes": [
-        {
-          "pos": [
-            5.5,
-            -50,
-            26
-          ],
-          "yaw": -180,
-          "pitch": 8.5
-        },
-        {
-          "pos": [
-            5.5,
-            -50.5,
-            22
-          ],
-          "yaw": -180,
-          "pitch": 9.5
-        },
-        {
-          "pos": [
-            5.5,
-            -51,
-            20
-          ],
-          "yaw": -180,
-          "pitch": 7.1
-        }
-      ]
-    },
-    {
-      "beat": "b8",
-      "at": 0.1,
+      "at": 0.45,
       "type": "place",
       "blocks": {
         "part": "readout"
       },
-      "spanMs": 4000,
-      "_what": "content observers, display links, sixteen boards"
-    },
-    {
-      "beat": "b9",
-      "at": 0.05,
-      "type": "setBlocks",
-      "_what": "the drive ends at the schematic edge; on the server the rest of the base fed it",
-      "blocks": [
-        {
-          "pos": [
-            0,
-            4,
-            13
-          ],
-          "block": "create:creative_motor[facing=east]{GeneratedSpeed:32}"
-        }
-      ]
+      "spanMs": 3500,
+      "_what": "observers, links, sixteen boards"
     },
     {
       "beat": "b9",
       "at": 0,
+      "until": 1,
       "type": "camera",
-      "_what": "run",
+      "_what": "drive",
       "keyframes": [
         {
           "pos": [
-            -8,
-            -50,
-            -8
+            18.3,
+            -47,
+            23.5
           ],
-          "yaw": -43.2,
-          "pitch": 15.3
+          "yaw": 139.8,
+          "pitch": 25.9
         },
         {
           "pos": [
-            -6,
-            -49,
-            14
+            18.1,
+            -47,
+            19.1
           ],
-          "yaw": -114.8,
-          "pitch": 26.1
+          "yaw": 126,
+          "pitch": 31.9
         },
         {
           "pos": [
-            8,
-            -48,
-            24
+            16.5,
+            -47,
+            15.5
           ],
-          "yaw": 176.4,
-          "pitch": 26.5
-        },
-        {
-          "pos": [
-            20,
-            -49,
-            16
-          ],
-          "yaw": 121.6,
-          "pitch": 24.6
-        },
-        {
-          "pos": [
-            22,
-            -50,
-            -2
-          ],
-          "yaw": 56.3,
-          "pitch": 18.4
-        },
-        {
-          "pos": [
-            10,
-            -51,
-            -8
-          ],
-          "yaw": 10.6,
-          "pitch": 17.1
+          "yaw": 111.8,
+          "pitch": 40.9
         }
       ]
     },
     {
       "beat": "b9",
-      "at": 0.18,
+      "at": 0.16,
       "type": "fill",
       "pos": [
-        3,
+        7,
         5,
         6
       ],
-      "_what": "raw ore into the barrel at the crusher head",
       "items": [
         {
           "id": "minecraft:raw_iron",
@@ -721,18 +703,18 @@
           "id": "minecraft:raw_gold",
           "count": 32
         }
-      ]
+      ],
+      "_what": "raw ore into the barrel at the crusher head"
     },
     {
       "beat": "b9",
       "at": 0.24,
       "type": "fill",
       "pos": [
-        9,
+        13,
         5,
         6
       ],
-      "_what": "crushed ore straight onto the washer, so the middle of the plant is not idle",
       "items": [
         {
           "id": "create:crushed_raw_iron",
@@ -742,18 +724,18 @@
           "id": "create:crushed_raw_copper",
           "count": 64
         }
-      ]
+      ],
+      "_what": "crushed ore onto the washer"
     },
     {
       "beat": "b9",
-      "at": 0.3,
+      "at": 0.32,
       "type": "fill",
       "pos": [
-        14,
+        18,
         4,
         10
       ],
-      "_what": "nuggets at the sorter, same reason",
       "items": [
         {
           "id": "minecraft:iron_nugget",
@@ -767,7 +749,8 @@
           "id": "create:zinc_nugget",
           "count": 64
         }
-      ]
+      ],
+      "_what": "nuggets at the sorter"
     },
     {
       "beat": "b9",

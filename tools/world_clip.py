@@ -361,7 +361,7 @@ def empty_container(nbt):
     return out
 
 
-def add_support(world, selected, drop, layers=1, frame_fluids=True):
+def add_support(world, selected, drop, layers=1, frame_fluids=True, frame_with=None):
     """Puts back the parts of the housing the machine cannot stand without.
 
     Dropping the room a machine is built into leaves the machine hanging in the air: no floor
@@ -412,10 +412,16 @@ def add_support(world, selected, drop, layers=1, frame_fluids=True):
                 if p in selected:
                     continue
                 block = world.block(*p)
-                if block is None or block[0].endswith(':air'):
-                    unframed.append((pos, p))
-                    continue
-                if block[0] in FLUIDS:
+                if block is None or block[0].endswith(':air') or block[0] in FLUIDS:
+                    # Air, or more of the same pool lying outside the cut. Both are open sides, and
+                    # an open side is the one thing water does not tolerate: the pool this clip
+                    # takes half of drains through it within a second of the take starting. A wall
+                    # goes in, or it is reported and left open.
+                    if frame_with:
+                        selected[p] = (frame_with, {})
+                        added[frame_with] += 1
+                    else:
+                        unframed.append((pos, p))
                     continue
                 selected[p] = block
                 added[block[0]] += 1
@@ -489,6 +495,12 @@ def build_structure(world, selected, data_version, drop_entities, clear_containe
         })
 
     root = {
+        # Where this came from, so the director can translate the absolute positions that sit
+        # inside block entity NBT. A Create display link stores the block it counts as a world
+        # position; move the machine and the link points at whatever is now at those coordinates,
+        # which in an empty studio world is air. The boards then show nothing and look broken, and
+        # no verifier notices, because every block is exactly where it should be.
+        'neodirect:sourceOrigin': [Int(c) for c in lo],
         'size': [Int(s) for s in size],
         'blocks': blocks,
         'palette': palette,
@@ -525,7 +537,14 @@ def main():
     world_dir = args.world or spec.get('world')
     if not world_dir:
         raise SystemExit('need a world directory, on the command line or in the spec')
-    box = args.box or ([*spec['box']['from'], *spec['box']['to']] if 'box' in spec else None)
+    # One box or several. Several, because a machine and the boiler that drives it can sit forty
+    # blocks apart with nothing but corridor between them, and one box spanning both spends five
+    # hundred blocks paving a floor nobody films.
+    boxes = spec.get('boxes')
+    if not boxes and 'box' in spec:
+        boxes = [spec['box']]
+    if args.box:
+        boxes = [{'from': args.box[:3], 'to': args.box[3:]}]
     seed = tuple(args.seed) if args.seed else tuple(spec['seed']) if 'seed' in spec else None
     drop = set(args.drop) | set(spec.get('drop', []))
     extra_natural = set(args.natural) | set(spec.get('natural', []))
@@ -537,11 +556,14 @@ def main():
     world = World(world_dir)
     truncated = False
 
-    if box:
-        lo_box = (min(box[0], box[3]), min(box[1], box[4]), min(box[2], box[5]))
-        hi_box = (max(box[0], box[3]), max(box[1], box[4]), max(box[2], box[5]))
-        print(f'box {lo_box} .. {hi_box}, dropping {len(drop)} block types')
-        selected = select_box(world, lo_box, hi_box, drop, extra_natural, extra_machine)
+    if boxes:
+        selected = {}
+        for entry in boxes:
+            lo_box = tuple(min(a, b) for a, b in zip(entry['from'], entry['to']))
+            hi_box = tuple(max(a, b) for a, b in zip(entry['from'], entry['to']))
+            part = select_box(world, lo_box, hi_box, drop, extra_natural, extra_machine)
+            print(f"box {lo_box} .. {hi_box}: {len(part)} blocks")
+            selected.update(part)
     elif seed:
         start = find_seed(world, seed)
         if start is None:
@@ -552,7 +574,7 @@ def main():
         if truncated:
             print(f'!! stopped at --limit {args.limit} blocks; the selection is incomplete')
     else:
-        raise SystemExit('need --box or --seed')
+        raise SystemExit('need --box, --boxes in the spec, or --seed')
 
     if not selected:
         raise SystemExit('nothing selected')
@@ -562,18 +584,18 @@ def main():
         before = len(selected)
         added = add_support(world, selected, drop,
                             layers=support.get('layers', 1),
-                            frame_fluids=support.get('frameFluids', True))
+                            frame_fluids=support.get('frameFluids', True),
+                            frame_with=support.get('frameWith'))
         print(f'support: +{len(selected) - before} blocks  '
               + ', '.join(f'{k[k.find(":") + 1:]}:{v}' for k, v in added.most_common(6)))
 
     # After support, or support digs a second layer in underneath the slab it just laid.
-    floor = spec.get('floor')
-    if floor:
-        # A continuous slab under the whole footprint. Support alone only puts a block under each
-        # machine block, which leaves a floor with the machine's own outline punched through it —
-        # correct, and it reads as a machine hovering over a hole. Whatever the world had at this
-        # level comes along as it is, stone and all: in the source this room is cut into rock, and
-        # inventing a tidy floor of some chosen material would be inventing part of the build.
+    for entry in (boxes or []):
+        floor = entry.get('floor') or (spec.get('floor') if len(boxes or []) == 1 else None)
+        if not floor:
+            continue
+        lo_box = tuple(min(a, b) for a, b in zip(entry['from'], entry['to']))
+        hi_box = tuple(max(a, b) for a, b in zip(entry['from'], entry['to']))
         y = floor['y']
         added = 0
         filled = 0

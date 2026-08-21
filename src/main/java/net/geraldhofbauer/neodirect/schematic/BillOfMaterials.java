@@ -45,6 +45,20 @@ public final class BillOfMaterials {
      * blank.
      */
     public static List<ItemStack> stacks(SchematicSource.Schematic schematic, HolderLookup.Provider registries) {
+        return stacks(schematic, registries, java.util.Set.of());
+    }
+
+    /**
+     * @param ignoreContentsOf block ids whose inventories are stock rather than building material.
+     *                         A machine cloned off a running server arrives with its output still
+     *                         in it, and a chest holding 1365 quartz would otherwise put the whole
+     *                         warehouse in the materials chest and call it a building cost. Filters
+     *                         and held items are unaffected — those are configuration, and a
+     *                         deployer without its filter is not the same deployer.
+     */
+    public static List<ItemStack> stacks(SchematicSource.Schematic schematic,
+                                         HolderLookup.Provider registries,
+                                         java.util.Set<String> ignoreContentsOf) {
         Map<Item, Integer> counts = new LinkedHashMap<>();
         Map<Item, ItemStack> templates = new LinkedHashMap<>();
 
@@ -53,6 +67,11 @@ public final class BillOfMaterials {
             if (item != Items.AIR) {
                 counts.merge(item, 1, Integer::sum);
                 templates.putIfAbsent(item, new ItemStack(item));
+            }
+            String blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+                    .getKey(block.state().getBlock()).toString();
+            if (ignoreContentsOf.contains(blockId)) {
+                continue;
             }
             for (ItemStack held : heldItems(block, registries)) {
                 counts.merge(held.getItem(), held.getCount(), Integer::sum);

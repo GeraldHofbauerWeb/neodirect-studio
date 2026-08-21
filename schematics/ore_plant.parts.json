@@ -49,6 +49,43 @@
             "create:cut_tuff_brick_slab",
             "create:cut_crimsite"
           ]
+        },
+        {
+          "box": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              19,
+              0,
+              27
+            ]
+          ],
+          "_what": "the floor slab, whatever it is made of — including the ore that happens to sit in the rock"
+        }
+      ]
+    },
+    {
+      "name": "boiler",
+      "letter": "B",
+      "title": "The boiler",
+      "_what": "Five columns of fluid tanks sitting on magma blocks — passive heat, no blaze burners anywhere — with a steam engine on each column and a powered shaft above that. Five mechanical pumps push water in from the pool underneath, and three water wheels turn the pumps. The shaft line at x=5 runs north out of here and is the only thing connecting this to the plant.",
+      "match": [
+        {
+          "box": [
+            [
+              0,
+              0,
+              17
+            ],
+            [
+              8,
+              13,
+              27
+            ]
+          ]
         }
       ]
     },
@@ -61,12 +98,12 @@
         {
           "box": [
             [
-              7,
+              11,
               4,
               1
             ],
             [
-              11,
+              15,
               6,
               3
             ]
@@ -78,12 +115,12 @@
           ],
           "box": [
             [
-              9,
+              13,
               4,
               6
             ],
             [
-              9,
+              13,
               4,
               6
             ]
@@ -95,12 +132,12 @@
           ],
           "box": [
             [
-              9,
+              13,
               5,
               7
             ],
             [
-              9,
+              13,
               5,
               7
             ]
@@ -123,12 +160,12 @@
         {
           "box": [
             [
-              10,
+              14,
               1,
               7
             ],
             [
-              15,
+              19,
               7,
               13
             ]
@@ -137,12 +174,12 @@
         {
           "box": [
             [
-              9,
+              13,
               1,
               8
             ],
             [
-              9,
+              13,
               3,
               11
             ]
@@ -175,12 +212,12 @@
         {
           "box": [
             [
-              5,
+              9,
               5,
               12
             ],
             [
-              10,
+              14,
               8,
               14
             ]
@@ -197,12 +234,12 @@
         {
           "box": [
             [
-              4,
+              8,
               4,
               11
             ],
             [
-              9,
+              13,
               5,
               15
             ]
@@ -219,12 +256,12 @@
         {
           "box": [
             [
-              3,
+              7,
               3,
               4
             ],
             [
-              9,
+              13,
               7,
               8
             ]
@@ -248,7 +285,7 @@
         },
         {
           "pos": [
-            3,
+            7,
             5,
             9
           ]

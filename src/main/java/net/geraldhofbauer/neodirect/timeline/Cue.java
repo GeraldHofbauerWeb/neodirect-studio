@@ -118,7 +118,8 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * @param pos    where the chest goes, relative to the timeline's origin
      * @param facing which way it faces: north, south, east or west
      */
-    record MaterialsChest(long atMs, int x, int y, int z, String facing, boolean large) implements Cue {}
+    record MaterialsChest(long atMs, int x, int y, int z, String facing, boolean large,
+                          List<String> ignoreContentsOf) implements Cue {}
 
     /**
      * Put specific items into a container that is already part of the build.
@@ -207,7 +208,8 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                 yield new MaterialsChest(atMs,
                         pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt(),
                         GsonHelper.getAsString(obj, "facing", "south"),
-                        GsonHelper.getAsBoolean(obj, "large", false));
+                        GsonHelper.getAsBoolean(obj, "large", false),
+                        obj.has("ignoreContentsOf") ? typeIds(obj.get("ignoreContentsOf")) : List.of());
             }
             case "fill" -> {
                 JsonArray pos = GsonHelper.getAsJsonArray(obj, "pos");
