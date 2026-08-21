@@ -57,6 +57,12 @@
     "create:content_observer": { "powered": "false" }
   },
 
+  "_floor": "One level taken whole, so the machine stands on a floor instead of over its own outline. Support puts a block under each machine block and nothing between them, which looks like a hole with a machine hovering in it. Where that level held water or air in the source world it is filled with stone — the same stone most of it is anyway, and a tile of the wrong rock beats a hole in the middle of the slab.",
+  "floor": {
+    "y": 4,
+    "fillWith": "minecraft:stone"
+  },
+
   "_support": "Dropping the room a machine is built into leaves the machine hanging in the air, and the verifier does not catch it: it looks immediately after placement, before the block updates that make an unsupported block fall have propagated. So the housing comes back where it is holding something up — the block underneath, and the wall behind anything mounted on one. Not a full six-sided shell: the first attempt at that walled in the front of the machine too, and the camera spent a whole orbit looking at a bunker. Fluids get more than that: every water block and every waterlogged block is boxed in on all six sides, because water that is not held flows, and flowing water is gone by the next check. That rule is what keeps the leaf block in front of the washing fan wet.",
   "support": {
     "layers": 1,

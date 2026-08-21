@@ -46,16 +46,18 @@
     12,
     18
   ],
-  "blocks": 364,
+  "blocks": 632,
   "blockEntities": 226,
   "entities": {},
   "namespaces": {
-    "create": 307,
-    "minecraft": 55,
+    "create": 326,
+    "minecraft": 304,
     "quark": 2
   },
   "types": {
-    "create:cut_deepslate_bricks": 97,
+    "minecraft:stone": 148,
+    "create:cut_deepslate_bricks": 116,
+    "minecraft:deepslate": 95,
     "create:belt": 46,
     "create:encased_chain_drive": 28,
     "create:item_vault": 27,
@@ -84,6 +86,8 @@
     "create:crushing_wheel": 2,
     "quark:oak_chest": 2,
     "minecraft:deepslate_brick_stairs": 2,
+    "minecraft:iron_ore": 2,
+    "minecraft:redstone_ore": 2,
     "create:stressometer": 1,
     "create:rotation_speed_controller": 1,
     "create:large_cogwheel": 1,
@@ -91,7 +95,9 @@
     "create:crushing_wheel_controller": 1,
     "create:encased_fan": 1,
     "minecraft:oak_leaves": 1,
-    "create:portable_storage_interface": 1
+    "create:portable_storage_interface": 1,
+    "minecraft:deepslate_iron_ore": 1,
+    "minecraft:infested_stone": 1
   },
   "filters": {
     "?": 22,

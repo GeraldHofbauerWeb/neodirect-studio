@@ -566,6 +566,35 @@ def main():
         print(f'support: +{len(selected) - before} blocks  '
               + ', '.join(f'{k[k.find(":") + 1:]}:{v}' for k, v in added.most_common(6)))
 
+    # After support, or support digs a second layer in underneath the slab it just laid.
+    floor = spec.get('floor')
+    if floor:
+        # A continuous slab under the whole footprint. Support alone only puts a block under each
+        # machine block, which leaves a floor with the machine's own outline punched through it —
+        # correct, and it reads as a machine hovering over a hole. Whatever the world had at this
+        # level comes along as it is, stone and all: in the source this room is cut into rock, and
+        # inventing a tidy floor of some chosen material would be inventing part of the build.
+        y = floor['y']
+        added = 0
+        filled = 0
+        for x in range(lo_box[0], hi_box[0] + 1):
+            for z in range(lo_box[2], hi_box[2] + 1):
+                if (x, y, z) in selected:
+                    continue
+                block = world.block(x, y, z)
+                if block is None or block[0].endswith(':air') or block[0] in FLUIDS:
+                    # Water and air in the floor line leave holes, and a hole in the middle of the
+                    # slab is worse than one tile of the wrong stone. Only filled where a fill
+                    # material is named, so the default stays "copy what is there".
+                    if not floor.get('fillWith'):
+                        continue
+                    block = (floor['fillWith'], {})
+                    filled += 1
+                selected[(x, y, z)] = block
+                added += 1
+        print(f'floor at y={y}: +{added} blocks'
+              + (f', {filled} of them filled with {floor["fillWith"]}' if filled else ''))
+
     # After the support pass, or it puts straight back what this is trying to take out.
     for pos in spec.get('remove', []):
         if selected.pop(tuple(pos), None) is None:
