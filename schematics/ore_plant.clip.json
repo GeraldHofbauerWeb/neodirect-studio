@@ -34,6 +34,16 @@
 
   "_keep": "Deliberately kept even though they look like scenery: redstone_block and redstone_lamp drive the stockpile switch and the content observers, chests and barrels are the machine's own buffers, and the rail, plough and cart assembler belong to the vault bank that docks on portable storage interfaces.",
 
+  "_natural": "Free-standing water is left behind. In the world the two water wheels sit in a pool, and a clip can only take part of that pool: the sources come along, the pool that contains them does not, and on a flat studio floor they spread out over the whole build. The wheels are decorative here anyway — the studio drive is fed by a creative motor, not by water. The one piece of water that does come is the waterlogged leaf in front of the washing fan, and that one carries its water inside a block, where it cannot go anywhere.",
+  "natural": [
+    "minecraft:water"
+  ],
+
+  "_machine": "One block of oak leaves, at local (8,4,2), directly in front of the washing fan. It is waterlogged, and that water is the entire reason the fan washes anything — Create reads the fluid state, not the block. Leaves are worldgen everywhere else in this world, so without naming it here the clip drops it and the washing stage arrives as a fan pointed at nothing. It is the only waterlogged natural block anywhere near the machinery, so nothing else comes with it.",
+  "machine": [
+    "minecraft:oak_leaves"
+  ],
+
   "_clearContainers": "Emptied on the way out. The plant had been running for a while and its chests held 1365 quartz, 444 experience nuggets and 299 lapis — the source machine's takings. The bill of materials counts items inside block entities (that is how the pilot's deployers arrive with their filters), so leaving them in would put the whole warehouse in the materials chest and call it a building cost. Filters live in their own key and are untouched.",
   "clearContainers": [
     "minecraft:chest",
@@ -41,6 +51,20 @@
     "quark:oak_chest",
     "create:item_vault"
   ],
+
+  "_resetStates": "A content observer's `powered` says whether its target currently holds what it is watching for. Emptying the chests above made all six of them liars, and the verifier is right to call it: the block it places settles to powered=false the moment it looks at an empty chest. Forcing the property here keeps the schematic and the world agreeing about a machine that has not run yet.",
+  "resetStates": {
+    "create:content_observer": { "powered": "false" }
+  },
+
+  "_support": "Dropping the room a machine is built into leaves the machine hanging in the air, and the verifier does not catch it: it looks immediately after placement, before the block updates that make an unsupported block fall have propagated. So the housing comes back where it is holding something up — the block underneath, and the wall behind anything mounted on one. Not a full six-sided shell: the first attempt at that walled in the front of the machine too, and the camera spent a whole orbit looking at a bunker. Fluids get more than that: every water block and every waterlogged block is boxed in on all six sides, because water that is not held flows, and flowing water is gone by the next check. That rule is what keeps the leaf block in front of the washing fan wet.",
+  "support": {
+    "layers": 1,
+    "frameFluids": true
+  },
+
+  "_origin": "Declared, not derived. Local coordinates are what the parts manifest and every cue in the storyboard are written against, and letting the corner follow the selection renumbers all of them whenever the cut changes — which happened three times before this line existed. A block outside it is an error now, not a silent shift.",
+  "origin": [-3304, 4, -2141],
 
   "out": "schematics/ore_plant.nbt",
   "report": "schematics/ore_plant.report.json"

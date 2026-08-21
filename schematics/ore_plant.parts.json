@@ -1,18 +1,117 @@
 {
   "_what": "The ore plant, cut into the assemblies the episode builds one at a time. Resolved by tools/parts.py, which fails if a block belongs to no part — a block nobody claims is a block no beat ever builds, and nothing in a take log would say so.",
-  "_order": "Parts are matched in order and the first one to claim a block keeps it. That is what lets 'drive' be written as 'every shaft and every gearbox, anywhere' without it stealing the gearbox that belongs to the washing station: the specific assemblies come first, the backbone last. Overlaps are reported, not forbidden — they are how the rules stay short.",
+  "_order": "Parts are matched in order and the first one to claim a block keeps it. The housing goes first, so every assembly after it is pure machinery and the box rules do not have to carve the walls out of themselves. The drive goes last, which is what lets it be written as 'every shaft and every gearbox, anywhere' without stealing the gearbox that belongs to the washing station. Overlaps are reported, not forbidden.",
   "schematic": "ore_plant.nbt",
-
   "parts": [
+    {
+      "name": "shell",
+      "letter": ".",
+      "title": "The housing",
+      "_what": "Floor, the walls things are mounted on, and the box around every fluid. Placed first and never mentioned. The one thing deliberately not in this list is the waterlogged oak leaf in front of the fan: it looks like scenery and it is the washing stage's water supply.",
+      "match": [
+        {
+          "ids": [
+            "create:cut_deepslate_bricks",
+            "create:cut_deepslate_brick_stairs",
+            "create:copycat_panel",
+            "minecraft:deepslate_bricks",
+            "minecraft:cracked_deepslate_bricks",
+            "minecraft:deepslate_tiles",
+            "minecraft:deepslate_brick_slab",
+            "minecraft:deepslate_brick_stairs",
+            "minecraft:cobbled_deepslate",
+            "minecraft:cobblestone",
+            "minecraft:black_stained_glass",
+            "minecraft:glowstone",
+            "minecraft:wall_torch",
+            "minecraft:lava_cauldron",
+            "minecraft:infested_stone",
+            "minecraft:infested_deepslate",
+            "quark:azalea_leaf_carpet",
+            "minecraft:stone",
+            "minecraft:deepslate",
+            "minecraft:tuff",
+            "minecraft:andesite",
+            "minecraft:gravel",
+            "minecraft:dirt",
+            "minecraft:smooth_stone",
+            "minecraft:moss_block",
+            "minecraft:moss_carpet",
+            "minecraft:spruce_trapdoor",
+            "minecraft:iron_block",
+            "create:asurine",
+            "create:limestone",
+            "create:crimsite",
+            "create:scoria",
+            "create:layered_deepslate",
+            "create:deepslate_pillar",
+            "create:cut_tuff_bricks",
+            "create:cut_tuff_brick_slab",
+            "create:cut_crimsite"
+          ]
+        }
+      ]
+    },
     {
       "name": "washing",
       "letter": "W",
       "title": "Washing",
       "_what": "A water wheel of its own, a gearbox, and a fan pointing south. What the fan blows through is a waterlogged leaf block — which is why there is no water to be seen and the stage still counts as washing. The two clay funnels downstream are the same allow/deny pair as everywhere else in this machine.",
       "match": [
-        { "box": [[6, 3, 0], [10, 5, 2]] },
-        { "ids": ["create:brass_funnel"], "box": [[8, 3, 5], [8, 3, 5]] },
-        { "ids": ["create:brass_belt_funnel"], "box": [[8, 4, 6], [8, 4, 6]] }
+        {
+          "box": [
+            [
+              7,
+              4,
+              1
+            ],
+            [
+              11,
+              6,
+              3
+            ]
+          ]
+        },
+        {
+          "ids": [
+            "create:brass_funnel"
+          ],
+          "box": [
+            [
+              9,
+              4,
+              6
+            ],
+            [
+              9,
+              4,
+              6
+            ]
+          ]
+        },
+        {
+          "ids": [
+            "create:brass_belt_funnel"
+          ],
+          "box": [
+            [
+              9,
+              5,
+              7
+            ],
+            [
+              9,
+              5,
+              7
+            ]
+          ]
+        },
+        {
+          "ids": [
+            "minecraft:oak_leaves"
+          ],
+          "_what": "waterlogged — this is the water the fan blows through"
+        }
       ]
     },
     {
@@ -21,8 +120,34 @@
       "title": "The unloading dock",
       "_what": "Where the mining train from the last episode parks. Two smart chutes carry the same eight stone types, one allowing and one denying, and that is the whole ore-from-spoil split.",
       "match": [
-        { "box": [[9, 0, 6], [14, 6, 12]] },
-        { "box": [[8, 0, 7], [8, 2, 10]] }
+        {
+          "box": [
+            [
+              10,
+              1,
+              7
+            ],
+            [
+              15,
+              7,
+              13
+            ]
+          ]
+        },
+        {
+          "box": [
+            [
+              9,
+              1,
+              8
+            ],
+            [
+              9,
+              3,
+              11
+            ]
+          ]
+        }
       ]
     },
     {
@@ -31,8 +156,14 @@
       "title": "The stock readout",
       "_what": "Content observers under the chest row, display links up to a wall of display boards. Matched by block id rather than by box because the chain runs the length of the machine.",
       "match": [
-        { "ids": ["create:display_board", "create:display_link", "create:content_observer",
-                  "create:stockpile_switch"] }
+        {
+          "ids": [
+            "create:display_board",
+            "create:display_link",
+            "create:content_observer",
+            "create:stockpile_switch"
+          ]
+        }
       ]
     },
     {
@@ -41,7 +172,20 @@
       "title": "Basins and presses",
       "_what": "Three basins with a press over each, one per metal group. Nuggets in, blocks out; the filter on the basin is what keeps the groups from mixing.",
       "match": [
-        { "box": [[4, 4, 11], [9, 7, 13]] }
+        {
+          "box": [
+            [
+              5,
+              5,
+              12
+            ],
+            [
+              10,
+              8,
+              14
+            ]
+          ]
+        }
       ]
     },
     {
@@ -50,7 +194,20 @@
       "title": "The sorter",
       "_what": "Six belts side by side, a funnel over each, one filter per ore. The longest beat in the episode.",
       "match": [
-        { "box": [[3, 3, 10], [8, 4, 14]] }
+        {
+          "box": [
+            [
+              4,
+              4,
+              11
+            ],
+            [
+              9,
+              5,
+              15
+            ]
+          ]
+        }
       ]
     },
     {
@@ -59,7 +216,20 @@
       "title": "The crusher",
       "_what": "Two crushing wheels with the controller between them, fed over a short belt loop.",
       "match": [
-        { "box": [[2, 2, 3], [8, 6, 7]] }
+        {
+          "box": [
+            [
+              3,
+              3,
+              4
+            ],
+            [
+              9,
+              7,
+              8
+            ]
+          ]
+        }
       ]
     },
     {
@@ -68,8 +238,21 @@
       "title": "Storage",
       "_what": "The vault wall and the chest row beneath it.",
       "match": [
-        { "ids": ["create:item_vault", "minecraft:chest", "quark:oak_chest", "minecraft:barrel"] },
-        { "pos": [2, 4, 8] }
+        {
+          "ids": [
+            "create:item_vault",
+            "minecraft:chest",
+            "quark:oak_chest",
+            "minecraft:barrel"
+          ]
+        },
+        {
+          "pos": [
+            3,
+            5,
+            9
+          ]
+        }
       ]
     },
     {
@@ -78,12 +261,24 @@
       "title": "The drive",
       "_what": "Everything that carries rotation, plus the water the wheels sit in. Built first, because every other part hangs off it — and it is the one assembly whose power comes from outside the schematic: on the server the chain drives run on into the next machine, so a studio take has to feed them from a creative motor.",
       "match": [
-        { "ids": ["create:encased_chain_drive", "create:shaft", "create:andesite_encased_shaft",
-                  "create:gearbox", "create:cogwheel", "create:large_cogwheel",
-                  "create:andesite_encased_cogwheel", "create:andesite_encased_large_cogwheel",
-                  "create:water_wheel", "create:rotation_speed_controller", "create:stressometer",
-                  "minecraft:water"] }
+        {
+          "ids": [
+            "create:encased_chain_drive",
+            "create:shaft",
+            "create:andesite_encased_shaft",
+            "create:gearbox",
+            "create:cogwheel",
+            "create:large_cogwheel",
+            "create:andesite_encased_cogwheel",
+            "create:andesite_encased_large_cogwheel",
+            "create:water_wheel",
+            "create:rotation_speed_controller",
+            "create:stressometer",
+            "minecraft:water"
+          ]
+        }
       ]
     }
-  ]
+  ],
+  "_shell": "The housing that came back as support. It is scenery, not a component: it goes down in one go before the narration starts, and the materials chest is counted without it. Matched last, so any block a real assembly wants is already gone."
 }

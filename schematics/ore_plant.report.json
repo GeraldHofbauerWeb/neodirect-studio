@@ -37,27 +37,29 @@
     "quark:azalea_leaf_carpet"
   ],
   "origin": [
-    -3303,
-    5,
-    -2140
+    -3304,
+    4,
+    -2141
   ],
   "size": [
-    15,
-    11,
-    17
+    16,
+    12,
+    18
   ],
-  "blocks": 241,
+  "blocks": 364,
   "blockEntities": 226,
   "entities": {},
   "namespaces": {
-    "create": 210,
-    "minecraft": 29,
+    "create": 307,
+    "minecraft": 55,
     "quark": 2
   },
   "types": {
+    "create:cut_deepslate_bricks": 97,
     "create:belt": 46,
     "create:encased_chain_drive": 28,
     "create:item_vault": 27,
+    "minecraft:glowstone": 20,
     "create:display_board": 16,
     "create:brass_belt_funnel": 15,
     "minecraft:chest": 12,
@@ -66,12 +68,13 @@
     "create:gearbox": 8,
     "create:display_link": 8,
     "create:brass_funnel": 7,
-    "minecraft:water": 7,
     "create:content_observer": 6,
+    "minecraft:deepslate_bricks": 6,
     "create:andesite_encased_shaft": 5,
     "create:andesite_encased_large_cogwheel": 4,
     "minecraft:redstone_lamp": 4,
     "minecraft:redstone_block": 4,
+    "minecraft:cracked_deepslate_bricks": 4,
     "create:basin": 3,
     "create:mechanical_press": 3,
     "create:smart_chute": 3,
@@ -80,12 +83,14 @@
     "create:water_wheel": 2,
     "create:crushing_wheel": 2,
     "quark:oak_chest": 2,
+    "minecraft:deepslate_brick_stairs": 2,
     "create:stressometer": 1,
     "create:rotation_speed_controller": 1,
     "create:large_cogwheel": 1,
     "create:stockpile_switch": 1,
     "create:crushing_wheel_controller": 1,
     "create:encased_fan": 1,
+    "minecraft:oak_leaves": 1,
     "create:portable_storage_interface": 1
   },
   "filters": {

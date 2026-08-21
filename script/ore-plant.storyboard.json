@@ -5,9 +5,9 @@
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
-    0,
-    -60,
-    0
+    -1,
+    -61,
+    -1
   ],
   "clearStage": true,
   "presentation": {
@@ -19,11 +19,20 @@
   "cues": [
     {
       "atMs": 0,
+      "type": "place",
+      "blocks": {
+        "part": "shell"
+      },
+      "spanMs": 6000,
+      "_what": "floor, walls, and the box around every fluid"
+    },
+    {
+      "atMs": 6500,
       "type": "materialsChest",
       "pos": [
-        7,
-        0,
-        20
+        8,
+        1,
+        21
       ],
       "facing": "north",
       "large": true,
@@ -70,9 +79,9 @@
       "type": "screen",
       "action": "open",
       "pos": [
-        7,
-        0,
-        20
+        8,
+        1,
+        21
       ]
     },
     {
@@ -81,9 +90,9 @@
       "type": "screen",
       "action": "close",
       "pos": [
-        7,
-        0,
-        20
+        8,
+        1,
+        21
       ]
     },
     {
@@ -128,6 +137,7 @@
       "blocks": {
         "part": "drive"
       },
+      "spanMs": 4000,
       "_what": "42 blocks: chain drives, gearboxes, shafts, cogwheels, the two water wheels"
     },
     {
@@ -172,6 +182,7 @@
       "blocks": {
         "part": "dock"
       },
+      "spanMs": 4000,
       "_what": "belt, chutes, the portable storage interface the train unloads through"
     },
     {
@@ -179,9 +190,9 @@
       "at": 0.55,
       "type": "showFilter",
       "pos": [
-        14,
-        2,
-        9
+        15,
+        3,
+        10
       ],
       "_what": "allow: the eight stone types"
     },
@@ -190,9 +201,9 @@
       "at": 0.72,
       "type": "showFilter",
       "pos": [
-        13,
-        2,
-        9
+        14,
+        3,
+        10
       ],
       "_what": "deny: the same eight"
     },
@@ -238,6 +249,7 @@
       "blocks": {
         "part": "crushing"
       },
+      "spanMs": 4000,
       "_what": "two wheels, the controller, the belt loop that feeds them"
     },
     {
@@ -245,9 +257,9 @@
       "at": 0.6,
       "type": "showFilter",
       "pos": [
-        8,
-        4,
-        3
+        9,
+        5,
+        4
       ],
       "_what": "allow: crushed iron, gold, copper, zinc"
     },
@@ -256,9 +268,9 @@
       "at": 0.78,
       "type": "showFilter",
       "pos": [
-        8,
-        4,
-        4
+        9,
+        5,
+        5
       ],
       "_what": "deny: the same four"
     },
@@ -304,6 +316,7 @@
       "blocks": {
         "part": "washing"
       },
+      "spanMs": 4000,
       "_what": "fan, water wheel, and the two clay funnels"
     },
     {
@@ -311,9 +324,9 @@
       "at": 0.7,
       "type": "showFilter",
       "pos": [
-        8,
-        3,
-        5
+        9,
+        4,
+        6
       ],
       "_what": "allow: clay"
     },
@@ -322,9 +335,9 @@
       "at": 0.85,
       "type": "showFilter",
       "pos": [
-        8,
-        4,
-        6
+        9,
+        5,
+        7
       ],
       "_what": "deny: clay"
     },
@@ -370,6 +383,7 @@
       "blocks": {
         "part": "sorting"
       },
+      "spanMs": 4000,
       "_what": "six belts, six funnels"
     },
     {
@@ -377,9 +391,9 @@
       "at": 0.22,
       "type": "showFilter",
       "pos": [
-        3,
         4,
-        10
+        5,
+        11
       ],
       "_what": "lane 1"
     },
@@ -388,9 +402,9 @@
       "at": 0.34,
       "type": "showFilter",
       "pos": [
-        4,
-        4,
-        10
+        5,
+        5,
+        11
       ],
       "_what": "lane 2"
     },
@@ -399,9 +413,9 @@
       "at": 0.46,
       "type": "showFilter",
       "pos": [
+        6,
         5,
-        4,
-        10
+        11
       ],
       "_what": "lane 3"
     },
@@ -410,9 +424,9 @@
       "at": 0.56,
       "type": "showFilter",
       "pos": [
-        6,
-        4,
-        10
+        7,
+        5,
+        11
       ],
       "_what": "lane 4"
     },
@@ -421,9 +435,9 @@
       "at": 0.66,
       "type": "showFilter",
       "pos": [
-        7,
-        4,
-        10
+        8,
+        5,
+        11
       ],
       "_what": "lane 5"
     },
@@ -432,9 +446,9 @@
       "at": 0.76,
       "type": "showFilter",
       "pos": [
-        8,
-        4,
-        10
+        9,
+        5,
+        11
       ],
       "_what": "lane 6"
     },
@@ -480,6 +494,7 @@
       "blocks": {
         "part": "compacting"
       },
+      "spanMs": 4000,
       "_what": "three basins, three presses"
     },
     {
@@ -487,9 +502,9 @@
       "at": 0.45,
       "type": "showFilter",
       "pos": [
-        6,
-        4,
-        12
+        7,
+        5,
+        13
       ],
       "_what": "basin: redstone and coal"
     },
@@ -498,9 +513,9 @@
       "at": 0.6,
       "type": "showFilter",
       "pos": [
-        7,
-        4,
-        12
+        8,
+        5,
+        13
       ],
       "_what": "basin: copper and zinc"
     },
@@ -509,9 +524,9 @@
       "at": 0.74,
       "type": "showFilter",
       "pos": [
-        8,
-        4,
-        12
+        9,
+        5,
+        13
       ],
       "_what": "basin: iron and gold"
     },
@@ -557,6 +572,7 @@
       "blocks": {
         "part": "storage"
       },
+      "spanMs": 4000,
       "_what": "27 vaults, 12 chests"
     },
     {
@@ -601,6 +617,7 @@
       "blocks": {
         "part": "readout"
       },
+      "spanMs": 4000,
       "_what": "content observers, display links, sixteen boards"
     },
     {
@@ -611,9 +628,9 @@
       "blocks": [
         {
           "pos": [
-            -1,
-            3,
-            12
+            0,
+            4,
+            13
           ],
           "block": "create:creative_motor[facing=east]{GeneratedSpeed:32}"
         }
@@ -686,9 +703,9 @@
       "at": 0.18,
       "type": "fill",
       "pos": [
-        2,
-        4,
-        5
+        3,
+        5,
+        6
       ],
       "_what": "raw ore into the barrel at the crusher head",
       "items": [
@@ -711,9 +728,9 @@
       "at": 0.24,
       "type": "fill",
       "pos": [
-        8,
-        4,
-        5
+        9,
+        5,
+        6
       ],
       "_what": "crushed ore straight onto the washer, so the middle of the plant is not idle",
       "items": [
@@ -732,9 +749,9 @@
       "at": 0.3,
       "type": "fill",
       "pos": [
-        13,
-        3,
-        9
+        14,
+        4,
+        10
       ],
       "_what": "nuggets at the sorter, same reason",
       "items": [

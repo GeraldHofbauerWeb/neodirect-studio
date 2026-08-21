@@ -40,6 +40,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -499,6 +500,12 @@ public final class Director {
                         // bright. Midday, every time.
                         level.setDayTime(6000L);
                         level.setWeatherParameters(0, 0, false, false);
+                        // Nothing a take destroys should leave an item behind. It matters more
+                        // than it sounds now that placements are staggered: a Create belt segment
+                        // with no neighbours yet is not a valid belt, removes itself, and drops as
+                        // an item — thirty of them on the floor after one build, all of them
+                        // blocks that are standing again by the end of the cue.
+                        level.getGameRules().getRule(GameRules.RULE_DOBLOCKDROPS).set(false, level.getServer());
                         swept.set(sweepStage(level, stage, schematicData));
                     },
                     () -> "noon, clear, " + swept.get() + " stale entities removed"));
@@ -576,24 +583,78 @@ public final class Director {
                     continue;
                 }
 
-                BlockState first = targets.get(0).state();
-                if (presentation.heldItem()) {
-                    steps.add(new Step(Math.max(0, place.atMs() - EQUIP_LEAD_MS), "equip",
-                            () -> equip(player, first), itemName(first)));
-                }
-                if (presentation.swing()) {
-                    steps.add(new Step(Math.max(0, place.atMs() - SWING_LEAD_MS), "swing",
-                            () -> ClientBridge.send(new ClientBridge.Command.Swing()), itemName(first)));
-                }
-
                 BlockPos origin = timeline.origin();
-                steps.add(new Step(place.atMs(), "place",
-                        () -> {
-                            for (SchematicSource.SchematicBlock block : targets) {
-                                placeBlock(level, origin.offset(block.relPos()), block, presentation);
-                            }
-                        },
-                        describePlacement(targets)));
+
+                // How far apart the blocks of this cue land. All in one tick reads as a magic
+                // trick — the machine simply appears — and the presentation layer exists to make
+                // it read as somebody building instead. spanMs spreads the cue over a fixed
+                // stretch, which is what a script wants when the stretch is a beat of narration;
+                // staggerMs sets the interval directly.
+                long step = place.spanMs() > 0 && targets.size() > 1
+                        ? place.spanMs() / (targets.size() - 1)
+                        : place.staggerMs();
+
+                if (step <= 0) {
+                    BlockState first = targets.get(0).state();
+                    if (presentation.heldItem()) {
+                        steps.add(new Step(Math.max(0, place.atMs() - EQUIP_LEAD_MS), "equip",
+                                () -> equip(player, first), itemName(first)));
+                    }
+                    if (presentation.swing()) {
+                        steps.add(new Step(Math.max(0, place.atMs() - SWING_LEAD_MS), "swing",
+                                () -> ClientBridge.send(new ClientBridge.Command.Swing()), itemName(first)));
+                    }
+                    steps.add(new Step(place.atMs(), "place",
+                            () -> {
+                                for (SchematicSource.SchematicBlock block : targets) {
+                                    placeBlock(level, origin.offset(block.relPos()), block, presentation);
+                                }
+                            },
+                            describePlacement(targets)));
+                } else {
+                    Item held = null;
+                    for (int i = 0; i < targets.size(); i++) {
+                        SchematicSource.SchematicBlock block = targets.get(i);
+                        long at = place.atMs() + i * step;
+                        // Only when the item actually changes. Handing the player the same block
+                        // thirty times in a row is thirty item-name labels flashing across the
+                        // bottom of the shot.
+                        Item want = block.state().getBlock().asItem();
+                        if (presentation.heldItem() && want != held) {
+                            held = want;
+                            steps.add(new Step(Math.max(0, at - EQUIP_LEAD_MS), "equip",
+                                    () -> equip(player, block.state()), itemName(block.state())));
+                        }
+                        if (presentation.swing()) {
+                            steps.add(new Step(Math.max(0, at - SWING_LEAD_MS), "swing",
+                                    () -> ClientBridge.send(new ClientBridge.Command.Swing()),
+                                    itemName(block.state())));
+                        }
+                        steps.add(new Step(at, "place",
+                                () -> placeBlock(level, origin.offset(block.relPos()), block, presentation),
+                                itemName(block.state())));
+                    }
+
+                    // And then assert the whole lot again, in one tick, at the end of the cue.
+                    //
+                    // A Create belt is a multiblock: a segment placed on its own is not a valid
+                    // belt and removes itself, so laying a run down one block at a time leaves
+                    // nothing behind — and the brass belt funnel that was supposed to sit on it
+                    // quietly becomes a plain brass funnel, which is a different block that does a
+                    // different thing. Re-placing every block of the cue once they are all present
+                    // fixes that without the director needing to know what a belt is.
+                    long settleAt = place.atMs() + step * targets.size();
+                    steps.add(new Step(settleAt, "settle",
+                            () -> {
+                                for (SchematicSource.SchematicBlock block : targets) {
+                                    BlockPos pos = origin.offset(block.relPos());
+                                    if (!level.getBlockState(pos).equals(block.state())) {
+                                        placeBlock(level, pos, block, Timeline.Presentation.NONE);
+                                    }
+                                }
+                            },
+                            targets.size() + " blocks re-asserted"));
+                }
             }
         }
 

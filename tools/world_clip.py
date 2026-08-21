@@ -62,6 +62,12 @@ NATURAL = {
 
 FLUIDS = {'minecraft:water', 'minecraft:lava'}
 
+# What sits behind a block that faces a given way. A wall-mounted block points away from the thing
+# holding it up, so this is where its support is.
+BEHIND = {'north': (0, 0, 1), 'south': (0, 0, -1),
+          'east': (-1, 0, 0), 'west': (1, 0, 0),
+          'up': (0, -1, 0), 'down': (0, 1, 0)}
+
 # Entities that are scenery rather than part of the build. Mobs wander in; the player is standing
 # right there by definition; loose items are litter from whatever the machine last dropped.
 DROP_ENTITIES = {'minecraft:player', 'minecraft:item', 'minecraft:experience_orb',
@@ -218,6 +224,8 @@ class World:
         return found
 
 
+ORTHOGONAL = [(-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1), (0, 0, 1)]
+
 NEIGHBOURS = [(dx, dy, dz)
               for dx in (-1, 0, 1) for dy in (-1, 0, 1) for dz in (-1, 0, 1)
               if (dx, dy, dz) != (0, 0, 0)]
@@ -318,7 +326,12 @@ def select_box(world, lo, hi, drop, extra_natural, extra_machine):
                 if (x, y, z) in selected:
                     continue
                 block = world.block(x, y, z)
-                if not block or block[0] not in FLUIDS:
+                if not block or block[0] not in FLUIDS or block[0] in extra_natural:
+                    continue
+                # Source blocks only. Flowing water is a consequence of a source somewhere, not a
+                # thing setBlock can put down: placed on its own it drains on the next tick and the
+                # verifier reports a block that simply is not there.
+                if block[1].get('level', '0') != '0':
                     continue
                 if any((x + dx, y + dy, z + dz) in selected for dx, dy, dz in NEIGHBOURS):
                     selected[(x, y, z)] = block
@@ -348,18 +361,98 @@ def empty_container(nbt):
     return out
 
 
-def build_structure(world, selected, data_version, drop_entities, clear_containers=()):
+def add_support(world, selected, drop, layers=1, frame_fluids=True):
+    """Puts back the parts of the housing the machine cannot stand without.
+
+    Dropping the room a machine is built into leaves the machine hanging in the air: no floor
+    under the belts, and nothing behind the blocks that are screwed to a wall, which pop off the
+    moment a block update reaches them. The take still reports success — the verifier looks
+    immediately after placement, before those updates have propagated, and by the time anything
+    has fallen the check has already passed.
+
+    So anything in the drop list that touches a kept block comes back as support. It is the
+    housing either way; the difference is that this is the part of it doing work.
+
+    Fluids get the stricter treatment. Water that is not boxed in flows, and flowing water is
+    gone by the next verification — so every fluid block, and every waterlogged block, gets
+    whatever the world had on all six sides, natural stone included. The washing fan's leaf block
+    is the case that matters: it is one waterlogged block in mid-air, and mid-air is exactly where
+    its water does not stay.
+    """
+    added = Counter()
+
+    for _ in range(layers):
+        additions = {}
+        for pos, (name, props) in list(selected.items()):
+            # Only the two directions that hold a block up. A full six-sided shell also walls in
+            # the front of the machine, and then the camera orbits a stone box: the first take with
+            # one looked like a bunker with a machine rumoured to be inside it.
+            wanted = [(0, -1, 0)]
+            facing = props.get('facing')
+            if facing in BEHIND:
+                wanted.append(BEHIND[facing])
+            for dx, dy, dz in wanted:
+                p = (pos[0] + dx, pos[1] + dy, pos[2] + dz)
+                if p in selected or p in additions:
+                    continue
+                block = world.block(*p)
+                if block and block[0] in drop:
+                    additions[p] = block
+                    added[block[0]] += 1
+        selected.update(additions)
+
+    if frame_fluids:
+        unframed = []
+        for pos in list(selected):
+            name, props = selected[pos]
+            if name not in FLUIDS and props.get('waterlogged') != 'true':
+                continue
+            for dx, dy, dz in ORTHOGONAL:
+                p = (pos[0] + dx, pos[1] + dy, pos[2] + dz)
+                if p in selected:
+                    continue
+                block = world.block(*p)
+                if block is None or block[0].endswith(':air'):
+                    unframed.append((pos, p))
+                    continue
+                if block[0] in FLUIDS:
+                    continue
+                selected[p] = block
+                added[block[0]] += 1
+        if unframed:
+            print(f'!! {len(unframed)} fluid faces have nothing to hold them, '
+                  f'e.g. {unframed[0][0]} open at {unframed[0][1]}')
+
+    return added
+
+
+def build_structure(world, selected, data_version, drop_entities, clear_containers=(),
+                    reset_states=None, origin=None):
     xs = [p[0] for p in selected]
     ys = [p[1] for p in selected]
     zs = [p[2] for p in selected]
-    lo = (min(xs), min(ys), min(zs))
     hi = (max(xs), max(ys), max(zs))
+    if origin is None:
+        lo = (min(xs), min(ys), min(zs))
+    else:
+        # A declared origin, because local coordinates are what everything downstream is written
+        # against — part boxes, showFilter positions, fill targets. Letting the corner follow the
+        # selection means every re-cut silently renumbers all of them, which has now happened three
+        # times and cost a take each. Out-of-range is an error rather than a shift.
+        lo = tuple(origin)
+        low = (min(xs), min(ys), min(zs))
+        if any(low[i] < lo[i] for i in range(3)):
+            raise SystemExit(f'declared origin {lo} but the selection reaches {low} — '
+                             f'move the origin and shift every local coordinate that depends on it')
     size = [hi[i] - lo[i] + 1 for i in range(3)]
 
     palette, palette_index = [], {}
     blocks = []
+    reset_states = reset_states or {}
     for pos in sorted(selected, key=lambda p: (p[1], p[2], p[0])):
         name, props = selected[pos]
+        if name in reset_states:
+            props = {**props, **reset_states[name]}
         key = (name, tuple(sorted(props.items())))
         if key not in palette_index:
             palette_index[key] = len(palette)
@@ -464,8 +557,23 @@ def main():
     if not selected:
         raise SystemExit('nothing selected')
 
+    support = spec.get('support') or {}
+    if support:
+        before = len(selected)
+        added = add_support(world, selected, drop,
+                            layers=support.get('layers', 1),
+                            frame_fluids=support.get('frameFluids', True))
+        print(f'support: +{len(selected) - before} blocks  '
+              + ', '.join(f'{k[k.find(":") + 1:]}:{v}' for k, v in added.most_common(6)))
+
+    # After the support pass, or it puts straight back what this is trying to take out.
+    for pos in spec.get('remove', []):
+        if selected.pop(tuple(pos), None) is None:
+            print(f'!! remove {tuple(pos)}: nothing selected there')
+
     root, lo, hi, dropped = build_structure(
-        world, selected, world.data_version, drop_entities, set(spec.get('clearContainers', [])))
+        world, selected, world.data_version, drop_entities,
+        set(spec.get('clearContainers', [])), spec.get('resetStates'), spec.get('origin'))
 
     histogram = Counter(name for name, _ in selected.values())
     namespaces = Counter(name.split(':', 1)[0] for name, _ in selected.values())

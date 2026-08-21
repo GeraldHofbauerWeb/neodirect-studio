@@ -30,12 +30,24 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * Place blocks from the schematic. Indices address the schematic's block list, so the didactic
      * order lives in the script and not in the code.
      *
+     * <p>A cue with a {@code staggerMs} lays its blocks down one at a time at that interval
+     * instead of all in the same tick, and {@code spanMs} spreads them evenly over a fixed
+     * stretch instead. Placing forty blocks in one tick reads as a magic trick — the machine
+     * simply exists — and the whole point of the presentation layer is that it should read as
+     * somebody building. One arm swing for forty blocks gives that away by itself.
+     *
      * <p>{@code blocks} may be an explicit list, the string {@code "all"}, or an object
      * {@code {"from": a, "to": b}}. The latter two exist so a whole-contraption build does not
      * need a couple of hundred hand-written indices — a script names the handful of blocks a beat
      * actually talks about, and sweeps up the rest in one cue.
      */
-    record Place(long atMs, Selector selector) implements Cue {
+    record Place(long atMs, Selector selector, long staggerMs, long spanMs) implements Cue {
+
+        @Override
+        public long endMs() {
+            return atMs + spanMs;
+        }
+
 
         /**
          * How a cue names the blocks it places.
@@ -274,11 +286,16 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
         if (spec == null) {
             throw new IllegalArgumentException("place cue needs 'blocks'");
         }
+        long stagger = GsonHelper.getAsLong(obj, "staggerMs", 0L);
+        long span = GsonHelper.getAsLong(obj, "spanMs", 0L);
+        if (stagger > 0 && span > 0) {
+            throw new IllegalArgumentException("a place cue takes staggerMs or spanMs, not both");
+        }
 
         if (spec.isJsonPrimitive() && spec.getAsJsonPrimitive().isString()) {
             return switch (spec.getAsString()) {
-                case "all" -> new Place(atMs, Place.Range.ALL);
-                case "rest" -> new Place(atMs, new Place.Rest(List.of()));
+                case "all" -> new Place(atMs, Place.Range.ALL, stagger, span);
+                case "rest" -> new Place(atMs, new Place.Rest(List.of()), stagger, span);
                 default -> throw new IllegalArgumentException(
                         "'blocks' as a string must be \"all\" or \"rest\", got " + spec.getAsString());
             };
@@ -287,26 +304,26 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
         if (spec.isJsonObject()) {
             JsonObject o = spec.getAsJsonObject();
             if (o.has("ofType")) {
-                return new Place(atMs, new Place.OfType(typeIds(o.get("ofType"))));
+                return new Place(atMs, new Place.OfType(typeIds(o.get("ofType"))), stagger, span);
             }
             if (o.has("part") || o.has("parts")) {
                 return new Place(atMs, new Place.Part(
-                        typeIds(o.has("part") ? o.get("part") : o.get("parts"))));
+                        typeIds(o.has("part") ? o.get("part") : o.get("parts"))), stagger, span);
             }
             if (o.has("rest")) {
                 return new Place(atMs, new Place.Rest(
-                        o.has("except") ? typeIds(o.get("except")) : List.of()));
+                        o.has("except") ? typeIds(o.get("except")) : List.of()), stagger, span);
             }
             return new Place(atMs, new Place.Range(
                     GsonHelper.getAsInt(o, "from", 0),
-                    GsonHelper.getAsInt(o, "to", Integer.MAX_VALUE)));
+                    GsonHelper.getAsInt(o, "to", Integer.MAX_VALUE)), stagger, span);
         }
 
         List<Integer> indices = new ArrayList<>();
         for (JsonElement el : spec.getAsJsonArray()) {
             indices.add(el.getAsInt());
         }
-        return new Place(atMs, new Place.Indices(List.copyOf(indices)));
+        return new Place(atMs, new Place.Indices(List.copyOf(indices)), stagger, span);
     }
 
     /** A block id or a list of them, both spellings accepted wherever types are named. */

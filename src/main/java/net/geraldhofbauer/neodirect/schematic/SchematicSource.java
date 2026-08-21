@@ -38,6 +38,10 @@ public final class SchematicSource {
     private SchematicSource() {
     }
 
+    /** The names a structure file uses for genuinely empty space. */
+    private static final java.util.Set<String> AIR_NAMES =
+            java.util.Set.of("minecraft:air", "minecraft:cave_air", "minecraft:void_air");
+
     /** One block of the schematic, in schematic-relative coordinates. */
     public record SchematicBlock(BlockPos relPos, BlockState state, CompoundTag blockEntityNbt) {
         public boolean hasBlockEntity() {
@@ -82,15 +86,26 @@ public final class SchematicSource {
 
         ListTag palette = readPalette(root);
         List<BlockState> states = new ArrayList<>(palette.size());
+        // Whether a palette entry is worth placing is decided by its *name*, not by whether the
+        // state it resolves to reports itself as air. Create's crushing wheel controller — the
+        // invisible block that sits between the two wheels and does the actual crushing — is
+        // air-like, and dropping it leaves a crusher that looks perfect and grinds nothing. The
+        // verifier would have agreed with it, because a block never loaded is a block never
+        // compared. Genuine air in a structure file is named air; that is the thing to skip.
+        boolean[] placeable = new boolean[palette.size()];
         List<String> unknown = new ArrayList<>();
         for (int i = 0; i < palette.size(); i++) {
             CompoundTag entry = palette.getCompound(i);
             String name = entry.getString("Name");
+            placeable[i] = !AIR_NAMES.contains(name);
             // Ask the registry ourselves, because readBlockState cannot tell us it failed.
             ResourceLocation id = ResourceLocation.tryParse(name);
-            if (id != null && !name.equals("minecraft:air")
+            if (id != null && placeable[i]
                     && blockLookup.get(ResourceKey.create(Registries.BLOCK, id)).isEmpty()) {
                 unknown.add(name);
+                // A block whose mod is absent resolves to air and would be placed as air. Nothing
+                // useful comes of that; it is reported instead.
+                placeable[i] = false;
             }
             states.add(NbtUtils.readBlockState(blockLookup, entry));
         }
@@ -107,10 +122,10 @@ public final class SchematicSource {
             if (stateIndex < 0 || stateIndex >= states.size()) {
                 continue;
             }
-            BlockState state = states.get(stateIndex);
-            if (state.isAir()) {
+            if (!placeable[stateIndex]) {
                 continue;
             }
+            BlockState state = states.get(stateIndex);
             CompoundTag beNbt = entry.contains("nbt", Tag.TAG_COMPOUND) ? entry.getCompound("nbt") : null;
             out.add(new SchematicBlock(new BlockPos(pos.getInt(0), pos.getInt(1), pos.getInt(2)), state, beNbt));
         }
