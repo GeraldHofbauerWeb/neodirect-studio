@@ -1,6 +1,6 @@
 {
   "take": "ore-plant-build",
-  "_what": "A build with no narration, for checking the clone is complete, that it holds itself up, and that the boiler actually turns the plant. The housing goes first, then the boiler, then the machine it drives.",
+  "_what": "A silent run-through: one camera move per assembly, held for a moment after it finishes so the sections read as sections, then the boiler switch is pulled and the camera stays on the wall to see whether the numbers move.",
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
@@ -17,96 +17,42 @@
   },
   "cues": [
     {
-      "atMs": 0,
+      "atMs": 500,
       "type": "camera",
-      "durationMs": 62000,
+      "durationMs": 11500,
       "keyframes": [
         {
           "pos": [
-            2.6,
-            -44.1,
-            -5.5
+            -17.3,
+            -45.4,
+            -25.0
           ],
-          "yaw": -20.0,
-          "pitch": 27.2
+          "yaw": -35.0,
+          "pitch": 10.8
         },
         {
           "pos": [
-            -8.9,
-            -44.1,
-            4.9
+            -16.6,
+            -45.4,
+            -10.8
           ],
-          "yaw": -64.9,
-          "pitch": 27.1
+          "yaw": -47.0,
+          "pitch": 14.0
         },
         {
           "pos": [
-            -9.5,
-            -44.1,
-            20.4
+            -11.6,
+            -45.4,
+            1.0
           ],
-          "yaw": -110.0,
-          "pitch": 27.2
-        },
-        {
-          "pos": [
-            0.9,
-            -44.1,
-            31.9
-          ],
-          "yaw": -154.9,
-          "pitch": 27.1
-        },
-        {
-          "pos": [
-            16.4,
-            -44.1,
-            32.5
-          ],
-          "yaw": 160.0,
-          "pitch": 27.2
-        },
-        {
-          "pos": [
-            27.9,
-            -44.1,
-            22.1
-          ],
-          "yaw": 115.1,
-          "pitch": 27.1
-        },
-        {
-          "pos": [
-            28.5,
-            -44.1,
-            6.6
-          ],
-          "yaw": 70.0,
-          "pitch": 27.2
-        },
-        {
-          "pos": [
-            18.1,
-            -44.1,
-            -4.9
-          ],
-          "yaw": 25.1,
-          "pitch": 27.1
-        },
-        {
-          "pos": [
-            2.6,
-            -44.1,
-            -5.5
-          ],
-          "yaw": -20.0,
-          "pitch": 27.2
+          "yaw": -59.0,
+          "pitch": 19.8
         }
       ],
-      "_what": "one orbit for the whole build"
+      "_what": "shell"
     },
     {
-      "atMs": 800,
+      "atMs": 900,
       "type": "place",
       "blocks": {
         "part": "shell"
@@ -115,90 +61,500 @@
       "_what": "shell"
     },
     {
-      "atMs": 11400,
+      "atMs": 10100,
+      "type": "marker",
+      "label": "shell"
+    },
+    {
+      "atMs": 13200,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            15.8,
+            -44.8,
+            32.3
+          ],
+          "yaw": 135.0,
+          "pitch": 26.8
+        },
+        {
+          "pos": [
+            14.8,
+            -44.8,
+            27.9
+          ],
+          "yaw": 123.1,
+          "pitch": 33.3
+        },
+        {
+          "pos": [
+            12.6,
+            -44.8,
+            24.4
+          ],
+          "yaw": 110.9,
+          "pitch": 43.4
+        }
+      ],
+      "_what": "boiler"
+    },
+    {
+      "atMs": 13600,
       "type": "place",
       "blocks": {
         "part": "boiler"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "boiler"
     },
     {
-      "atMs": 16600,
+      "atMs": 17800,
+      "type": "marker",
+      "label": "boiler"
+    },
+    {
+      "atMs": 20900,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            3.8,
+            -47.0,
+            -1.9
+          ],
+          "yaw": -19.9,
+          "pitch": 24.6
+        },
+        {
+          "pos": [
+            2.8,
+            -47.0,
+            2.6
+          ],
+          "yaw": -32.1,
+          "pitch": 30.9
+        },
+        {
+          "pos": [
+            3.4,
+            -47.0,
+            6.7
+          ],
+          "yaw": -44.0,
+          "pitch": 41.0
+        }
+      ],
+      "_what": "drive"
+    },
+    {
+      "atMs": 21300,
       "type": "place",
       "blocks": {
         "part": "drive"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "drive"
     },
     {
-      "atMs": 21800,
+      "atMs": 25500,
+      "type": "marker",
+      "label": "drive"
+    },
+    {
+      "atMs": 28600,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            26.8,
+            -52.8,
+            4.1
+          ],
+          "yaw": 60.2,
+          "pitch": 19.5
+        },
+        {
+          "pos": [
+            23.5,
+            -52.8,
+            3.7
+          ],
+          "yaw": 48.0,
+          "pitch": 24.0
+        },
+        {
+          "pos": [
+            20.6,
+            -52.8,
+            4.3
+          ],
+          "yaw": 35.7,
+          "pitch": 30.9
+        }
+      ],
+      "_what": "dock"
+    },
+    {
+      "atMs": 29000,
       "type": "place",
       "blocks": {
         "part": "dock"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "dock"
     },
     {
-      "atMs": 27000,
+      "atMs": 33200,
+      "type": "marker",
+      "label": "dock"
+    },
+    {
+      "atMs": 36300,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            0.2,
+            -52.0,
+            12.5
+          ],
+          "yaw": -120.2,
+          "pitch": 16.4
+        },
+        {
+          "pos": [
+            3.5,
+            -52.0,
+            12.8
+          ],
+          "yaw": -132.0,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            6.4,
+            -52.0,
+            12.2
+          ],
+          "yaw": -144.3,
+          "pitch": 26.5
+        }
+      ],
+      "_what": "crushing"
+    },
+    {
+      "atMs": 36700,
       "type": "place",
       "blocks": {
         "part": "crushing"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "crushing"
     },
     {
-      "atMs": 32200,
+      "atMs": 40900,
+      "type": "marker",
+      "label": "crushing"
+    },
+    {
+      "atMs": 44000,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            8.9,
+            -52.5,
+            15.7
+          ],
+          "yaw": -159.9,
+          "pitch": 16.4
+        },
+        {
+          "pos": [
+            11.7,
+            -52.5,
+            13.9
+          ],
+          "yaw": -172.1,
+          "pitch": 20.2
+        },
+        {
+          "pos": [
+            13.5,
+            -52.5,
+            11.5
+          ],
+          "yaw": 175.9,
+          "pitch": 26.5
+        }
+      ],
+      "_what": "washing"
+    },
+    {
+      "atMs": 44400,
       "type": "place",
       "blocks": {
         "part": "washing"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "washing"
     },
     {
-      "atMs": 37400,
+      "atMs": 48600,
+      "type": "marker",
+      "label": "washing"
+    },
+    {
+      "atMs": 51700,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            18.8,
+            -52.5,
+            21.3
+          ],
+          "yaw": 135.0,
+          "pitch": 17.6
+        },
+        {
+          "pos": [
+            18.5,
+            -52.5,
+            18.4
+          ],
+          "yaw": 123.2,
+          "pitch": 21.3
+        },
+        {
+          "pos": [
+            17.5,
+            -52.5,
+            16.0
+          ],
+          "yaw": 111.0,
+          "pitch": 26.7
+        }
+      ],
+      "_what": "sorting"
+    },
+    {
+      "atMs": 52100,
       "type": "place",
       "blocks": {
         "part": "sorting"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "sorting"
     },
     {
-      "atMs": 42600,
+      "atMs": 56300,
+      "type": "marker",
+      "label": "sorting"
+    },
+    {
+      "atMs": 59400,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            19.3,
+            -50.5,
+            21.3
+          ],
+          "yaw": 135.0,
+          "pitch": 17.6
+        },
+        {
+          "pos": [
+            19.0,
+            -50.5,
+            18.4
+          ],
+          "yaw": 123.2,
+          "pitch": 21.3
+        },
+        {
+          "pos": [
+            18.0,
+            -50.5,
+            16.0
+          ],
+          "yaw": 111.0,
+          "pitch": 26.7
+        }
+      ],
+      "_what": "compacting"
+    },
+    {
+      "atMs": 59800,
       "type": "place",
       "blocks": {
         "part": "compacting"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "compacting"
     },
     {
-      "atMs": 47800,
+      "atMs": 64000,
+      "type": "marker",
+      "label": "compacting"
+    },
+    {
+      "atMs": 67100,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            21.3,
+            -52.5,
+            24.3
+          ],
+          "yaw": 135.0,
+          "pitch": 12.9
+        },
+        {
+          "pos": [
+            20.3,
+            -52.5,
+            19.9
+          ],
+          "yaw": 123.1,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            18.1,
+            -52.5,
+            16.4
+          ],
+          "yaw": 110.9,
+          "pitch": 23.3
+        }
+      ],
+      "_what": "storage"
+    },
+    {
+      "atMs": 67500,
       "type": "place",
       "blocks": {
         "part": "storage"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "storage"
     },
     {
-      "atMs": 53000,
+      "atMs": 71700,
+      "type": "marker",
+      "label": "storage"
+    },
+    {
+      "atMs": 74800,
+      "type": "camera",
+      "durationMs": 6500,
+      "keyframes": [
+        {
+          "pos": [
+            21.5,
+            -47.2,
+            25.0
+          ],
+          "yaw": 135.0,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            20.4,
+            -47.2,
+            20.1
+          ],
+          "yaw": 123.1,
+          "pitch": 25.8
+        },
+        {
+          "pos": [
+            17.9,
+            -47.2,
+            16.2
+          ],
+          "yaw": 110.9,
+          "pitch": 35.0
+        }
+      ],
+      "_what": "readout"
+    },
+    {
+      "atMs": 75200,
       "type": "place",
       "blocks": {
         "part": "readout"
       },
-      "spanMs": 3600,
+      "spanMs": 4000,
       "_what": "readout"
     },
     {
-      "atMs": 58200,
+      "atMs": 79400,
       "type": "marker",
-      "label": "built"
+      "label": "readout"
+    },
+    {
+      "atMs": 82500,
+      "type": "use",
+      "pos": [
+        7,
+        5,
+        19
+      ],
+      "_what": "the boiler switch, pulled"
+    },
+    {
+      "atMs": 82800,
+      "type": "camera",
+      "durationMs": 12000,
+      "keyframes": [
+        {
+          "pos": [
+            21.5,
+            -47.2,
+            25.0
+          ],
+          "yaw": 135.0,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            20.4,
+            -47.2,
+            20.1
+          ],
+          "yaw": 123.1,
+          "pitch": 25.8
+        },
+        {
+          "pos": [
+            17.9,
+            -47.2,
+            16.2
+          ],
+          "yaw": 110.9,
+          "pitch": 35.0
+        }
+      ],
+      "_what": "the wall, once it is running"
+    },
+    {
+      "atMs": 95000,
+      "type": "marker",
+      "label": "running"
     }
   ]
 }

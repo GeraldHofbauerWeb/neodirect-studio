@@ -17,7 +17,7 @@ import java.util.List;
  * game stutters.
  */
 public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.MaterialsChest, Cue.Fill,
-        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks {
+        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks, Cue.Use {
 
     long atMs();
 
@@ -165,6 +165,17 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
     record BlockSpec(int x, int y, int z, String block) {}
 
     /**
+     * Right-click a block, the way a player would.
+     *
+     * <p>Not the same as setting its state. A lever set to {@code powered=true} does put current
+     * into the block it is on, and that is where the resemblance ends: pulling one is an event, and
+     * a good deal of what listens for it — Create's kinetic network among other things — listens
+     * for the event and not for the resulting blockstate. The plant that would not start had a
+     * lever in exactly the right position and had never been switched on.
+     */
+    record Use(long atMs, int x, int y, int z) implements Cue {}
+
+    /**
      * Open or close a container's screen on camera.
      *
      * <p>The point is to show the actual stack counts rather than assert them in narration — the
@@ -270,6 +281,13 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                     throw new IllegalArgumentException("a screen cue with action \"open\" needs a 'pos'");
                 }
                 yield new Screen(atMs, action, at[0], at[1], at[2]);
+            }
+            case "use" -> {
+                JsonArray pos = GsonHelper.getAsJsonArray(obj, "pos");
+                if (pos.size() != 3) {
+                    throw new IllegalArgumentException("use 'pos' must have exactly 3 entries");
+                }
+                yield new Use(atMs, pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt());
             }
             case "marker" -> new Marker(atMs, GsonHelper.getAsString(obj, "label", ""));
             default -> throw new IllegalArgumentException("unknown cue type: " + type);

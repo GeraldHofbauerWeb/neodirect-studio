@@ -574,6 +574,19 @@ public final class Director {
                         () -> setBlocks.blocks().forEach(spec -> setBlock(level, origin, spec)),
                         setBlocks.blocks().size() + " blocks"));
 
+            } else if (cue instanceof Cue.Use use) {
+                BlockPos at = timeline.origin().offset(use.x(), use.y(), use.z());
+                steps.add(new Step(use.atMs(), "use",
+                        () -> {
+                            BlockState state = level.getBlockState(at);
+                            if (presentation.swing()) {
+                                ClientBridge.send(new ClientBridge.Command.Swing());
+                            }
+                            state.useWithoutItem(level, player, new net.minecraft.world.phys.BlockHitResult(
+                                    Vec3.atCenterOf(at), Direction.UP, at, false));
+                        },
+                        () -> itemName(level.getBlockState(at))));
+
             } else if (cue instanceof Cue.Marker marker) {
                 steps.add(new Step(marker.atMs(), "marker", () -> {
                 }, marker.label()));
@@ -658,7 +671,16 @@ public final class Director {
                             () -> {
                                 for (SchematicSource.SchematicBlock block : targets) {
                                     BlockPos pos = origin.offset(block.relPos());
-                                    if (!level.getBlockState(pos).equals(block.state())) {
+                                    // State mismatches, and every block entity whether it matches
+                                    // or not. A Create display link is written once, at the moment
+                                    // its own block goes down, and if the board it points at is
+                                    // still four seconds away from existing then the link comes up
+                                    // pointing at nothing. Re-applying the saved NBT once the whole
+                                    // cue is present fixes that. It is safe to do wholesale because
+                                    // placeBlock empties a block entity before replacing it and
+                                    // doTileDrops is off for the take, so nothing spills.
+                                    if (block.hasBlockEntity()
+                                            || !level.getBlockState(pos).equals(block.state())) {
                                         placeBlock(level, pos, block, Timeline.Presentation.NONE,
                                                 shift, sourceOrigin, sourceSize);
                                     }

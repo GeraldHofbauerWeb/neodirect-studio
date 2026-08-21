@@ -84,9 +84,15 @@ def main(path):
         elif kind == 'setBlocks':
             for spec in cue['blocks']:
                 pos = tuple(spec['pos'])
-                if pos in blocks:
-                    fail(f'{where} {pos}: the schematic already has {blocks[pos][0]} there — '
-                         f'the build and the cue would fight over it')
+                if pos not in blocks:
+                    continue
+                # Setting the same block again is a state change, not a collision — throwing a
+                # lever the build just placed is exactly what the closing beat is for. Putting a
+                # *different* block where the build puts one is the mistake worth catching.
+                wanted = spec['block'].split('[')[0].split('{')[0]
+                if wanted != blocks[pos][0]:
+                    fail(f'{where} {pos}: the schematic has {blocks[pos][0]} there and the cue '
+                         f'places {wanted} — the build and the cue would fight over it')
 
     used = set()
     for cue in storyboard['cues']:

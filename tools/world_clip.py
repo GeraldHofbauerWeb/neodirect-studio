@@ -338,6 +338,19 @@ def select_box(world, lo, hi, drop, extra_natural, extra_machine):
     return selected
 
 
+def strip_keys(nbt, keys):
+    """Drops cached state a block entity recomputes for itself.
+
+    A Create kinetic block remembers the network it belongs to — its id, its size, its stress, the
+    speed it was turning at. All of that is derived from the shafts around it, and all of it is
+    saved. Clone the machine and every wheel arrives certain it belongs to a network on another
+    server: it spins, because it is a source, and it drives nothing, because the thing it thinks it
+    is driving does not exist here. The symptom looks like a Create bug and is a stale cache.
+    """
+    return {k: (strip_keys(v, keys) if isinstance(v, dict) else v)
+            for k, v in nbt.items() if k not in keys}
+
+
 def empty_container(nbt):
     """Throws away what a container holds, and keeps what configures it.
 
@@ -361,7 +374,14 @@ def empty_container(nbt):
     return out
 
 
-def add_support(world, selected, drop, layers=1, frame_fluids=True, frame_with=None):
+def inside_box(pos, box):
+    lo = tuple(min(a, b) for a, b in zip(box['from'], box['to']))
+    hi = tuple(max(a, b) for a, b in zip(box['from'], box['to']))
+    return all(lo[i] <= pos[i] <= hi[i] for i in range(3))
+
+
+def add_support(world, selected, drop, layers=1, frame_fluids=True, frame_with=None,
+                boxes=()):
     """Puts back the parts of the housing the machine cannot stand without.
 
     Dropping the room a machine is built into leaves the machine hanging in the air: no floor
@@ -402,38 +422,60 @@ def add_support(world, selected, drop, layers=1, frame_fluids=True, frame_with=N
         selected.update(additions)
 
     if frame_fluids:
+        # Water is the one thing a clip cannot take half of. Three rules, applied outward until the
+        # water has nowhere left to go:
+        #
+        #   a solid neighbour  -> take it. That is the basin the pool sits in, and the reason the
+        #                         pool stayed put on the server.
+        #   a fluid neighbour  -> leave it open and follow it. That is where the water is supposed
+        #                         to flow, and it regenerates from the sources already taken. Wall
+        #                         it and three water wheels end up sealed in a stone pocket with a
+        #                         source one block away that cannot reach them.
+        #   an air neighbour   -> wall it. That is the cut, and the pool drains through it inside a
+        #                         second of the take starting.
+        #
+        # Outward, because the basin two blocks along is not adjacent to anything selected yet, and
+        # water reaches seven.
+        frontier = [pos for pos, (name, props) in selected.items()
+                    if name in FLUIDS or props.get('waterlogged') == 'true']
+        wet = set(frontier)
         unframed = []
-        for pos in list(selected):
-            name, props = selected[pos]
-            if name not in FLUIDS and props.get('waterlogged') != 'true':
-                continue
-            for dx, dy, dz in ORTHOGONAL:
-                p = (pos[0] + dx, pos[1] + dy, pos[2] + dz)
-                if p in selected:
-                    continue
-                block = world.block(*p)
-                if block is None or block[0].endswith(':air') or block[0] in FLUIDS:
-                    # Air, or more of the same pool lying outside the cut. Both are open sides, and
-                    # an open side is the one thing water does not tolerate: the pool this clip
-                    # takes half of drains through it within a second of the take starting. A wall
-                    # goes in, or it is reported and left open.
-                    if frame_with:
-                        selected[p] = (frame_with, {})
-                        added[frame_with] += 1
-                    else:
-                        unframed.append((pos, p))
-                    continue
-                selected[p] = block
-                added[block[0]] += 1
+        for _ in range(8):
+            nxt = []
+            for pos in frontier:
+                for dx, dy, dz in ORTHOGONAL:
+                    p = (pos[0] + dx, pos[1] + dy, pos[2] + dz)
+                    if p in wet:
+                        continue
+                    block = world.block(*p)
+                    if block is None or block[0].endswith(':air'):
+                        if p in selected:
+                            continue
+                        if frame_with:
+                            selected[p] = (frame_with, {})
+                            added[frame_with] += 1
+                        else:
+                            unframed.append((pos, p))
+                        continue
+                    if block[0] in FLUIDS:
+                        wet.add(p)
+                        nxt.append(p)
+                        continue
+                    if p not in selected:
+                        selected[p] = block
+                        added[block[0]] += 1
+            if not nxt:
+                break
+            frontier = nxt
         if unframed:
-            print(f'!! {len(unframed)} fluid faces have nothing to hold them, '
-                  f'e.g. {unframed[0][0]} open at {unframed[0][1]}')
+            print(f'!! {len(unframed)} fluid faces open onto nothing, '
+                  f'e.g. {unframed[0][0]} at {unframed[0][1]}')
 
     return added
 
 
 def build_structure(world, selected, data_version, drop_entities, clear_containers=(),
-                    reset_states=None, origin=None):
+                    reset_states=None, origin=None, clear_nbt_keys=()):
     xs = [p[0] for p in selected]
     ys = [p[1] for p in selected]
     zs = [p[2] for p in selected]
@@ -476,6 +518,8 @@ def build_structure(world, selected, data_version, drop_entities, clear_containe
             nbt = {k: v for k, v in be.items() if k not in ('x', 'y', 'z', 'keepPacked')}
             if name in clear_containers:
                 nbt = empty_container(nbt)
+            if clear_nbt_keys:
+                nbt = strip_keys(nbt, set(clear_nbt_keys))
             block['nbt'] = nbt
         blocks.append(block)
 
@@ -585,7 +629,7 @@ def main():
         added = add_support(world, selected, drop,
                             layers=support.get('layers', 1),
                             frame_fluids=support.get('frameFluids', True),
-                            frame_with=support.get('frameWith'))
+                            frame_with=support.get('frameWith'), boxes=boxes or [])
         print(f'support: +{len(selected) - before} blocks  '
               + ', '.join(f'{k[k.find(":") + 1:]}:{v}' for k, v in added.most_common(6)))
 
@@ -624,7 +668,8 @@ def main():
 
     root, lo, hi, dropped = build_structure(
         world, selected, world.data_version, drop_entities,
-        set(spec.get('clearContainers', [])), spec.get('resetStates'), spec.get('origin'))
+        set(spec.get('clearContainers', [])), spec.get('resetStates'), spec.get('origin'),
+        spec.get('clearNbtKeys', []))
 
     histogram = Counter(name for name, _ in selected.values())
     namespaces = Counter(name.split(':', 1)[0] for name, _ in selected.values())

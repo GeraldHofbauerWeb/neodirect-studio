@@ -53,11 +53,6 @@
   "_clearContainers": "Emptied on the way out. The plant had been running for a while and its chests held 1365 quartz, 444 experience nuggets and 299 lapis — the source machine's takings. The bill of materials counts items inside block entities (that is how the pilot's deployers arrive with their filters), so leaving them in would put the whole warehouse in the materials chest and call it a building cost. Filters live in their own key and are untouched.",
   "clearContainers": [],
 
-  "_resetStates": "A content observer's `powered` says whether its target currently holds what it is watching for. Emptying the chests above made all six of them liars, and the verifier is right to call it: the block it places settles to powered=false the moment it looks at an empty chest. Forcing the property here keeps the schematic and the world agreeing about a machine that has not run yet.",
-  "resetStates": {
-    "create:content_observer": { "powered": "false" }
-  },
-
   "_support": "Dropping the room a machine is built into leaves the machine hanging in the air, and the verifier does not catch it: it looks immediately after placement, before the block updates that make an unsupported block fall have propagated. So the housing comes back where it is holding something up — the block underneath, and the wall behind anything mounted on one. Not a full six-sided shell: the first attempt at that walled in the front of the machine too, and the camera spent a whole orbit looking at a bunker. Fluids get more than that: every water block and every waterlogged block is boxed in on all six sides, because water that is not held flows, and flowing water is gone by the next check. That rule is what keeps the leaf block in front of the washing fan wet.",
   "support": {
     "layers": 1,
@@ -67,6 +62,22 @@
 
   "_origin": "Declared, not derived. Local coordinates are what the parts manifest and every cue in the storyboard are written against, and letting the corner follow the selection renumbers all of them whenever the cut changes — which happened three times before this line existed. A block outside it is an error now, not a silent shift.",
   "origin": [-3308, 4, -2141],
+
+  "_resetStates": "Block states that a world computes rather than a player chooses. Redstone wire carries its signal strength in its own blockstate, and a cloned wire arrives frozen at whatever it was carrying on the server — so the clutch downstream reads fifteen and stays disengaged no matter what the lever does, and the plant never starts. Same for the clutch's own powered flag and the lamps. Set them to the resting value and let the world work them out from the sources it can actually see.",
+  "resetStates": {
+    "minecraft:redstone_wire": { "power": "0" },
+    "create:clutch": { "powered": "false" },
+    "minecraft:redstone_lamp": { "lit": "false" }
+  },
+
+  "_clearNbtKeys": "Cached kinetic state, dropped on the way out. A Create block entity saves the network it belongs to — id, size, stress, capacity — and the speed it was turning at. Cloned, every wheel and shaft arrives certain it belongs to a network that exists on another machine: the water wheel spins, because it is a source, and drives nothing, because what it thinks it is driving is not here. It looks like a Create bug and it is a stale cache. Same family as the redstone wire's power and the content observer's powered flag.",
+  "clearNbtKeys": [
+    "Network",
+    "Speed",
+    "Stress",
+    "NetworkSize",
+    "Sequence"
+  ],
 
   "out": "schematics/ore_plant.nbt",
   "report": "schematics/ore_plant.report.json"
