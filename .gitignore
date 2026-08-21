@@ -14,3 +14,4 @@ libs/*.jar
 libs/create-nested/
 scratch/
 __pycache__/
+ffmpeg2pass-0.log*

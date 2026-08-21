@@ -101,6 +101,24 @@ public final class ControlServer {
         // enough — any other Minecraft on the machine carries the same title, and picking the
         // wrong one silently records somebody else's game.
         body.addProperty("pid", ProcessHandle.current().pid());
+        // Where the camera actually is, as opposed to where the timeline says it should be. Those
+        // two came apart silently for a long time — the server was teleporting the player back out
+        // of blocks without logging it — and the only way to tell was to ask mid-move and compare.
+        // Read off the server thread on purpose: a diagnostic that has to queue behind a take is
+        // no use during one, and a position read a tick stale still answers the question.
+        MinecraftServer mc = minecraftServer;
+        if (mc != null) {
+            ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+            if (player != null) {
+                JsonArray pos = new JsonArray();
+                pos.add(player.getX());
+                pos.add(player.getEyeY());
+                pos.add(player.getZ());
+                body.add("eye", pos);
+                body.addProperty("pose", player.getPose().name());
+                body.addProperty("noPhysics", player.noPhysics);
+            }
+        }
         respond(exchange, 200, body.toString());
     }
 

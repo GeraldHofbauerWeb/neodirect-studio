@@ -6,12 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.io.File;
 
@@ -41,6 +43,41 @@ public final class ClientDirector {
 
     /** What the player's flight/physics looked like before we took over, so we can hand it back. */
     private static boolean restoreNoPhysics;
+
+    /**
+     * The camera's body while filming: 0.6 blocks cubed instead of 0.6 by 1.8, with the eye 0.4
+     * off the floor of it rather than 1.62.
+     *
+     * <p>A standing player hangs more than a block and a half below the point the script calls the
+     * camera, so a shot composed to sit in a one-block gap inside a machine puts the body in the
+     * stone underneath it. This is the same trick a crawling mod uses, through the API NeoForge
+     * provides for it, and it is why the eye height in {@link #applyPose} is read from the player
+     * rather than assumed — the arithmetic follows the pose without being told.
+     */
+    private static final Pose FILMING_POSE = Pose.SWIMMING;
+
+    /**
+     * Holds the camera intangible, every tick, for as long as a take is running.
+     *
+     * <p>Setting {@code noPhysics} once at the start of a run does nothing: {@code Player#tick}
+     * assigns {@code this.noPhysics = this.isSpectator()} unconditionally at the top of every
+     * tick, on both sides, so outside spectator mode the flag is gone again a twentieth of a
+     * second later. This runs after that assignment and puts it back.
+     *
+     * <p>Its twin on the server is what actually stops the stutter — see
+     * {@code Director#holdCameraIntangible}. This side matters for the pose, and for the
+     * client's own habit of shoving a solid player out of a wall.
+     */
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!running || !(event.getEntity() instanceof LocalPlayer player)) {
+            return;
+        }
+        player.noPhysics = true;
+        if (player.getForcedPose() != FILMING_POSE) {
+            player.setForcedPose(FILMING_POSE);
+        }
+    }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -104,7 +141,7 @@ public final class ClientDirector {
         if (command instanceof ClientBridge.Command.BeginRun begin) {
             beginRun(player, begin);
         } else if (command instanceof ClientBridge.Command.MoveCamera move) {
-            rig = new CameraRig(move.keyframes(), move.durationMs());
+            rig = new CameraRig(move.keyframes(), move.durationMs(), move.linear());
         } else if (command instanceof ClientBridge.Command.Swing) {
             // Has to happen here rather than server-side: the server never echoes an animate packet
             // back to the player who caused it, so a server-side swing would animate every view
@@ -122,6 +159,7 @@ public final class ClientDirector {
         restoreNoPhysics = player.noPhysics;
         player.getAbilities().flying = true;
         player.noPhysics = true;
+        player.setForcedPose(FILMING_POSE);
 
         applyPose(player, new CameraPath.Pose(
                 new Vec3(begin.x(), begin.y(), begin.z()), begin.yaw(), begin.pitch()));
@@ -144,6 +182,7 @@ public final class ClientDirector {
         // and put a fall in the last frames of every recording.
         player.getAbilities().flying = true;
         player.noPhysics = restoreNoPhysics;
+        player.setForcedPose(null);
         player.setDeltaMovement(Vec3.ZERO);
         NeoDirect.LOGGER.info("Camera released, holding final pose.");
     }

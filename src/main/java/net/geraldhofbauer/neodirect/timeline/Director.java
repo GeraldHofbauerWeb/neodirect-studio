@@ -43,6 +43,8 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.entity.Pose;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -160,6 +162,7 @@ public final class Director {
         }
 
         Run run = new Run(timeline, steps);
+        activeServer = server;
         if (!ACTIVE.compareAndSet(null, run)) {
             failure.completeExceptionally(new IllegalStateException("a take is already running"));
             return failure;
@@ -181,6 +184,36 @@ public final class Director {
         NeoDirect.LOGGER.info("Take '{}' armed — {} steps over {} ms.",
                 timeline.take(), steps.size(), timeline.durationMs());
         return run.result;
+    }
+
+    /**
+     * Keeps the camera from being pushed out of the machine it is filming.
+     *
+     * <p>The stutter this fixes was invisible in the logs and took a source dive to find. A client
+     * that teleports its own player along a spline sends the server a position; the server replays
+     * that move against the world, and if the new box overlaps something the old one did not, it
+     * teleports the player back and then throws away every position packet for up to twenty ticks
+     * while it waits for the acknowledgement. That is the jump on screen.
+     *
+     * <p>The one thing that short-circuits that check is {@code ServerPlayer#noPhysics}, and
+     * vanilla only ever grants it to spectators — {@code Player#tick} recomputes it from
+     * {@code isSpectator()} at the top of every tick. So it has to be re-asserted every tick, and
+     * it has to happen here: entities tick before the connection does, so a flag set now is the
+     * flag the packet handler reads a moment later in the same tick.
+     *
+     * <p>The searched-for-and-not-found log line, for anyone who looks next time: there is none.
+     * The {@code moved wrongly!} warning is suppressed in creative mode, so the correction happens
+     * in silence.
+     */
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (ACTIVE.get() == null || !(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        player.noPhysics = true;
+        if (player.getForcedPose() != FILMING_POSE) {
+            player.setForcedPose(FILMING_POSE);
+        }
     }
 
     @SubscribeEvent
@@ -221,6 +254,7 @@ public final class Director {
     private static void finish(Run run, long elapsedMs) {
         ACTIVE.set(null);
         restoreGameMode();
+        releaseCamera();
         ClientBridge.send(new ClientBridge.Command.EndRun());
 
         JsonObject result = new JsonObject();
@@ -237,6 +271,7 @@ public final class Director {
     public static void abort(String reason) {
         Run run = ACTIVE.getAndSet(null);
         restoreGameMode();
+        releaseCamera();
         if (run != null) {
             ClientBridge.send(new ClientBridge.Command.EndRun());
             run.result.completeExceptionally(new IllegalStateException(reason));
@@ -526,7 +561,7 @@ public final class Director {
             if (cue instanceof Cue.Camera camera) {
                 steps.add(new Step(camera.atMs(), "camera",
                         () -> ClientBridge.send(new ClientBridge.Command.MoveCamera(
-                                camera.keyframes(), camera.durationMs())),
+                                camera.keyframes(), camera.durationMs(), camera.linear())),
                         camera.keyframes().size() + " keyframes over " + camera.durationMs() + " ms"));
 
             } else if (cue instanceof Cue.Entities entities) {
@@ -798,6 +833,25 @@ public final class Director {
      * every other placement does it: replacing a block entity without emptying it scatters its
      * contents across the floor.
      */
+    /** The camera's body while filming: a crawl-sized box, so a one-block gap really is enough. */
+    private static final Pose FILMING_POSE = Pose.SWIMMING;
+
+    /** The server a take was armed against, so its end can undo what its start did. */
+    private static MinecraftServer activeServer;
+
+    /** Hands the player back its ordinary body once the take is over. */
+    private static void releaseCamera() {
+        MinecraftServer server = activeServer;
+        activeServer = null;
+        if (server == null) {
+            return;
+        }
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            player.noPhysics = false;
+            player.setForcedPose(null);
+        }
+    }
+
     /**
      * How to undo a {@code gameMode} cue once the take is over — set by the first one to fire.
      *

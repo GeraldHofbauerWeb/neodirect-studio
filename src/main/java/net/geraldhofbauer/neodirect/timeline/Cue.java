@@ -96,8 +96,18 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
         record Rest(List<String> exceptTypes) implements Selector {}
     }
 
-    /** Fly the camera along keyframes over {@code durationMs}. */
-    record Camera(long atMs, long durationMs, List<Keyframe> keyframes) implements Cue {
+    /**
+     * Fly the camera along keyframes over {@code durationMs}.
+     *
+     * <p>{@code ease} decides how the clock maps onto the path. Smoothstep by default, which is
+     * what a shot that starts still and ends still wants. Linear is for a path that is one leg of
+     * a longer journey — a camera following a build block by block passes through a keyframe every
+     * few hundred milliseconds, and easing each leg separately turns a glide into a series of
+     * lurches. It also keeps the keyframes on the clock: with easing, keyframe three of seven is
+     * not three sevenths of the way through the cue, and a camera meant to arrive as a block does
+     * arrives somewhere else.
+     */
+    record Camera(long atMs, long durationMs, List<Keyframe> keyframes, boolean linear) implements Cue {
         @Override
         public long endMs() {
             return atMs + durationMs;
@@ -244,7 +254,11 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                 if (keyframes.size() < 2) {
                     throw new IllegalArgumentException("camera cue needs at least 2 keyframes, got " + keyframes.size());
                 }
-                yield new Camera(atMs, durationMs, List.copyOf(keyframes));
+                String ease = GsonHelper.getAsString(obj, "ease", "inOut");
+                if (!ease.equals("inOut") && !ease.equals("linear")) {
+                    throw new IllegalArgumentException("camera 'ease' must be \"inOut\" or \"linear\", got " + ease);
+                }
+                yield new Camera(atMs, durationMs, List.copyOf(keyframes), ease.equals("linear"));
             }
             case "entities" -> new Entities(atMs, GsonHelper.getAsString(obj, "filter", ""));
             case "materialsChest" -> {

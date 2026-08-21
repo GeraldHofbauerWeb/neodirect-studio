@@ -42,6 +42,12 @@ for (const ms of at) {
   }
 }
 
-const log = await running;
-if (log.error) throw new Error(log.error);
-console.log(`\ntake ${log.take}: ${log.actualDurationMs} ms (planned ${log.plannedDurationMs} ms)`);
+// The stills are the point; the take log is a courtesy. Node's fetch gives up on a response that
+// takes minutes to arrive, and a two-and-a-half-minute build take now does — losing the contact
+// sheet to that would be losing the only thing this tool exists for.
+const log = await running.catch((e) => ({ error: e.message }));
+if (log.error) {
+  console.warn(`\ntake log not collected: ${log.error}`);
+} else {
+  console.log(`\ntake ${log.take}: ${log.actualDurationMs} ms (planned ${log.plannedDurationMs} ms)`);
+}

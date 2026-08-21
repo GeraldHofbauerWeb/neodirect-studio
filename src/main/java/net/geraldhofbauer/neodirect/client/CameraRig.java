@@ -16,17 +16,19 @@ final class CameraRig {
 
     private final List<Cue.Keyframe> keyframes;
     private final long durationMs;
+    private final boolean linear;
     private final long startNanos;
 
-    CameraRig(List<Cue.Keyframe> keyframes, long durationMs) {
+    CameraRig(List<Cue.Keyframe> keyframes, long durationMs, boolean linear) {
         this.keyframes = keyframes;
         this.durationMs = Math.max(1, durationMs);
+        this.linear = linear;
         this.startNanos = System.nanoTime();
     }
 
     CameraPath.Pose sample() {
         long elapsedMs = (System.nanoTime() - startNanos) / 1_000_000L;
         double progress = Mth.clamp((double) elapsedMs / durationMs, 0.0, 1.0);
-        return CameraPath.sample(keyframes, CameraPath.easeInOut(progress));
+        return CameraPath.sample(keyframes, linear ? progress : CameraPath.easeInOut(progress));
     }
 }

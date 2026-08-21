@@ -30,7 +30,7 @@ public final class ClientBridge {
         /** Take the wheel: freeze player input and put the camera where the first keyframe is. */
         record BeginRun(double x, double y, double z, float yaw, float pitch) implements Command {}
 
-        record MoveCamera(List<Cue.Keyframe> keyframes, long durationMs) implements Command {}
+        record MoveCamera(List<Cue.Keyframe> keyframes, long durationMs, boolean linear) implements Command {}
 
         record Swing() implements Command {}
 

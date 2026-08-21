@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.geraldhofbauer.neodirect.schematic.SchematicSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -121,7 +122,35 @@ public final class Verifier {
      * <p>Keyframes are not enough to check. Catmull-Rom passes through each keyframe but bows
      * outward between them, so a path whose every waypoint sits clear of the contraption can still
      * bulge into the drill face — which is exactly how one shot ended up glitching through it.
+     *
+     * <p>Nor is the camera point enough. It used to test the single block containing the eye,
+     * which is not what collides: the body hangs below it, and a shot composed to sit in a gap
+     * inside a machine passed this check with its feet in the stone. Everything the camera's box
+     * overlaps is tested now.
      */
+    /**
+     * The camera's own body, as a box around the point a script calls the camera.
+     *
+     * <p>Matches the pose the director films in — a crawl-sized 0.6 cube with the eye 0.4 up it,
+     * rather than the 1.8-tall standing box a player normally carries. Keep the two in step: this
+     * is a check on what the take will actually do, and a check measuring a different body than
+     * the one that flies is worse than no check, because it reads as a pass.
+     */
+    private static AABB cameraBox(Vec3 eye) {
+        return new AABB(eye.x - 0.3, eye.y - 0.4, eye.z - 0.3,
+                eye.x + 0.3, eye.y + 0.2, eye.z + 0.3);
+    }
+
+    private static BlockPos firstBlockIn(ServerLevel level, AABB box) {
+        for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(box.minX, box.minY, box.minZ),
+                BlockPos.containing(box.maxX, box.maxY, box.maxZ))) {
+            if (!level.getBlockState(pos).isAir()) {
+                return pos.immutable();
+            }
+        }
+        return null;
+    }
+
     public static JsonArray checkCameraClearance(ServerLevel level, Timeline timeline, int samplesPerMove) {
         JsonArray problems = new JsonArray();
 
@@ -135,12 +164,13 @@ public final class Verifier {
             for (int i = 0; i <= samplesPerMove; i++) {
                 double t = (double) i / samplesPerMove;
                 // Ease the same way playback does, so samples cluster where the camera lingers.
-                var pose = CameraPath.sample(camera.keyframes(), CameraPath.easeInOut(t));
-                BlockPos pos = BlockPos.containing(pose.position());
-                if (!level.getBlockState(pos).isAir()) {
+                var pose = CameraPath.sample(camera.keyframes(),
+                        camera.linear() ? t : CameraPath.easeInOut(t));
+                BlockPos hit = firstBlockIn(level, cameraBox(pose.position()));
+                if (hit != null) {
                     blocked++;
                     if (firstBlocked == null) {
-                        firstBlocked = pos;
+                        firstBlocked = hit;
                     }
                 }
             }
