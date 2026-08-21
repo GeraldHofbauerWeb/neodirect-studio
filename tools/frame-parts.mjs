@@ -187,3 +187,77 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       { _what: name, keyframes: moveFor(lo, size, origin, 215, occupancy(groups, origin)) }, null, 2));
   }
 }
+
+/**
+ * Where to stand *inside* a machine to watch one station work.
+ *
+ * The move above frames a part from outside, which is right while it is being built and wrong
+ * once it is running: a crusher in the middle of a plant is behind a vault wall from every
+ * compass point, and backing off until the path is clear only backs off until the part is a grey
+ * smudge. Following material through it means being in the gap the material travels down, and in
+ * spectator that gap is a legal camera position.
+ *
+ * So this searches instead of solving: every air block in a shell around the station, scored by
+ * how much of the station it can actually see. Air here means "no schematic block", which is the
+ * same set the clearance check uses — the studio has nothing else in it.
+ */
+export function vantages(targets, occupied, { near = 3, far = 11, minY = -Infinity } = {}) {
+  const centre = [0, 1, 2].map((k) => targets.reduce((s, t) => s + t[k] + 0.5, 0) / targets.length);
+  const found = [];
+  const reach = Math.ceil(far);
+  for (let dx = -reach; dx <= reach; dx++) {
+    for (let dy = -reach; dy <= reach; dy++) {
+      for (let dz = -reach; dz <= reach; dz++) {
+        const p = [Math.floor(centre[0]) + dx, Math.floor(centre[1]) + dy, Math.floor(centre[2]) + dz];
+        if (p[1] < minY) continue;
+        if (occupied.has(p.join(','))) continue;
+        const eye = [p[0] + 0.5, p[1] + 0.5, p[2] + 0.5];
+        const d = Math.hypot(eye[0] - centre[0], eye[1] - centre[1], eye[2] - centre[2]);
+        if (d < near || d > far) continue;
+        found.push({ pos: eye, distance: round(d), seen: visibility(eye, targets, occupied) });
+      }
+    }
+  }
+  found.sort((a, b) => b.seen - a.seen || a.distance - b.distance);
+  return { centre, vantages: found };
+}
+
+/** Whether a straight run between two points stays in air. Spectator ignores collision; the eye still does not. */
+export function airPath(from, to, occupied) {
+  const steps = Math.max(8, Math.ceil(Math.hypot(to[0] - from[0], to[1] - from[1], to[2] - from[2]) * 4));
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const p = [0, 1, 2].map((k) => Math.floor(from[k] + (to[k] - from[k]) * t));
+    if (occupied.has(p.join(','))) return false;
+  }
+  return true;
+}
+
+/**
+ * A move that ends at the best interior view of a station and starts somewhere it can be reached
+ * from without passing through the machine. Three keyframes, so the curve has something to ease
+ * along; the middle one is on the line and therefore also in air.
+ */
+export function insideMove(targets, occupied, opts = {}) {
+  const { centre: standCentre, vantages: ranked } = vantages(targets, occupied, opts);
+  // Where the camera stands and what it points at are two different questions. Standing is decided
+  // by the blocks that must be in shot at all; aim can be pulled a little wider, so a belt that
+  // runs out of the bottom of the frame comes back into it.
+  const centre = opts.lookAt
+      ? [0, 1, 2].map((k) => opts.lookAt.reduce((s, t) => s + t[k] + 0.5, 0) / opts.lookAt.length)
+      : standCentre;
+  if (!ranked.length) throw new Error('no air within reach of ' + standCentre.map(round).join(','));
+  const end = ranked[0];
+  const start = ranked.find((v) => v.distance > end.distance + 2.5
+      && v.seen >= end.seen * 0.7
+      && airPath(v.pos, end.pos, occupied)) ?? ranked[1] ?? end;
+  const mid = [0, 1, 2].map((k) => (start.pos[k] + end.pos[k]) / 2);
+  return {
+    end,
+    start,
+    keyframes: [start.pos, mid, end.pos].map((pos) => {
+      const { yaw, pitch } = aim(pos, centre);
+      return { pos: pos.map(round), yaw, pitch };
+    }),
+  };
+}

@@ -1,0 +1,2088 @@
+{
+  "take": "ore-plant-run",
+  "_what": "Joined by tools/join-takes.mjs from script/ore-plant-build.json and script/ore-plant-flow.json. Edit those, not this — it is regenerated.",
+  "schematic": "ore_plant.nbt",
+  "parts": "ore_plant.groups.json",
+  "origin": [
+    0,
+    -61,
+    0
+  ],
+  "clearStage": true,
+  "presentation": {
+    "heldItem": true,
+    "swing": true,
+    "sound": true,
+    "particles": true
+  },
+  "cues": [
+    {
+      "type": "camera",
+      "atMs": 500,
+      "durationMs": 10500,
+      "_what": "shell",
+      "keyframes": [
+        {
+          "pos": [
+            10,
+            -45.6,
+            -28
+          ],
+          "yaw": 0,
+          "pitch": 11.3
+        },
+        {
+          "pos": [
+            2.2,
+            -45.6,
+            -17.2
+          ],
+          "yaw": -14,
+          "pitch": 14.6
+        },
+        {
+          "pos": [
+            -0.5,
+            -45.6,
+            -5.8
+          ],
+          "yaw": -27.9,
+          "pitch": 20.5
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 900,
+      "blocks": {
+        "part": "shell"
+      },
+      "spanMs": 7500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "floor and the walls things hang on"
+    },
+    {
+      "type": "marker",
+      "atMs": 9200,
+      "label": "shell"
+    },
+    {
+      "type": "camera",
+      "atMs": 12200,
+      "durationMs": 15000,
+      "_what": "boiler",
+      "keyframes": [
+        {
+          "pos": [
+            14.5,
+            -45.9,
+            31
+          ],
+          "yaw": 135,
+          "pitch": 26.2
+        },
+        {
+          "pos": [
+            13.9,
+            -45.9,
+            26.8
+          ],
+          "yaw": 120.8,
+          "pitch": 32.5
+        },
+        {
+          "pos": [
+            11.9,
+            -45.9,
+            23.6
+          ],
+          "yaw": 106.9,
+          "pitch": 42.5
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 12600,
+      "blocks": {
+        "part": "boiler"
+      },
+      "spanMs": 12000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "tanks, magma, engines, pumps, wheels"
+    },
+    {
+      "type": "marker",
+      "atMs": 25400,
+      "label": "boiler"
+    },
+    {
+      "type": "camera",
+      "atMs": 28400,
+      "durationMs": 13000,
+      "_what": "drive",
+      "keyframes": [
+        {
+          "pos": [
+            4.4,
+            -46.9,
+            -0.2
+          ],
+          "yaw": -19.9,
+          "pitch": 26
+        },
+        {
+          "pos": [
+            3.2,
+            -46.9,
+            3.9
+          ],
+          "yaw": -34,
+          "pitch": 32.5
+        },
+        {
+          "pos": [
+            3.6,
+            -46.9,
+            7.7
+          ],
+          "yaw": -48.4,
+          "pitch": 42.4
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 28800,
+      "blocks": {
+        "part": "drive"
+      },
+      "spanMs": 10000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "chain drives, gearboxes, the speed controller"
+    },
+    {
+      "type": "marker",
+      "atMs": 39600,
+      "label": "drive"
+    },
+    {
+      "type": "camera",
+      "atMs": 42600,
+      "durationMs": 7500,
+      "_what": "dock",
+      "keyframes": [
+        {
+          "pos": [
+            25.6,
+            -53.4,
+            4.8
+          ],
+          "yaw": 60.3,
+          "pitch": 19
+        },
+        {
+          "pos": [
+            22.3,
+            -53.4,
+            4.4
+          ],
+          "yaw": 46,
+          "pitch": 24.1
+        },
+        {
+          "pos": [
+            19.5,
+            -53.4,
+            5.3
+          ],
+          "yaw": 32.6,
+          "pitch": 32.8
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 43000,
+      "blocks": {
+        "part": "dock"
+      },
+      "spanMs": 4500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "belt, chutes, the interface the train unloads through"
+    },
+    {
+      "type": "marker",
+      "atMs": 48300,
+      "label": "dock"
+    },
+    {
+      "type": "camera",
+      "atMs": 51300,
+      "durationMs": 11500,
+      "_what": "crushing",
+      "keyframes": [
+        {
+          "pos": [
+            19.6,
+            -52.5,
+            11.8
+          ],
+          "yaw": 120.2,
+          "pitch": 15.9
+        },
+        {
+          "pos": [
+            18.2,
+            -52.5,
+            8.7
+          ],
+          "yaw": 105.9,
+          "pitch": 20.5
+        },
+        {
+          "pos": [
+            16.1,
+            -52.5,
+            6.7
+          ],
+          "yaw": 92,
+          "pitch": 28.2
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 51700,
+      "blocks": {
+        "part": "crushing"
+      },
+      "spanMs": 8500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "two wheels, the controller, the belt loop"
+    },
+    {
+      "type": "marker",
+      "atMs": 61000,
+      "label": "crushing"
+    },
+    {
+      "type": "camera",
+      "atMs": 64000,
+      "durationMs": 6000,
+      "_what": "washing",
+      "keyframes": [
+        {
+          "pos": [
+            22.1,
+            -50.5,
+            9.8
+          ],
+          "yaw": 120.2,
+          "pitch": 27.6
+        },
+        {
+          "pos": [
+            20.7,
+            -50.5,
+            6.7
+          ],
+          "yaw": 105.9,
+          "pitch": 34.5
+        },
+        {
+          "pos": [
+            18.6,
+            -50.5,
+            4.7
+          ],
+          "yaw": 92,
+          "pitch": 44.5
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 64400,
+      "blocks": {
+        "part": "washing"
+      },
+      "spanMs": 3000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "fan, leaf, water wheel, and the clay pair"
+    },
+    {
+      "type": "marker",
+      "atMs": 68200,
+      "label": "washing"
+    },
+    {
+      "type": "camera",
+      "atMs": 71200,
+      "durationMs": 13000,
+      "_what": "sorting",
+      "keyframes": [
+        {
+          "pos": [
+            6.5,
+            -50.5,
+            5.7
+          ],
+          "yaw": -30,
+          "pitch": 31.4
+        },
+        {
+          "pos": [
+            6.2,
+            -50.5,
+            8.5
+          ],
+          "yaw": -43.8,
+          "pitch": 38.4
+        },
+        {
+          "pos": [
+            6.9,
+            -50.5,
+            11
+          ],
+          "yaw": -58.6,
+          "pitch": 48.9
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 71600,
+      "blocks": {
+        "part": "sorting"
+      },
+      "spanMs": 10000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "six belts, six funnels"
+    },
+    {
+      "type": "marker",
+      "atMs": 82400,
+      "label": "sorting"
+    },
+    {
+      "type": "camera",
+      "atMs": 85400,
+      "durationMs": 8500,
+      "_what": "compacting",
+      "keyframes": [
+        {
+          "pos": [
+            17.2,
+            -51.5,
+            19.2
+          ],
+          "yaw": 135,
+          "pitch": 17.2
+        },
+        {
+          "pos": [
+            16.9,
+            -51.5,
+            16.7
+          ],
+          "yaw": 120.7,
+          "pitch": 21.7
+        },
+        {
+          "pos": [
+            15.8,
+            -51.5,
+            14.8
+          ],
+          "yaw": 106.8,
+          "pitch": 29.1
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 85800,
+      "blocks": {
+        "part": "compacting"
+      },
+      "spanMs": 5500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "three basins, three presses"
+    },
+    {
+      "type": "marker",
+      "atMs": 92100,
+      "label": "compacting"
+    },
+    {
+      "type": "camera",
+      "atMs": 95100,
+      "durationMs": 6000,
+      "_what": "storage",
+      "keyframes": [
+        {
+          "pos": [
+            22.2,
+            -50.5,
+            20.3
+          ],
+          "yaw": 120.2,
+          "pitch": 22.1
+        },
+        {
+          "pos": [
+            20.4,
+            -50.5,
+            16.4
+          ],
+          "yaw": 106.3,
+          "pitch": 28.1
+        },
+        {
+          "pos": [
+            17.7,
+            -50.5,
+            13.8
+          ],
+          "yaw": 92.4,
+          "pitch": 37.4
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 95500,
+      "blocks": {
+        "part": "storage"
+      },
+      "spanMs": 3000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "27 vaults, 12 chests"
+    },
+    {
+      "type": "marker",
+      "atMs": 99300,
+      "label": "storage"
+    },
+    {
+      "type": "camera",
+      "atMs": 102300,
+      "durationMs": 10500,
+      "_what": "readout",
+      "keyframes": [
+        {
+          "pos": [
+            1.4,
+            -47.5,
+            27
+          ],
+          "yaw": -149.9,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            6,
+            -47.5,
+            25.2
+          ],
+          "yaw": -164,
+          "pitch": 25.3
+        },
+        {
+          "pos": [
+            9.2,
+            -47.5,
+            22.2
+          ],
+          "yaw": -178.1,
+          "pitch": 33.1
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 102700,
+      "blocks": {
+        "part": "readout"
+      },
+      "spanMs": 7500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "observers, links, sixteen boards"
+    },
+    {
+      "type": "marker",
+      "atMs": 111000,
+      "label": "readout"
+    },
+    {
+      "type": "use",
+      "atMs": 114000,
+      "pos": [
+        7,
+        5,
+        19
+      ],
+      "_what": "the boiler switch, pulled"
+    },
+    {
+      "type": "reseat",
+      "atMs": 116500,
+      "ofType": [
+        "create:andesite_encased_cogwheel",
+        "create:andesite_encased_large_cogwheel",
+        "create:andesite_encased_shaft",
+        "create:clutch",
+        "create:crushing_wheel",
+        "create:crushing_wheel_controller",
+        "create:encased_chain_drive",
+        "create:encased_fan",
+        "create:gearbox",
+        "create:large_cogwheel",
+        "create:mechanical_press",
+        "create:mechanical_pump",
+        "create:powered_shaft",
+        "create:shaft",
+        "create:steam_engine",
+        "create:stressometer",
+        "create:water_wheel"
+      ],
+      "_what": "every pure kinetic block, bare, so it finds the network it is actually on"
+    },
+    {
+      "type": "camera",
+      "atMs": 117500,
+      "durationMs": 12000,
+      "_what": "the wall, once it is running",
+      "keyframes": [
+        {
+          "pos": [
+            1.4,
+            -47.5,
+            27
+          ],
+          "yaw": -149.9,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            6,
+            -47.5,
+            25.2
+          ],
+          "yaw": -164,
+          "pitch": 25.3
+        },
+        {
+          "pos": [
+            9.2,
+            -47.5,
+            22.2
+          ],
+          "yaw": -178.1,
+          "pitch": 33.1
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 130000,
+      "label": "running"
+    },
+    {
+      "type": "marker",
+      "atMs": 132500,
+      "label": "filters — the dock"
+    },
+    {
+      "type": "camera",
+      "atMs": 132500,
+      "durationMs": 3000,
+      "_what": "smart chute — allow: the eight stone types",
+      "keyframes": [
+        {
+          "pos": [
+            18.5,
+            -57.5,
+            7.5
+          ],
+          "yaw": -18.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            18.5,
+            -57.5,
+            7.5
+          ],
+          "yaw": -18.4,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 133200,
+      "pos": [
+        19,
+        3,
+        10
+      ],
+      "_what": "smart chute — allow: the eight stone types"
+    },
+    {
+      "type": "screen",
+      "atMs": 135100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 135500,
+      "durationMs": 3000,
+      "_what": "smart chute — deny: the same eight",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            9.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            9.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 136200,
+      "pos": [
+        18,
+        3,
+        10
+      ],
+      "_what": "smart chute — deny: the same eight"
+    },
+    {
+      "type": "screen",
+      "atMs": 138100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 138500,
+      "durationMs": 3000,
+      "_what": "smart chute — deny: rail, so the train keeps its own track",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            10.5
+          ],
+          "yaw": -90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            10.5
+          ],
+          "yaw": -90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 139200,
+      "pos": [
+        19,
+        5,
+        10
+      ],
+      "_what": "smart chute — deny: rail, so the train keeps its own track"
+    },
+    {
+      "type": "screen",
+      "atMs": 141100,
+      "action": "close"
+    },
+    {
+      "type": "marker",
+      "atMs": 141500,
+      "label": "filters — the crusher"
+    },
+    {
+      "type": "camera",
+      "atMs": 141500,
+      "durationMs": 3000,
+      "_what": "brass funnel — allow: crushed iron, gold, copper, zinc",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            4.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            4.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 142200,
+      "pos": [
+        13,
+        5,
+        4
+      ],
+      "_what": "brass funnel — allow: crushed iron, gold, copper, zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 144100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 144500,
+      "durationMs": 3000,
+      "_what": "brass funnel — deny: the same four",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 145200,
+      "pos": [
+        13,
+        5,
+        5
+      ],
+      "_what": "brass funnel — deny: the same four"
+    },
+    {
+      "type": "screen",
+      "atMs": 147100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 147500,
+      "durationMs": 3000,
+      "_what": "belt funnel — allow: the eight stone types again",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": -108.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": -108.4,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 148200,
+      "pos": [
+        12,
+        5,
+        5
+      ],
+      "_what": "belt funnel — allow: the eight stone types again"
+    },
+    {
+      "type": "screen",
+      "atMs": 150100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 150500,
+      "durationMs": 3000,
+      "_what": "belt funnel — allow: what comes back out",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": -90,
+          "pitch": 18.4
+        },
+        {
+          "pos": [
+            7.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": -90,
+          "pitch": 18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 151200,
+      "pos": [
+        10,
+        5,
+        8
+      ],
+      "_what": "belt funnel — allow: what comes back out"
+    },
+    {
+      "type": "screen",
+      "atMs": 153100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 153500,
+      "durationMs": 3000,
+      "_what": "brass funnel — allow: the crushed four, a floor down",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            6.5
+          ],
+          "yaw": -90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            6.5
+          ],
+          "yaw": -90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 154200,
+      "pos": [
+        10,
+        3,
+        6
+      ],
+      "_what": "brass funnel — allow: the crushed four, a floor down"
+    },
+    {
+      "type": "screen",
+      "atMs": 156100,
+      "action": "close"
+    },
+    {
+      "type": "marker",
+      "atMs": 156500,
+      "label": "filters — the washer"
+    },
+    {
+      "type": "camera",
+      "atMs": 156500,
+      "durationMs": 3000,
+      "_what": "brass funnel — allow: clay",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -57.5,
+            6.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -57.5,
+            6.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 157200,
+      "pos": [
+        13,
+        4,
+        6
+      ],
+      "_what": "brass funnel — allow: clay"
+    },
+    {
+      "type": "screen",
+      "atMs": 159100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 159500,
+      "durationMs": 3000,
+      "_what": "belt funnel — deny: clay",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 160200,
+      "pos": [
+        13,
+        5,
+        7
+      ],
+      "_what": "belt funnel — deny: clay"
+    },
+    {
+      "type": "screen",
+      "atMs": 162100,
+      "action": "close"
+    },
+    {
+      "type": "marker",
+      "atMs": 162500,
+      "label": "filters — the sorter"
+    },
+    {
+      "type": "camera",
+      "atMs": 162500,
+      "durationMs": 3000,
+      "_what": "lane 1 — experience nuggets",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 163200,
+      "pos": [
+        8,
+        5,
+        11
+      ],
+      "_what": "lane 1 — experience nuggets"
+    },
+    {
+      "type": "screen",
+      "atMs": 165100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 165500,
+      "durationMs": 3000,
+      "_what": "lane 2 — lapis, emerald, diamond, ore and gem alike",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 166200,
+      "pos": [
+        9,
+        5,
+        11
+      ],
+      "_what": "lane 2 — lapis, emerald, diamond, ore and gem alike"
+    },
+    {
+      "type": "screen",
+      "atMs": 168100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 168500,
+      "durationMs": 3000,
+      "_what": "lane 3 — gunpowder and quartz",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 169200,
+      "pos": [
+        10,
+        5,
+        11
+      ],
+      "_what": "lane 3 — gunpowder and quartz"
+    },
+    {
+      "type": "screen",
+      "atMs": 171100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 171500,
+      "durationMs": 3000,
+      "_what": "lane 4 — redstone and coal",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": -135,
+          "pitch": 19.5
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": -135,
+          "pitch": 19.5
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 172200,
+      "pos": [
+        11,
+        5,
+        11
+      ],
+      "_what": "lane 4 — redstone and coal"
+    },
+    {
+      "type": "screen",
+      "atMs": 174100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 174500,
+      "durationMs": 3000,
+      "_what": "lane 5 — copper and zinc",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            8.5
+          ],
+          "yaw": -18.4,
+          "pitch": 32.3
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            8.5
+          ],
+          "yaw": -18.4,
+          "pitch": 32.3
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 175200,
+      "pos": [
+        12,
+        5,
+        11
+      ],
+      "_what": "lane 5 — copper and zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 177100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 177500,
+      "durationMs": 3000,
+      "_what": "lane 6 — iron and gold",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            11.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            11.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 178200,
+      "pos": [
+        13,
+        5,
+        11
+      ],
+      "_what": "lane 6 — iron and gold"
+    },
+    {
+      "type": "screen",
+      "atMs": 180100,
+      "action": "close"
+    },
+    {
+      "type": "marker",
+      "atMs": 180500,
+      "label": "filters — the presses"
+    },
+    {
+      "type": "camera",
+      "atMs": 180500,
+      "durationMs": 3000,
+      "_what": "basin — redstone and coal",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            12.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            12.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 181200,
+      "pos": [
+        11,
+        5,
+        13
+      ],
+      "_what": "basin — redstone and coal"
+    },
+    {
+      "type": "screen",
+      "atMs": 183100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 183500,
+      "durationMs": 3000,
+      "_what": "basin — copper and zinc",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            10.5
+          ],
+          "yaw": -18.4,
+          "pitch": 32.3
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            10.5
+          ],
+          "yaw": -18.4,
+          "pitch": 32.3
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 184200,
+      "pos": [
+        12,
+        5,
+        13
+      ],
+      "_what": "basin — copper and zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 186100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 186500,
+      "durationMs": 3000,
+      "_what": "basin — iron and gold",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 187200,
+      "pos": [
+        13,
+        5,
+        13
+      ],
+      "_what": "basin — iron and gold"
+    },
+    {
+      "type": "screen",
+      "atMs": 189100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 189500,
+      "durationMs": 3000,
+      "_what": "output funnel — the finished block only",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": -71.6,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 190200,
+      "pos": [
+        11,
+        5,
+        14
+      ],
+      "_what": "output funnel — the finished block only"
+    },
+    {
+      "type": "screen",
+      "atMs": 192100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 192500,
+      "durationMs": 3000,
+      "_what": "output funnel — the finished block only",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 32.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 32.3
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 193200,
+      "pos": [
+        12,
+        5,
+        14
+      ],
+      "_what": "output funnel — the finished block only"
+    },
+    {
+      "type": "screen",
+      "atMs": 195100,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 195500,
+      "durationMs": 3000,
+      "_what": "output funnel — the finished block only",
+      "keyframes": [
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            14.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            14.5
+          ],
+          "yaw": 90,
+          "pitch": -18.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 196200,
+      "pos": [
+        13,
+        5,
+        14
+      ],
+      "_what": "output funnel — the finished block only"
+    },
+    {
+      "type": "screen",
+      "atMs": 198100,
+      "action": "close"
+    },
+    {
+      "type": "marker",
+      "atMs": 199500,
+      "label": "the dock"
+    },
+    {
+      "type": "camera",
+      "atMs": 199500,
+      "durationMs": 5500,
+      "_what": "dock — the chest the train unloads into, and the two chutes under it",
+      "keyframes": [
+        {
+          "pos": [
+            26.4,
+            -55,
+            9.4
+          ],
+          "yaw": 82.1,
+          "pitch": 17.4
+        },
+        {
+          "pos": [
+            24.3,
+            -55,
+            8.2
+          ],
+          "yaw": 68.4,
+          "pitch": 21.8
+        },
+        {
+          "pos": [
+            22.1,
+            -55,
+            7.9
+          ],
+          "yaw": 54.2,
+          "pitch": 29.4
+        }
+      ]
+    },
+    {
+      "type": "fill",
+      "atMs": 201000,
+      "pos": [
+        18,
+        4,
+        10
+      ],
+      "items": [
+        {
+          "id": "minecraft:raw_iron",
+          "count": 64
+        },
+        {
+          "id": "minecraft:raw_gold",
+          "count": 64
+        },
+        {
+          "id": "minecraft:raw_copper",
+          "count": 64
+        },
+        {
+          "id": "create:raw_zinc",
+          "count": 64
+        },
+        {
+          "id": "minecraft:iron_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:deepslate_iron_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:gold_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:copper_ore",
+          "count": 64
+        },
+        {
+          "id": "create:zinc_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:cobblestone",
+          "count": 64
+        },
+        {
+          "id": "minecraft:cobbled_deepslate",
+          "count": 64
+        },
+        {
+          "id": "minecraft:gravel",
+          "count": 64
+        },
+        {
+          "id": "minecraft:flint",
+          "count": 64
+        },
+        {
+          "id": "minecraft:netherrack",
+          "count": 64
+        }
+      ],
+      "_what": "a train-load: ore, raw ore, and the stone that came up with it"
+    },
+    {
+      "type": "camera",
+      "atMs": 205000,
+      "durationMs": 4000,
+      "_what": "dock — the chutes emptying it",
+      "keyframes": [
+        {
+          "pos": [
+            22.1,
+            -55,
+            7.9
+          ],
+          "yaw": 54.2,
+          "pitch": 29.4
+        },
+        {
+          "pos": [
+            22.1,
+            -55,
+            7.9
+          ],
+          "yaw": 54.2,
+          "pitch": 29.4
+        }
+      ]
+    },
+    {
+      "type": "gameMode",
+      "atMs": 208500,
+      "mode": "spectator"
+    },
+    {
+      "type": "marker",
+      "atMs": 209500,
+      "label": "crusher"
+    },
+    {
+      "type": "camera",
+      "atMs": 209500,
+      "durationMs": 5000,
+      "_what": "crusher — two wheels, the controller between them, and the belt that carries the crushed ore out",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            1.5
+          ],
+          "yaw": -27.3,
+          "pitch": 20.2
+        },
+        {
+          "pos": [
+            7.5,
+            -54.5,
+            3
+          ],
+          "yaw": -34.9,
+          "pitch": 15
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 214500,
+      "durationMs": 7000,
+      "_what": "crusher — held while the material comes through",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 222000,
+      "label": "washer"
+    },
+    {
+      "type": "camera",
+      "atMs": 222000,
+      "durationMs": 5000,
+      "_what": "washer — the fan, the waterlogged leaf in front of it, and what comes off the belt below",
+      "keyframes": [
+        {
+          "pos": [
+            20,
+            -52.9,
+            10.4
+          ],
+          "yaw": 130.1,
+          "pitch": 18.7
+        },
+        {
+          "pos": [
+            19.7,
+            -52.9,
+            7.8
+          ],
+          "yaw": 116.2,
+          "pitch": 22.5
+        },
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 227000,
+      "durationMs": 7000,
+      "_what": "washer — held while the material comes through",
+      "keyframes": [
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        },
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 234500,
+      "label": "press"
+    },
+    {
+      "type": "camera",
+      "atMs": 234500,
+      "durationMs": 5000,
+      "_what": "press — three basins with a press over each, and the funnels that feed them off the lanes",
+      "keyframes": [
+        {
+          "pos": [
+            14.8,
+            -52.5,
+            21.2
+          ],
+          "yaw": 163.4,
+          "pitch": 17.3
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            18.9
+          ],
+          "yaw": 149.3,
+          "pitch": 21.7
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 239500,
+      "durationMs": 7000,
+      "_what": "press — held while the material comes through",
+      "keyframes": [
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 247000,
+      "label": "the whole line"
+    },
+    {
+      "type": "camera",
+      "atMs": 247000,
+      "durationMs": 10000,
+      "_what": "the plant working, end to end",
+      "keyframes": [
+        {
+          "pos": [
+            21.8,
+            -41.8,
+            52.2
+          ],
+          "yaw": 163,
+          "pitch": 15.5
+        },
+        {
+          "pos": [
+            26,
+            -41.8,
+            40.1
+          ],
+          "yaw": 149,
+          "pitch": 19.8
+        },
+        {
+          "pos": [
+            25.3,
+            -41.8,
+            28.8
+          ],
+          "yaw": 135,
+          "pitch": 27.4
+        }
+      ]
+    }
+  ]
+}

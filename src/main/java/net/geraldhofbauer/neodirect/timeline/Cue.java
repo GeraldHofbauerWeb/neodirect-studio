@@ -7,7 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * One instruction on the timeline, fired when the take's wall clock passes {@link #atMs()}.
@@ -17,7 +19,7 @@ import java.util.List;
  * game stutters.
  */
 public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.MaterialsChest, Cue.Fill,
-        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks, Cue.Use, Cue.Reseat {
+        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks, Cue.Use, Cue.Reseat, Cue.GameMode {
 
     long atMs();
 
@@ -41,7 +43,8 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * need a couple of hundred hand-written indices — a script names the handful of blocks a beat
      * actually talks about, and sweeps up the rest in one cue.
      */
-    record Place(long atMs, Selector selector, long staggerMs, long spanMs) implements Cue {
+    record Place(long atMs, Selector selector, long staggerMs, long spanMs,
+                 Map<String, Double> pace) implements Cue {
 
         @Override
         public long endMs() {
@@ -202,10 +205,29 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      */
     record Screen(long atMs, String action, int x, int y, int z) implements Cue {}
 
+    /**
+     * Puts the player into another game mode mid-take.
+     *
+     * <p>Creative is right while a take is building something — the camera carries a block, swings
+     * at it, opens screens. None of that is wanted once the machine is running and the shot is
+     * only following material through it: spectator takes the hand, the hotbar and the crosshair
+     * out of frame and lets the camera sit inside a belt without the machine noticing.
+     *
+     * <p>The mode the player was in when the first such cue fired is put back when the take ends,
+     * however it ends. A take that leaves the studio in spectator would break the next one, which
+     * places blocks.
+     *
+     * @param mode {@code creative}, {@code spectator}, {@code survival} or {@code adventure}
+     */
+    record GameMode(long atMs, String mode) implements Cue {}
+
     /** A no-op that shows up in the take log — useful to line the video up with the narration. */
     record Marker(long atMs, String label) implements Cue {}
 
     record Keyframe(double x, double y, double z, float yaw, float pitch) {}
+
+    /** Spelled out rather than taken from GameType, so a typo is a parse error and not a silent survival. */
+    java.util.Set<String> MODES = java.util.Set.of("creative", "spectator", "survival", "adventure");
 
     static Cue parse(JsonObject obj) {
         long atMs = GsonHelper.getAsLong(obj, "atMs", 0L);
@@ -309,9 +331,42 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                 }
                 yield new Reseat(atMs, typeIds(obj.get("ofType")));
             }
+            case "gameMode" -> {
+                String mode = GsonHelper.getAsString(obj, "mode");
+                if (!MODES.contains(mode)) {
+                    throw new IllegalArgumentException("gameMode 'mode' must be one of " + MODES + ", got " + mode);
+                }
+                yield new GameMode(atMs, mode);
+            }
             case "marker" -> new Marker(atMs, GsonHelper.getAsString(obj, "label", ""));
             default -> throw new IllegalArgumentException("unknown cue type: " + type);
         };
+    }
+
+    /**
+     * How long each block of a cue is dwelt on, relative to the others.
+     *
+     * <p>{@code {"default": 3, "minecraft:stone": 1}} means every block gets three times the share
+     * of the cue that a stone block does. Without it a cue divides its span evenly, which spends
+     * the same four frames on the four hundredth cobblestone of a floor as on the crushing wheel —
+     * and the floor is not what anybody is watching.
+     *
+     * <p>Relative on purpose: the cue still finishes exactly when it said it would, whatever is in
+     * it. An absolute per-block delay would make the length of a beat depend on its contents.
+     */
+    private static Map<String, Double> parsePace(JsonElement el) {
+        if (el == null) {
+            return Map.of();
+        }
+        Map<String, Double> pace = new LinkedHashMap<>();
+        for (var entry : el.getAsJsonObject().entrySet()) {
+            double weight = entry.getValue().getAsDouble();
+            if (weight <= 0) {
+                throw new IllegalArgumentException("pace weight for " + entry.getKey() + " must be above zero");
+            }
+            pace.put(entry.getKey(), weight);
+        }
+        return Map.copyOf(pace);
     }
 
     /**
@@ -331,11 +386,12 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
         if (stagger > 0 && span > 0) {
             throw new IllegalArgumentException("a place cue takes staggerMs or spanMs, not both");
         }
+        Map<String, Double> pace = parsePace(obj.get("pace"));
 
         if (spec.isJsonPrimitive() && spec.getAsJsonPrimitive().isString()) {
             return switch (spec.getAsString()) {
-                case "all" -> new Place(atMs, Place.Range.ALL, stagger, span);
-                case "rest" -> new Place(atMs, new Place.Rest(List.of()), stagger, span);
+                case "all" -> new Place(atMs, Place.Range.ALL, stagger, span, pace);
+                case "rest" -> new Place(atMs, new Place.Rest(List.of()), stagger, span, pace);
                 default -> throw new IllegalArgumentException(
                         "'blocks' as a string must be \"all\" or \"rest\", got " + spec.getAsString());
             };
@@ -344,26 +400,26 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
         if (spec.isJsonObject()) {
             JsonObject o = spec.getAsJsonObject();
             if (o.has("ofType")) {
-                return new Place(atMs, new Place.OfType(typeIds(o.get("ofType"))), stagger, span);
+                return new Place(atMs, new Place.OfType(typeIds(o.get("ofType"))), stagger, span, pace);
             }
             if (o.has("part") || o.has("parts")) {
                 return new Place(atMs, new Place.Part(
-                        typeIds(o.has("part") ? o.get("part") : o.get("parts"))), stagger, span);
+                        typeIds(o.has("part") ? o.get("part") : o.get("parts"))), stagger, span, pace);
             }
             if (o.has("rest")) {
                 return new Place(atMs, new Place.Rest(
-                        o.has("except") ? typeIds(o.get("except")) : List.of()), stagger, span);
+                        o.has("except") ? typeIds(o.get("except")) : List.of()), stagger, span, pace);
             }
             return new Place(atMs, new Place.Range(
                     GsonHelper.getAsInt(o, "from", 0),
-                    GsonHelper.getAsInt(o, "to", Integer.MAX_VALUE)), stagger, span);
+                    GsonHelper.getAsInt(o, "to", Integer.MAX_VALUE)), stagger, span, pace);
         }
 
         List<Integer> indices = new ArrayList<>();
         for (JsonElement el : spec.getAsJsonArray()) {
             indices.add(el.getAsInt());
         }
-        return new Place(atMs, new Place.Indices(List.copyOf(indices)), stagger, span);
+        return new Place(atMs, new Place.Indices(List.copyOf(indices)), stagger, span, pace);
     }
 
     /** A block id or a list of them, both spellings accepted wherever types are named. */

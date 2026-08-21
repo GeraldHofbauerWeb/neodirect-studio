@@ -31,6 +31,9 @@ export const AUDITION_VOICES = [
   { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matilda', note: 'American, upbeat educator' },
   { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Daniel', note: 'British, steady broadcaster' },
   { id: 'iP95p4xoKVk53GoZ742B', name: 'Chris', note: 'American, casual and down-to-earth' },
+  // Public library rather than the account's own — the text-to-speech endpoint takes a shared
+  // voice id directly, so there is nothing to add to the collection first.
+  { id: 'Z2fsAwk7IblvPhYzfslC', name: 'Davis', note: 'American, casual and a shade deeper' },
 ];
 
 async function apiKey() {

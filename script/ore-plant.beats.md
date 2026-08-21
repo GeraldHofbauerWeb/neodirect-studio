@@ -1,7 +1,8 @@
 # Ore Processing Plant — narration
 
-Ten beats, English, voice *Chris* as in the pilot. The boiler is in now, as its
-own beat at the front, because you were right that without it nothing turns.
+Ten beats, English, voice *Davis* — the one you sent, not the pilot's Chris. The
+boiler is in now, as its own beat at the front, because you were right that
+without it nothing turns.
 
 **This is the file to mark up.** Overwrite the text under any beat and I read it
 back into `script/ore-plant.beats.json`. Nothing goes to ElevenLabs until you

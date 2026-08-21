@@ -1,6 +1,6 @@
 {
   "take": "ore-plant-build",
-  "_what": "A silent run-through. One camera move per assembly, chosen for what can actually be seen from there rather than by compass point alone, held for a moment after the assembly finishes. Then the switch is pulled, the wheels are reseated bare, and the camera stays on the wall.",
+  "_what": "A silent run-through. One camera move per assembly, held for a moment after the assembly finishes, then the switch is pulled, the kinetic blocks are reseated bare, and the camera stays on the wall. Placement time inside a cue goes to the components rather than to the floor they stand on.",
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
@@ -17,58 +17,79 @@
   },
   "cues": [
     {
-      "atMs": 500,
       "type": "camera",
-      "durationMs": 11500,
+      "atMs": 500,
+      "durationMs": 10500,
+      "_what": "shell",
       "keyframes": [
         {
           "pos": [
             10,
-            -46.7,
+            -45.6,
             -28
           ],
           "yaw": 0,
-          "pitch": 10.5
+          "pitch": 11.3
         },
         {
           "pos": [
             2.2,
-            -46.7,
+            -45.6,
             -17.2
           ],
           "yaw": -14,
-          "pitch": 13.6
+          "pitch": 14.6
         },
         {
           "pos": [
             -0.5,
-            -46.7,
+            -45.6,
             -5.8
           ],
           "yaw": -27.9,
-          "pitch": 19.2
+          "pitch": 20.5
         }
-      ],
-      "_what": "shell"
+      ]
     },
     {
-      "atMs": 900,
       "type": "place",
+      "atMs": 900,
       "blocks": {
         "part": "shell"
       },
-      "spanMs": 9000,
-      "_what": "shell"
+      "spanMs": 7500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "floor and the walls things hang on"
     },
     {
-      "atMs": 10100,
       "type": "marker",
+      "atMs": 9200,
       "label": "shell"
     },
     {
-      "atMs": 13200,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 12200,
+      "durationMs": 15000,
+      "_what": "boiler",
       "keyframes": [
         {
           "pos": [
@@ -97,76 +118,116 @@
           "yaw": 106.9,
           "pitch": 42.5
         }
-      ],
-      "_what": "boiler"
+      ]
     },
     {
-      "atMs": 13600,
       "type": "place",
+      "atMs": 12600,
       "blocks": {
         "part": "boiler"
       },
-      "spanMs": 4000,
-      "_what": "boiler"
+      "spanMs": 12000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "tanks, magma, engines, pumps, wheels"
     },
     {
-      "atMs": 17800,
       "type": "marker",
+      "atMs": 25400,
       "label": "boiler"
     },
     {
-      "atMs": 20900,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 28400,
+      "durationMs": 13000,
+      "_what": "drive",
       "keyframes": [
         {
           "pos": [
             4.4,
-            -48,
+            -46.9,
             -0.2
           ],
           "yaw": -19.9,
-          "pitch": 24
+          "pitch": 26
         },
         {
           "pos": [
             3.2,
-            -48,
+            -46.9,
             3.9
           ],
           "yaw": -34,
-          "pitch": 30
+          "pitch": 32.5
         },
         {
           "pos": [
             3.6,
-            -48,
+            -46.9,
             7.7
           ],
           "yaw": -48.4,
-          "pitch": 39.7
+          "pitch": 42.4
         }
-      ],
-      "_what": "drive"
+      ]
     },
     {
-      "atMs": 21300,
       "type": "place",
+      "atMs": 28800,
       "blocks": {
         "part": "drive"
       },
-      "spanMs": 4000,
-      "_what": "drive"
+      "spanMs": 10000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "chain drives, gearboxes, the speed controller"
     },
     {
-      "atMs": 25500,
       "type": "marker",
+      "atMs": 39600,
       "label": "drive"
     },
     {
-      "atMs": 28600,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 42600,
+      "durationMs": 7500,
+      "_what": "dock",
       "keyframes": [
         {
           "pos": [
@@ -195,27 +256,47 @@
           "yaw": 32.6,
           "pitch": 32.8
         }
-      ],
-      "_what": "dock"
+      ]
     },
     {
-      "atMs": 29000,
       "type": "place",
+      "atMs": 43000,
       "blocks": {
         "part": "dock"
       },
-      "spanMs": 4000,
-      "_what": "dock"
+      "spanMs": 4500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "belt, chutes, the interface the train unloads through"
     },
     {
-      "atMs": 33200,
       "type": "marker",
+      "atMs": 48300,
       "label": "dock"
     },
     {
-      "atMs": 36300,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 51300,
+      "durationMs": 11500,
+      "_what": "crushing",
       "keyframes": [
         {
           "pos": [
@@ -244,27 +325,47 @@
           "yaw": 92,
           "pitch": 28.2
         }
-      ],
-      "_what": "crushing"
+      ]
     },
     {
-      "atMs": 36700,
       "type": "place",
+      "atMs": 51700,
       "blocks": {
         "part": "crushing"
       },
-      "spanMs": 4000,
-      "_what": "crushing"
+      "spanMs": 8500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "two wheels, the controller, the belt loop"
     },
     {
-      "atMs": 40900,
       "type": "marker",
+      "atMs": 61000,
       "label": "crushing"
     },
     {
-      "atMs": 44000,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 64000,
+      "durationMs": 6000,
+      "_what": "washing",
       "keyframes": [
         {
           "pos": [
@@ -293,27 +394,47 @@
           "yaw": 92,
           "pitch": 44.5
         }
-      ],
-      "_what": "washing"
+      ]
     },
     {
-      "atMs": 44400,
       "type": "place",
+      "atMs": 64400,
       "blocks": {
         "part": "washing"
       },
-      "spanMs": 4000,
-      "_what": "washing"
+      "spanMs": 3000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "fan, leaf, water wheel, and the clay pair"
     },
     {
-      "atMs": 48600,
       "type": "marker",
+      "atMs": 68200,
       "label": "washing"
     },
     {
-      "atMs": 51700,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 71200,
+      "durationMs": 13000,
+      "_what": "sorting",
       "keyframes": [
         {
           "pos": [
@@ -342,27 +463,47 @@
           "yaw": -58.6,
           "pitch": 48.9
         }
-      ],
-      "_what": "sorting"
+      ]
     },
     {
-      "atMs": 52100,
       "type": "place",
+      "atMs": 71600,
       "blocks": {
         "part": "sorting"
       },
-      "spanMs": 4000,
-      "_what": "sorting"
+      "spanMs": 10000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "six belts, six funnels"
     },
     {
-      "atMs": 56300,
       "type": "marker",
+      "atMs": 82400,
       "label": "sorting"
     },
     {
-      "atMs": 59400,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 85400,
+      "durationMs": 8500,
+      "_what": "compacting",
       "keyframes": [
         {
           "pos": [
@@ -391,27 +532,47 @@
           "yaw": 106.8,
           "pitch": 29.1
         }
-      ],
-      "_what": "compacting"
+      ]
     },
     {
-      "atMs": 59800,
       "type": "place",
+      "atMs": 85800,
       "blocks": {
         "part": "compacting"
       },
-      "spanMs": 4000,
-      "_what": "compacting"
+      "spanMs": 5500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "three basins, three presses"
     },
     {
-      "atMs": 64000,
       "type": "marker",
+      "atMs": 92100,
       "label": "compacting"
     },
     {
-      "atMs": 67100,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 95100,
+      "durationMs": 6000,
+      "_what": "storage",
       "keyframes": [
         {
           "pos": [
@@ -440,27 +601,47 @@
           "yaw": 92.4,
           "pitch": 37.4
         }
-      ],
-      "_what": "storage"
+      ]
     },
     {
-      "atMs": 67500,
       "type": "place",
+      "atMs": 95500,
       "blocks": {
         "part": "storage"
       },
-      "spanMs": 4000,
-      "_what": "storage"
+      "spanMs": 3000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "27 vaults, 12 chests"
     },
     {
-      "atMs": 71700,
       "type": "marker",
+      "atMs": 99300,
       "label": "storage"
     },
     {
-      "atMs": 74800,
       "type": "camera",
-      "durationMs": 6500,
+      "atMs": 102300,
+      "durationMs": 10500,
+      "_what": "readout",
       "keyframes": [
         {
           "pos": [
@@ -489,26 +670,45 @@
           "yaw": -178.1,
           "pitch": 33.1
         }
-      ],
-      "_what": "readout"
+      ]
     },
     {
-      "atMs": 75200,
       "type": "place",
+      "atMs": 102700,
       "blocks": {
         "part": "readout"
       },
-      "spanMs": 4000,
-      "_what": "readout"
+      "spanMs": 7500,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "observers, links, sixteen boards"
     },
     {
-      "atMs": 79400,
       "type": "marker",
+      "atMs": 111000,
       "label": "readout"
     },
     {
-      "atMs": 82500,
       "type": "use",
+      "atMs": 114000,
       "pos": [
         7,
         5,
@@ -517,8 +717,8 @@
       "_what": "the boiler switch, pulled"
     },
     {
-      "atMs": 85000,
       "type": "reseat",
+      "atMs": 116500,
       "ofType": [
         "create:andesite_encased_cogwheel",
         "create:andesite_encased_large_cogwheel",
@@ -538,12 +738,13 @@
         "create:stressometer",
         "create:water_wheel"
       ],
-      "_what": "every pure kinetic block, bare \u2014 92 of them. None carries configuration worth keeping, and a cloned kinetic block entity is the one thing in this machine that cannot work out for itself that it has moved."
+      "_what": "every pure kinetic block, bare, so it finds the network it is actually on"
     },
     {
-      "atMs": 86000,
       "type": "camera",
+      "atMs": 117500,
       "durationMs": 12000,
+      "_what": "the wall, once it is running",
       "keyframes": [
         {
           "pos": [
@@ -572,12 +773,11 @@
           "yaw": -178.1,
           "pitch": 33.1
         }
-      ],
-      "_what": "the wall, once it is running"
+      ]
     },
     {
-      "atMs": 98500,
       "type": "marker",
+      "atMs": 130000,
       "label": "running"
     }
   ]

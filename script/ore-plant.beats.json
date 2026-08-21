@@ -1,30 +1,30 @@
 {
   "episode": "create-ore-processing",
   "language": "en",
-  "voiceId": "iP95p4xoKVk53GoZ742B",
-  "voiceName": "Chris - Charming, Down-to-Earth",
+  "voiceId": "Z2fsAwk7IblvPhYzfslC",
+  "voiceName": "Davis - Casual Deeper American Male",
   "_note": "Generated from script/ore-plant.beats.md, which is the copy that gets marked up. plannedMs are estimates; `render-voice.mjs render` measures each beat and writes measuredMs and startMs back.",
   "_source": "Every number came out of the schematic and its report. Re-check them if the clip is re-cut.",
   "beats": [
     {
       "id": "b0",
       "plannedMs": 28000,
-      "text": "Three hundred and one blocks, forty-nine different kinds, and the whole lot fits in one double chest with room left over. Most of it is repetition \u2014 forty-six belt segments, twenty-eight encased chain drives, twenty-seven item vaults, twenty fluid tanks for the boiler. Nothing on that list is expensive, and nothing on it is clever either, which is worth saying now, because the part that makes this machine work is not really in the chest at all. It is the twenty filters, and the fact that no two of them are set the same way."
+      "text": "Three hundred and one blocks, forty-nine different kinds, and the whole lot fits in one double chest with room left over. Most of it is repetition — forty-six belt segments, twenty-eight encased chain drives, twenty-seven item vaults, twenty fluid tanks for the boiler. Nothing on that list is expensive, and nothing on it is clever either, which is worth saying now, because the part that makes this machine work is not really in the chest at all. It is the twenty filters, and the fact that no two of them are set the same way."
     },
     {
       "id": "b1",
       "plannedMs": 34000,
-      "text": "Start at the boiler, because nothing here moves without it and everything else is hung off what it turns. It looks like one boiler and it is five: five separate columns of fluid tank, four blocks high, each with its own steam engine on top. Under all of them runs a row of magma blocks, and no blaze burner anywhere \u2014 magma gives you passive heat, the lowest setting there is, and five small boilers on passive heat is enough for a plant this size and not a great deal more. Water comes up from the pool underneath through five mechanical pumps, and the pumps are turned by three water wheels standing in the same water they are pumping. Above the engines, one shaft. That shaft is the only thing connecting this end of the room to the machine at the other end."
+      "text": "Start at the boiler, because nothing here moves without it and everything else is hung off what it turns. It looks like one boiler and it is five: five separate columns of fluid tank, four blocks high, each with its own steam engine on top. Under all of them runs a row of magma blocks, and no blaze burner anywhere — magma gives you passive heat, the lowest setting there is, and five small boilers on passive heat is enough for a plant this size and not a great deal more. Water comes up from the pool underneath through five mechanical pumps, and the pumps are turned by three water wheels standing in the same water they are pumping. Above the engines, one shaft. That shaft is the only thing connecting this end of the room to the machine at the other end."
     },
     {
       "id": "b2",
       "plannedMs": 26000,
-      "text": "From the boiler the line runs north along the ceiling and drops into the plant, and from there it is chain drives most of the way \u2014 twenty-eight of them, more of this build than any other single component, and the part you will never see in a screenshot of it. Gearboxes take the corners. A rotation speed controller sets the pace for everything downstream, so the crusher and the presses and the belts all run off one number instead of being tuned against each other. And there is a stressometer on the wall, which earns its place the first time you add something and the whole plant slows down."
+      "text": "From the boiler the line runs north along the ceiling and drops into the plant, and from there it is chain drives most of the way — twenty-eight of them, more of this build than any other single component, and the part you will never see in a screenshot of it. Gearboxes take the corners. A rotation speed controller sets the pace for everything downstream, so the crusher and the presses and the belts all run off one number instead of being tuned against each other. And there is a stressometer on the wall, which earns its place the first time you add something and the whole plant slows down."
     },
     {
       "id": "b3",
       "plannedMs": 36000,
-      "text": "This end is where the ore arrives. A mining train pulls in, parks, and empties itself through a portable storage interface \u2014 and if it looks familiar, that is the machine from the last episode, which has no idea what becomes of what it drops off. What becomes of it is two smart chutes, one above the other, and they are the first showing of a pattern that runs through this entire build. Both are set to the same eight things: cobblestone, cobbled deepslate, gravel, flint, basalt, soul sand, netherrack and blackstone. One of them allows that list. The one next to it denies it. Same list, opposite switch. Everything the train dropped goes down exactly one of the two, there is no priority to get wrong, and nothing sits in the middle waiting for somebody to decide."
+      "text": "This end is where the ore arrives. A mining train pulls in, parks, and empties itself through a portable storage interface — and if it looks familiar, that is the machine from the last episode, which has no idea what becomes of what it drops off. What becomes of it is two smart chutes, one above the other, and they are the first showing of a pattern that runs through this entire build. Both are set to the same eight things: cobblestone, cobbled deepslate, gravel, flint, basalt, soul sand, netherrack and blackstone. One of them allows that list. The one next to it denies it. Same list, opposite switch. Everything the train dropped goes down exactly one of the two, there is no priority to get wrong, and nothing sits in the middle waiting for somebody to decide."
     },
     {
       "id": "b4",
@@ -34,27 +34,27 @@
     {
       "id": "b5",
       "plannedMs": 29000,
-      "text": "Washing comes next, and the fan looks wrong the first time you see it. A fan only washes what it blows over if it is blowing through water, and there is no water in front of this one \u2014 there is a leaf block. It is waterlogged, and Create reads the fluid rather than the block holding it, so as far as the fan is concerned it is facing a pond. The whole stage is a fan, a leaf and a water wheel to turn it. And since washing gravel gives you clay, and clay is not ore, the clay comes out here the way everything comes out of everywhere in this machine: allow clay on one funnel, deny clay on the next."
+      "text": "Washing comes next, and the fan looks wrong the first time you see it. A fan only washes what it blows over if it is blowing through water, and there is no water in front of this one — there is a leaf block. It is waterlogged, and Create reads the fluid rather than the block holding it, so as far as the fan is concerned it is facing a pond. The whole stage is a fan, a leaf and a water wheel to turn it. And since washing gravel gives you clay, and clay is not ore, the clay comes out here the way everything comes out of everywhere in this machine: allow clay on one funnel, deny clay on the next."
     },
     {
       "id": "b6",
       "plannedMs": 35000,
-      "text": "Six belts side by side, a funnel over each, one filter per funnel, and this is where the machine keeps most of its cleverness. Experience nuggets on the first lane. Lapis, emerald and diamond on the second \u2014 and each of those is listed twice there, once as the ore and once as the gem, because a crushing wheel handed a whole stone block gives you the ore back rather than what is inside it. Gunpowder and quartz. Redstone and coal. Copper and zinc nuggets. Iron and gold nuggets. Anything matching none of the six stays on the belt and comes round again, which means adding a metal later is a question of adding a lane rather than rebuilding the sorter."
+      "text": "Six belts side by side, a funnel over each, one filter per funnel, and this is where the machine keeps most of its cleverness. Experience nuggets on the first lane. Lapis, emerald and diamond on the second — and each of those is listed twice there, once as the ore and once as the gem, because a crushing wheel handed a whole stone block gives you the ore back rather than what is inside it. Gunpowder and quartz. Redstone and coal. Copper and zinc nuggets. Iron and gold nuggets. Anything matching none of the six stays on the belt and comes round again, which means adding a metal later is a question of adding a lane rather than rebuilding the sorter."
     },
     {
       "id": "b7",
       "plannedMs": 25000,
-      "text": "Nuggets are awkward to store and worse to carry, so they get pressed on the way past. Three basins with a mechanical press over each, and the filter on the basin decides which metals are allowed to meet: redstone and coal in the first, copper and zinc in the second, iron and gold in the third. That separation is not tidiness. A basin with two metals in it will happily make you something \u2014 it just will not be the thing you wanted. Over each output is a funnel set to the finished block, so nothing half-pressed gets past."
+      "text": "Nuggets are awkward to store and worse to carry, so they get pressed on the way past. Three basins with a mechanical press over each, and the filter on the basin decides which metals are allowed to meet: redstone and coal in the first, copper and zinc in the second, iron and gold in the third. That separation is not tidiness. A basin with two metals in it will happily make you something — it just will not be the thing you wanted. Over each output is a funnel set to the finished block, so nothing half-pressed gets past."
     },
     {
       "id": "b8",
       "plannedMs": 30000,
-      "text": "Storage is deliberately dull: twenty-seven item vaults for bulk, and a row of twelve chests underneath them for the part a hopper or a hand can actually reach. What sits under the chests is the interesting half. A content observer beneath each one, a display link above, and a wall of sixteen display boards fed from those links. Eight lines: the power on the network in stress units, the fill level of the storage, and then one line per lane \u2014 gold and iron, copper and zinc, coal and redstone, byproducts, valuables, experience nuggets. That sounds like decoration right up to the first time a lane stops quietly, and a number that has not moved all evening tells you which of the twenty filters to go and look at."
+      "text": "Storage is deliberately dull: twenty-seven item vaults for bulk, and a row of twelve chests underneath them for the part a hopper or a hand can actually reach. What sits under the chests is the interesting half. A content observer beneath each one, a display link above, and a wall of sixteen display boards fed from those links. Eight lines: the power on the network in stress units, the fill level of the storage, and then one line per lane — gold and iron, copper and zinc, coal and redstone, byproducts, valuables, experience nuggets. That sounds like decoration right up to the first time a lane stops quietly, and a number that has not moved all evening tells you which of the twenty filters to go and look at."
     },
     {
       "id": "b9",
       "plannedMs": 24000,
-      "text": "One lever starts all of it. Off, a redstone torch burns, the wire beside it carries fifteen, and a powered clutch is a disengaged one \u2014 so the wheels turn nothing, the pumps stay still and the boiler stays dry. Throw it and the torch goes out and everything downstream of it wakes up at once. Then feed it: ore into the crusher, crushed ore onto the washer, nuggets straight onto the sorter, all at the same time, because a single batch takes longer to travel the whole line than we have here and a plant working in only its first third looks broken rather than busy. Give it a moment. Every lane moving, the wall counting up, and that is a Create ore plant."
+      "text": "One lever starts all of it. Off, a redstone torch burns, the wire beside it carries fifteen, and a powered clutch is a disengaged one — so the wheels turn nothing, the pumps stay still and the boiler stays dry. Throw it and the torch goes out and everything downstream of it wakes up at once. Then feed it: ore into the crusher, crushed ore onto the washer, nuggets straight onto the sorter, all at the same time, because a single batch takes longer to travel the whole line than we have here and a plant working in only its first third looks broken rather than busy. Give it a moment. Every lane moving, the wall counting up, and that is a Create ore plant."
     }
   ]
 }

@@ -164,6 +164,11 @@ def main():
             'blocks': len(blocks),
             'parts': {name: [list(blocks[i]['pos']) for i in indices]
                       for name, indices in groups.items()},
+            # Parallel to 'parts': the block id at each of those positions. The director does not
+            # need it — it reads the schematic — but the shot tools do, to tell a floor slab from a
+            # crushing wheel without opening the NBT from JavaScript.
+            'ids': {name: [blocks[i]['name'] for i in indices]
+                    for name, indices in groups.items()},
         }
         Path(args.json).write_text(json.dumps(resolved, indent=1) + '\n')
         print(f'\n-> {args.json}')

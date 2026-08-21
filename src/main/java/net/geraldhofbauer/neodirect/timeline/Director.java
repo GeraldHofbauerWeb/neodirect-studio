@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -219,6 +220,7 @@ public final class Director {
 
     private static void finish(Run run, long elapsedMs) {
         ACTIVE.set(null);
+        restoreGameMode();
         ClientBridge.send(new ClientBridge.Command.EndRun());
 
         JsonObject result = new JsonObject();
@@ -234,6 +236,7 @@ public final class Director {
     /** Aborts whatever is running — used when the server shuts down mid-take. */
     public static void abort(String reason) {
         Run run = ACTIVE.getAndSet(null);
+        restoreGameMode();
         if (run != null) {
             ClientBridge.send(new ClientBridge.Command.EndRun());
             run.result.completeExceptionally(new IllegalStateException(reason));
@@ -617,6 +620,18 @@ public final class Director {
                         },
                         () -> itemName(level.getBlockState(at))));
 
+            } else if (cue instanceof Cue.GameMode mode) {
+                GameType wanted = gameType(mode.mode());
+                steps.add(new Step(mode.atMs(), "gameMode",
+                        () -> {
+                            if (restoreGameMode == null) {
+                                GameType before = player.gameMode.getGameModeForPlayer();
+                                restoreGameMode = () -> player.setGameMode(before);
+                            }
+                            player.setGameMode(wanted);
+                        },
+                        mode.mode()));
+
             } else if (cue instanceof Cue.Marker marker) {
                 steps.add(new Step(marker.atMs(), "marker", () -> {
                 }, marker.label()));
@@ -641,9 +656,38 @@ public final class Director {
                 // it read as somebody building instead. spanMs spreads the cue over a fixed
                 // stretch, which is what a script wants when the stretch is a beat of narration;
                 // staggerMs sets the interval directly.
-                long step = place.spanMs() > 0 && targets.size() > 1
-                        ? place.spanMs() / (targets.size() - 1)
-                        : place.staggerMs();
+                //
+                // Evenly, unless the cue says otherwise. An even spread gives a floor slab the
+                // same beat as a crushing wheel, and a viewer learns nothing from watching four
+                // hundred stones go down at the speed of the one block that mattered. `pace`
+                // weights the blocks against each other; the cue still ends when it said it would.
+                double[] weights = new double[targets.size()];
+                double totalWeight = 0;
+                for (int i = 0; i < targets.size(); i++) {
+                    weights[i] = weightOf(place.pace(), targets.get(i).state());
+                    totalWeight += weights[i];
+                }
+                boolean spreadOut = place.spanMs() > 0 && targets.size() > 1;
+                long spread = spreadOut
+                        ? place.spanMs()
+                        : place.staggerMs() * Math.max(0, targets.size() - 1);
+                long step = spreadOut ? spread : place.staggerMs();
+
+                // The offset of each block from the start of the cue, in cue order. The last block
+                // lands at the end of the spread, exactly as it did when every step was the same
+                // size — the weights redistribute the time inside the cue and never lengthen it.
+                // The extra slot on the end is when the settle step runs: one more block's worth
+                // of time after the last one, so it never lands in the same tick as a placement.
+                long[] offsets = new long[targets.size() + 1];
+                double leading = totalWeight - weights[targets.size() - 1];
+                double running = 0;
+                for (int i = 0; i < targets.size(); i++) {
+                    offsets[i] = leading > 0 ? Math.round(spread * (running / leading)) : 0;
+                    running += weights[i];
+                }
+                offsets[targets.size()] = offsets[targets.size() - 1] + (leading > 0
+                        ? Math.round(spread * weights[targets.size() - 1] / leading)
+                        : Math.max(step, 1));
 
                 if (step <= 0) {
                     BlockState first = targets.get(0).state();
@@ -667,7 +711,7 @@ public final class Director {
                     Item held = null;
                     for (int i = 0; i < targets.size(); i++) {
                         SchematicSource.SchematicBlock block = targets.get(i);
-                        long at = place.atMs() + i * step;
+                        long at = place.atMs() + offsets[i];
                         // Only when the item actually changes. Handing the player the same block
                         // thirty times in a row is thirty item-name labels flashing across the
                         // bottom of the shot.
@@ -696,7 +740,7 @@ public final class Director {
                     // quietly becomes a plain brass funnel, which is a different block that does a
                     // different thing. Re-placing every block of the cue once they are all present
                     // fixes that without the director needing to know what a belt is.
-                    long settleAt = place.atMs() + step * targets.size();
+                    long settleAt = place.atMs() + offsets[targets.size()];
                     steps.add(new Step(settleAt, "settle",
                             () -> {
                                 for (SchematicSource.SchematicBlock block : targets) {
@@ -754,6 +798,49 @@ public final class Director {
      * every other placement does it: replacing a block entity without emptying it scatters its
      * contents across the floor.
      */
+    /**
+     * How to undo a {@code gameMode} cue once the take is over — set by the first one to fire.
+     *
+     * <p>Static rather than a field on the run because the restore has to happen from
+     * {@link #finish} and {@link #abort} alike: a take aborted halfway through must not leave the
+     * studio in spectator, where the next take's blocks would go down with no hand to place them.
+     */
+    private static Runnable restoreGameMode;
+
+    private static void restoreGameMode() {
+        Runnable restore = restoreGameMode;
+        restoreGameMode = null;
+        if (restore != null) {
+            restore.run();
+        }
+    }
+
+    /**
+     * A block's share of its cue: its own entry in the pace map, else {@code default}, else one.
+     */
+    private static double weightOf(java.util.Map<String, Double> pace, BlockState state) {
+        if (pace.isEmpty()) {
+            return 1.0;
+        }
+        String id = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
+        Double own = pace.get(id);
+        if (own != null) {
+            return own;
+        }
+        return pace.getOrDefault("default", 1.0);
+    }
+
+    /** Spelled out, so an unknown name is a loud failure rather than a quiet survival mode. */
+    private static GameType gameType(String name) {
+        return switch (name) {
+            case "creative" -> GameType.CREATIVE;
+            case "spectator" -> GameType.SPECTATOR;
+            case "survival" -> GameType.SURVIVAL;
+            case "adventure" -> GameType.ADVENTURE;
+            default -> throw new IllegalArgumentException("unknown game mode: " + name);
+        };
+    }
+
     private static void setBlock(ServerLevel level, BlockPos origin, Cue.BlockSpec spec) {
         BlockPos pos = origin.offset(spec.x(), spec.y(), spec.z());
         BlockStateParser.BlockResult parsed;
@@ -1086,12 +1173,6 @@ public final class Director {
         return stored;
     }
 
-    /**
-     * Opens a container on camera, or closes whatever is open.
-     *
-     * <p>Opening goes through the block's own {@code MenuProvider}, so a double chest opens as the
-     * 54-slot screen the player would see, not as two halves.
-     */
     /** Drops specific items into a container that is part of the build. */
     private static int fillContainer(ServerLevel level, BlockPos origin, Cue.Fill cue) {
         BlockPos pos = origin.offset(cue.x(), cue.y(), cue.z());
@@ -1138,6 +1219,12 @@ public final class Director {
         filter.use(level, player, InteractionHand.MAIN_HAND);
     }
 
+    /**
+     * Opens a container on camera, or closes whatever is open.
+     *
+     * <p>Opening goes through the block's own {@code MenuProvider}, so a double chest opens as the
+     * 54-slot screen the player would see, not as two halves.
+     */
     private static void toggleScreen(ServerLevel level, ServerPlayer player, BlockPos origin, Cue.Screen cue) {
         if (cue.action().equals("close")) {
             player.closeContainer();

@@ -28,7 +28,11 @@ const SCENE = 'NeoDirect';
 const SOURCE = 'neodirect-game';
 const WIDTH = 1920;
 const HEIGHT = 1080;
-const FPS = 60;
+// Thirty, not sixty. At 60 the compositor cannot keep up with a running Create plant and x264 on
+// the same machine: a four-minute run came out with 36% of its frames lagged, which reads as a
+// stutter through every camera move. At 30 the same run reports none at all, and nothing in a
+// build tutorial moves fast enough to want the other thirty.
+const FPS = 30;
 
 /** Locates the game window by the pid the director reports, not by title. */
 async function gameWindow() {
