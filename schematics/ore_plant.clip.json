@@ -8,9 +8,9 @@
   "_box": "A flood fill is useless here: the machine is built inside a deepslate-brick room, and the kinetic network runs on into the next machine, so 'everything connected that was placed by hand' is the entire base. The box is the cluster of ore-processing blocks, measured rather than eyeballed.\n\nThe north edge sits at -2141 rather than at -2139, where the machinery appears to stop. Two blocks further north stand a water wheel and the gearbox it turns, and that gearbox is what drives the washing fan. Cut at -2139 the fan arrives with no power at all, and nothing about the schematic would say so.\n\nThe east edge sits at -3289, one block past the docking station, and that is deliberate. The cluster runs on to -3280, but what continues there is 108 item vaults, 85 deployers, 54 drills, 16 chassis, a cart assembler and a plough — the mining train from the pilot episode, parked at its unloading point. Cutting at the cluster boundary would have put 142 of its blocks in the schematic and left 132 outside, which is how ten unexplained deployers and a vault wall with no purpose ended up in the first cut.",
   "boxes": [
     {
-      "_what": "the plant",
+      "_what": "the plant. The top edge is at 17 rather than 15, which is two blocks of empty stone for the sake of one block of water: the wheel that drives the display board sits at 15 with its source directly above it, and cut at 15 the wheel arrives dry and the wall never flips a flap.",
       "from": [-3303, 5, -2141],
-      "to":   [-3289, 15, -2124],
+      "to":   [-3289, 17, -2124],
       "floor": { "y": 4, "fillWith": "minecraft:stone" }
     },
     {
