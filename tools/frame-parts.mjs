@@ -15,6 +15,41 @@
 import { readFile } from 'node:fs/promises';
 import { aim } from './aim.mjs';
 
+/**
+ * The bearing a part is most visible from, starting from the one that was asked for.
+ *
+ * The requested bearing wins unless it is genuinely bad — a shot composed on purpose should not be
+ * quietly rotated because an automatic score liked the other side by a few percent.
+ */
+export function bestBearing(lo, size, origin, wanted, occupied, blocks) {
+  const sample = blocks.length > 24
+    ? blocks.filter((_, i) => i % Math.ceil(blocks.length / 24) === 0)
+    : blocks;
+  const targets = sample.map((p) => [p[0] + origin[0], p[1] + origin[1], p[2] + origin[2]]);
+  const score = (b, lift = 0) => {
+    const k = moveFor(lo, size, origin, b, occupied, lift);
+    return visibility(k[k.length - 1].pos, targets, occupied);
+  };
+  // A low bar on purpose. The score is a good detector of "there is a wall in the way" and a poor
+  // judge of "this is the nicer side": the display wall reads perfectly from a bearing this metric
+  // is lukewarm about, because it counts blocks and not whether you can read them. So a bearing
+  // that was chosen deliberately keeps its place unless the part is genuinely buried from there.
+  const asked = score(wanted);
+  if (asked >= 0.45) return { bearing: wanted, lift: 0, score: asked, asked };
+  // Bearing first, then height. Something buried under a wall of display boards is not visible
+  // from any compass point at eye level, and the answer is to look down at it rather than to keep
+  // walking around the outside — which is what a person filming it would do.
+  let best = { bearing: wanted, lift: 0, score: asked, asked };
+  for (const lift of [0, 3, 6, 9, 13]) {
+    for (let b = 0; b < 360; b += 30) {
+      const s = score(b, lift);
+      if (s > best.score + 0.05) best = { bearing: b, lift, score: s, asked };
+    }
+    if (best.score >= 0.6) break;
+  }
+  return best;
+}
+
 export function bounds(positions) {
   const lo = [Infinity, Infinity, Infinity];
   const hi = [-Infinity, -Infinity, -Infinity];
@@ -28,26 +63,68 @@ export function bounds(positions) {
 }
 
 /**
+ * Whether a straight run between two points clips anything.
+ *
+ * Sampled rather than solved, and with a margin, because the camera follows a Catmull-Rom spline
+ * that bows outward between keyframes — a path whose every waypoint is clear can still bulge into
+ * the build. The mod checks the real curve when a take is verified; this is the cheap version that
+ * stops a shot being written that way in the first place.
+ */
+function clear(from, to, occupied, margin = 1) {
+  const steps = Math.max(8, Math.ceil(Math.hypot(to[0] - from[0], to[1] - from[1], to[2] - from[2]) * 3));
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const p = [0, 1, 2].map((k) => from[k] + (to[k] - from[k]) * t);
+    for (let dx = -margin; dx <= margin; dx++) {
+      for (let dy = -margin; dy <= margin; dy++) {
+        for (let dz = -margin; dz <= margin; dz++) {
+          const key = `${Math.floor(p[0]) + dx},${Math.floor(p[1]) + dy},${Math.floor(p[2]) + dz}`;
+          if (occupied.has(key)) return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+/**
  * A three-quarter move that ends closer than it starts.
  *
  * Distance comes from the part's largest horizontal dimension: a six-block funnel row wants the
  * camera near enough to read a filter, and the boiler wants it far enough back to see all five
  * columns, and those are the same rule with a different number in it.
+ *
+ * With `occupied` given, the move backs off and climbs until nothing on it clips the build. Better
+ * to find that here than in a verify report after the take, and much better than in the footage.
  */
-export function moveFor(lo, size, origin, bearing = 215) {
+export function moveFor(lo, size, origin, bearing = 215, occupied = null, lift = 0) {
   const centre = [
     origin[0] + lo[0] + size[0] / 2,
     origin[1] + lo[1] + size[1] / 2,
     origin[2] + lo[2] + size[2] / 2,
   ];
   const reach = Math.max(size[0], size[2]);
-  const near = Math.max(6, reach * 0.9);
-  const far = Math.max(10, reach * 1.6);
 
+  // Try the tight framing first and give it up a step at a time. A three-block washing stage read
+  // from eleven blocks away is a shot of the room it stands in.
+  for (let attempt = 0; attempt < 12; attempt++) {
+    const near = Math.max(4.5, reach * 0.8) + attempt * 1.2;
+    const far = Math.max(8, reach * 1.5) + attempt * 1.2;
+    const keyframes = keyframesFor(centre, bearing, near, far, size, lift + attempt * 0.6);
+    if (!occupied) return keyframes;
+    const points = keyframes.map((k) => k.pos);
+    const ok = points.every((p, i) => i === 0 || clear(points[i - 1], p, occupied))
+      && points.every((p) => clear(p, p, occupied));
+    if (ok) return keyframes;
+  }
+  return keyframesFor(centre, bearing, reach * 2.4 + 8, reach * 3.2 + 10, size, lift + 6);
+}
+
+function keyframesFor(centre, bearing, near, far, size, lift) {
   return [far, (far + near) / 2, near].map((d, i) => {
     // Drift the bearing across the move so it is a slow arc rather than a push straight in.
     const angle = ((bearing + i * 14) * Math.PI) / 180;
-    const height = centre[1] + Math.max(3, size[1] * 0.7);
+    const height = centre[1] + Math.max(2.5, size[1] * 0.6) + lift;
     const pos = [
       round(centre[0] + d * Math.sin(angle)),
       round(height),
@@ -56,6 +133,42 @@ export function moveFor(lo, size, origin, bearing = 215) {
     const { yaw, pitch } = aim(pos, centre);
     return { pos, yaw, pitch };
   });
+}
+
+/**
+ * How much of a part can actually be seen from a point.
+ *
+ * Framing by bounding box and compass bearing gets the camera to the right neighbourhood and says
+ * nothing about whether the machine is behind a wall from there — which it was, twice, for a
+ * washing stage whose fan faces into its own housing and a vault trio buried in the middle of the
+ * plant. Rays from the camera to the part's own blocks, counted.
+ */
+export function visibility(from, targets, occupied) {
+  let seen = 0;
+  for (const t of targets) {
+    const to = [t[0] + 0.5, t[1] + 0.5, t[2] + 0.5];
+    const steps = Math.ceil(Math.hypot(to[0] - from[0], to[1] - from[1], to[2] - from[2]) * 2);
+    let blocked = false;
+    // Stop one step short: the target block is itself occupied, and it is not in its own way.
+    for (let i = 1; i < steps - 1; i++) {
+      const f = i / steps;
+      const key = [0, 1, 2].map((k) => Math.floor(from[k] + (to[k] - from[k]) * f)).join(',');
+      if (occupied.has(key) && key !== t.join(',')) { blocked = true; break; }
+    }
+    if (!blocked) seen++;
+  }
+  return targets.length ? seen / targets.length : 1;
+}
+
+/** Every block the schematic fills, as a lookup the clearance check can ask. */
+export function occupancy(groups, origin) {
+  const set = new Set();
+  for (const positions of Object.values(groups.parts)) {
+    for (const p of positions) {
+      set.add(`${p[0] + origin[0]},${p[1] + origin[1]},${p[2] + origin[2]}`);
+    }
+  }
+  return set;
 }
 
 const round = (n) => Math.round(n * 10) / 10;
@@ -70,6 +183,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   for (const [name, positions] of Object.entries(groups.parts)) {
     const { lo, size } = bounds(positions);
     console.log(`\n// ${name}: ${positions.length} blocks, ${size.join('x')} at ${lo.join(',')}`);
-    console.log(JSON.stringify({ _what: name, keyframes: moveFor(lo, size, origin) }, null, 2));
+    console.log(JSON.stringify(
+      { _what: name, keyframes: moveFor(lo, size, origin, 215, occupancy(groups, origin)) }, null, 2));
   }
 }

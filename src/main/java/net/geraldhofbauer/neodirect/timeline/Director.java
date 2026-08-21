@@ -574,6 +574,36 @@ public final class Director {
                         () -> setBlocks.blocks().forEach(spec -> setBlock(level, origin, spec)),
                         setBlocks.blocks().size() + " blocks"));
 
+            } else if (cue instanceof Cue.Reseat reseat) {
+                Set<String> wanted = Set.copyOf(reseat.blockIds());
+                List<SchematicSource.SchematicBlock> targets = schematic.stream()
+                        .filter(block -> wanted.contains(
+                                BuiltInRegistries.BLOCK.getKey(block.state().getBlock()).toString()))
+                        .toList();
+                if (targets.isEmpty()) {
+                    throw new IllegalArgumentException("reseat: no blocks of type " + reseat.blockIds());
+                }
+                BlockPos origin = timeline.origin();
+                steps.add(new Step(reseat.atMs(), "reseat",
+                        () -> {
+                            for (SchematicSource.SchematicBlock block : targets) {
+                                BlockPos pos = origin.offset(block.relPos());
+                                Clearable.tryClear(level.getBlockEntity(pos));
+                                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                            }
+                            for (SchematicSource.SchematicBlock block : targets) {
+                                // Bare, with none of the saved block entity data put back. That is
+                                // the difference between this and placing the block again: a player
+                                // who breaks one and sets it down gets a block entity that has
+                                // never heard of the machine it came from, and goes looking for the
+                                // shafts around it. Hand it the old data and it already believes it
+                                // has an answer.
+                                level.setBlock(origin.offset(block.relPos()), block.state(),
+                                        Block.UPDATE_ALL);
+                            }
+                        },
+                        targets.size() + " x " + reseat.blockIds()));
+
             } else if (cue instanceof Cue.Use use) {
                 BlockPos at = timeline.origin().offset(use.x(), use.y(), use.z());
                 steps.add(new Step(use.atMs(), "use",

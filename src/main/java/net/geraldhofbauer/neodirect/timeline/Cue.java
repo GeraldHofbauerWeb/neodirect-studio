@@ -17,7 +17,7 @@ import java.util.List;
  * game stutters.
  */
 public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.MaterialsChest, Cue.Fill,
-        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks, Cue.Use {
+        Cue.ShowFilter, Cue.Screen, Cue.Marker, Cue.SetBlocks, Cue.Use, Cue.Reseat {
 
     long atMs();
 
@@ -176,6 +176,20 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
     record Use(long atMs, int x, int y, int z) implements Cue {}
 
     /**
+     * Break a block and put it straight back.
+     *
+     * <p>Which is not what placing it again does. {@code Level#setBlock} returns early when the
+     * state it is given is the state already there, so a cue that re-asserts the build is a no-op
+     * for everything the build got right — and a Create water wheel that came out of a clone with
+     * the wrong idea of which network it belongs to is, by its blockstate, exactly right. It has to
+     * go to air and come back before it looks around and finds the shafts next to it.
+     *
+     * <p>Named by block type rather than by position, because "every water wheel" survives the
+     * schematic being re-cut and a list of coordinates does not.
+     */
+    record Reseat(long atMs, List<String> blockIds) implements Cue {}
+
+    /**
      * Open or close a container's screen on camera.
      *
      * <p>The point is to show the actual stack counts rather than assert them in narration — the
@@ -288,6 +302,12 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
                     throw new IllegalArgumentException("use 'pos' must have exactly 3 entries");
                 }
                 yield new Use(atMs, pos.get(0).getAsInt(), pos.get(1).getAsInt(), pos.get(2).getAsInt());
+            }
+            case "reseat" -> {
+                if (!obj.has("ofType")) {
+                    throw new IllegalArgumentException("reseat cue needs 'ofType'");
+                }
+                yield new Reseat(atMs, typeIds(obj.get("ofType")));
             }
             case "marker" -> new Marker(atMs, GsonHelper.getAsString(obj, "label", ""));
             default -> throw new IllegalArgumentException("unknown cue type: " + type);

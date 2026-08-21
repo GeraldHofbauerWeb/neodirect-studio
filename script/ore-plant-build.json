@@ -1,6 +1,6 @@
 {
   "take": "ore-plant-build",
-  "_what": "A silent run-through: one camera move per assembly, held for a moment after it finishes so the sections read as sections, then the boiler switch is pulled and the camera stays on the wall to see whether the numbers move.",
+  "_what": "A silent run-through. One camera move per assembly, chosen for what can actually be seen from there rather than by compass point alone, held for a moment after the assembly finishes. Then the switch is pulled, the wheels are reseated bare, and the camera stays on the wall.",
   "schematic": "ore_plant.nbt",
   "parts": "ore_plant.groups.json",
   "origin": [
@@ -23,30 +23,30 @@
       "keyframes": [
         {
           "pos": [
-            -17.3,
-            -45.4,
-            -25.0
+            10,
+            -46.7,
+            -28
           ],
-          "yaw": -35.0,
-          "pitch": 10.8
+          "yaw": 0,
+          "pitch": 10.5
         },
         {
           "pos": [
-            -16.6,
-            -45.4,
-            -10.8
+            2.2,
+            -46.7,
+            -17.2
           ],
-          "yaw": -47.0,
-          "pitch": 14.0
+          "yaw": -14,
+          "pitch": 13.6
         },
         {
           "pos": [
-            -11.6,
-            -45.4,
-            1.0
+            -0.5,
+            -46.7,
+            -5.8
           ],
-          "yaw": -59.0,
-          "pitch": 19.8
+          "yaw": -27.9,
+          "pitch": 19.2
         }
       ],
       "_what": "shell"
@@ -72,30 +72,30 @@
       "keyframes": [
         {
           "pos": [
-            15.8,
-            -44.8,
-            32.3
+            14.5,
+            -45.9,
+            31
           ],
-          "yaw": 135.0,
-          "pitch": 26.8
+          "yaw": 135,
+          "pitch": 26.2
         },
         {
           "pos": [
-            14.8,
-            -44.8,
-            27.9
+            13.9,
+            -45.9,
+            26.8
           ],
-          "yaw": 123.1,
-          "pitch": 33.3
+          "yaw": 120.8,
+          "pitch": 32.5
         },
         {
           "pos": [
-            12.6,
-            -44.8,
-            24.4
+            11.9,
+            -45.9,
+            23.6
           ],
-          "yaw": 110.9,
-          "pitch": 43.4
+          "yaw": 106.9,
+          "pitch": 42.5
         }
       ],
       "_what": "boiler"
@@ -121,30 +121,30 @@
       "keyframes": [
         {
           "pos": [
-            3.8,
-            -47.0,
-            -1.9
+            4.4,
+            -48,
+            -0.2
           ],
           "yaw": -19.9,
-          "pitch": 24.6
+          "pitch": 24
         },
         {
           "pos": [
-            2.8,
-            -47.0,
-            2.6
+            3.2,
+            -48,
+            3.9
           ],
-          "yaw": -32.1,
-          "pitch": 30.9
+          "yaw": -34,
+          "pitch": 30
         },
         {
           "pos": [
-            3.4,
-            -47.0,
-            6.7
+            3.6,
+            -48,
+            7.7
           ],
-          "yaw": -44.0,
-          "pitch": 41.0
+          "yaw": -48.4,
+          "pitch": 39.7
         }
       ],
       "_what": "drive"
@@ -170,30 +170,30 @@
       "keyframes": [
         {
           "pos": [
-            26.8,
-            -52.8,
-            4.1
+            25.6,
+            -53.4,
+            4.8
           ],
-          "yaw": 60.2,
-          "pitch": 19.5
+          "yaw": 60.3,
+          "pitch": 19
         },
         {
           "pos": [
-            23.5,
-            -52.8,
-            3.7
+            22.3,
+            -53.4,
+            4.4
           ],
-          "yaw": 48.0,
-          "pitch": 24.0
+          "yaw": 46,
+          "pitch": 24.1
         },
         {
           "pos": [
-            20.6,
-            -52.8,
-            4.3
+            19.5,
+            -53.4,
+            5.3
           ],
-          "yaw": 35.7,
-          "pitch": 30.9
+          "yaw": 32.6,
+          "pitch": 32.8
         }
       ],
       "_what": "dock"
@@ -219,30 +219,30 @@
       "keyframes": [
         {
           "pos": [
-            0.2,
-            -52.0,
-            12.5
+            19.6,
+            -52.5,
+            11.8
           ],
-          "yaw": -120.2,
-          "pitch": 16.4
+          "yaw": 120.2,
+          "pitch": 15.9
         },
         {
           "pos": [
-            3.5,
-            -52.0,
-            12.8
+            18.2,
+            -52.5,
+            8.7
           ],
-          "yaw": -132.0,
-          "pitch": 20.4
+          "yaw": 105.9,
+          "pitch": 20.5
         },
         {
           "pos": [
-            6.4,
-            -52.0,
-            12.2
+            16.1,
+            -52.5,
+            6.7
           ],
-          "yaw": -144.3,
-          "pitch": 26.5
+          "yaw": 92,
+          "pitch": 28.2
         }
       ],
       "_what": "crushing"
@@ -268,30 +268,30 @@
       "keyframes": [
         {
           "pos": [
-            8.9,
-            -52.5,
-            15.7
+            22.1,
+            -50.5,
+            9.8
           ],
-          "yaw": -159.9,
-          "pitch": 16.4
+          "yaw": 120.2,
+          "pitch": 27.6
         },
         {
           "pos": [
-            11.7,
-            -52.5,
-            13.9
+            20.7,
+            -50.5,
+            6.7
           ],
-          "yaw": -172.1,
-          "pitch": 20.2
+          "yaw": 105.9,
+          "pitch": 34.5
         },
         {
           "pos": [
-            13.5,
-            -52.5,
-            11.5
+            18.6,
+            -50.5,
+            4.7
           ],
-          "yaw": 175.9,
-          "pitch": 26.5
+          "yaw": 92,
+          "pitch": 44.5
         }
       ],
       "_what": "washing"
@@ -317,30 +317,30 @@
       "keyframes": [
         {
           "pos": [
-            18.8,
-            -52.5,
-            21.3
+            6.5,
+            -50.5,
+            5.7
           ],
-          "yaw": 135.0,
-          "pitch": 17.6
+          "yaw": -30,
+          "pitch": 31.4
         },
         {
           "pos": [
-            18.5,
-            -52.5,
-            18.4
+            6.2,
+            -50.5,
+            8.5
           ],
-          "yaw": 123.2,
-          "pitch": 21.3
+          "yaw": -43.8,
+          "pitch": 38.4
         },
         {
           "pos": [
-            17.5,
-            -52.5,
-            16.0
+            6.9,
+            -50.5,
+            11
           ],
-          "yaw": 111.0,
-          "pitch": 26.7
+          "yaw": -58.6,
+          "pitch": 48.9
         }
       ],
       "_what": "sorting"
@@ -366,30 +366,30 @@
       "keyframes": [
         {
           "pos": [
-            19.3,
-            -50.5,
-            21.3
+            17.2,
+            -51.5,
+            19.2
           ],
-          "yaw": 135.0,
-          "pitch": 17.6
+          "yaw": 135,
+          "pitch": 17.2
         },
         {
           "pos": [
-            19.0,
-            -50.5,
-            18.4
+            16.9,
+            -51.5,
+            16.7
           ],
-          "yaw": 123.2,
-          "pitch": 21.3
+          "yaw": 120.7,
+          "pitch": 21.7
         },
         {
           "pos": [
-            18.0,
-            -50.5,
-            16.0
+            15.8,
+            -51.5,
+            14.8
           ],
-          "yaw": 111.0,
-          "pitch": 26.7
+          "yaw": 106.8,
+          "pitch": 29.1
         }
       ],
       "_what": "compacting"
@@ -415,30 +415,30 @@
       "keyframes": [
         {
           "pos": [
-            21.3,
-            -52.5,
-            24.3
+            22.2,
+            -50.5,
+            20.3
           ],
-          "yaw": 135.0,
-          "pitch": 12.9
+          "yaw": 120.2,
+          "pitch": 22.1
         },
         {
           "pos": [
-            20.3,
-            -52.5,
-            19.9
-          ],
-          "yaw": 123.1,
-          "pitch": 16.6
-        },
-        {
-          "pos": [
-            18.1,
-            -52.5,
+            20.4,
+            -50.5,
             16.4
           ],
-          "yaw": 110.9,
-          "pitch": 23.3
+          "yaw": 106.3,
+          "pitch": 28.1
+        },
+        {
+          "pos": [
+            17.7,
+            -50.5,
+            13.8
+          ],
+          "yaw": 92.4,
+          "pitch": 37.4
         }
       ],
       "_what": "storage"
@@ -464,30 +464,30 @@
       "keyframes": [
         {
           "pos": [
-            21.5,
-            -47.2,
-            25.0
+            1.4,
+            -47.5,
+            27
           ],
-          "yaw": 135.0,
+          "yaw": -149.9,
           "pitch": 20.4
         },
         {
           "pos": [
-            20.4,
-            -47.2,
-            20.1
+            6,
+            -47.5,
+            25.2
           ],
-          "yaw": 123.1,
-          "pitch": 25.8
+          "yaw": -164,
+          "pitch": 25.3
         },
         {
           "pos": [
-            17.9,
-            -47.2,
-            16.2
+            9.2,
+            -47.5,
+            22.2
           ],
-          "yaw": 110.9,
-          "pitch": 35.0
+          "yaw": -178.1,
+          "pitch": 33.1
         }
       ],
       "_what": "readout"
@@ -517,42 +517,66 @@
       "_what": "the boiler switch, pulled"
     },
     {
-      "atMs": 82800,
+      "atMs": 85000,
+      "type": "reseat",
+      "ofType": [
+        "create:andesite_encased_cogwheel",
+        "create:andesite_encased_large_cogwheel",
+        "create:andesite_encased_shaft",
+        "create:clutch",
+        "create:crushing_wheel",
+        "create:crushing_wheel_controller",
+        "create:encased_chain_drive",
+        "create:encased_fan",
+        "create:gearbox",
+        "create:large_cogwheel",
+        "create:mechanical_press",
+        "create:mechanical_pump",
+        "create:powered_shaft",
+        "create:shaft",
+        "create:steam_engine",
+        "create:stressometer",
+        "create:water_wheel"
+      ],
+      "_what": "every pure kinetic block, bare \u2014 92 of them. None carries configuration worth keeping, and a cloned kinetic block entity is the one thing in this machine that cannot work out for itself that it has moved."
+    },
+    {
+      "atMs": 86000,
       "type": "camera",
       "durationMs": 12000,
       "keyframes": [
         {
           "pos": [
-            21.5,
-            -47.2,
-            25.0
+            1.4,
+            -47.5,
+            27
           ],
-          "yaw": 135.0,
+          "yaw": -149.9,
           "pitch": 20.4
         },
         {
           "pos": [
-            20.4,
-            -47.2,
-            20.1
+            6,
+            -47.5,
+            25.2
           ],
-          "yaw": 123.1,
-          "pitch": 25.8
+          "yaw": -164,
+          "pitch": 25.3
         },
         {
           "pos": [
-            17.9,
-            -47.2,
-            16.2
+            9.2,
+            -47.5,
+            22.2
           ],
-          "yaw": 110.9,
-          "pitch": 35.0
+          "yaw": -178.1,
+          "pitch": 33.1
         }
       ],
       "_what": "the wall, once it is running"
     },
     {
-      "atMs": 95000,
+      "atMs": 98500,
       "type": "marker",
       "label": "running"
     }

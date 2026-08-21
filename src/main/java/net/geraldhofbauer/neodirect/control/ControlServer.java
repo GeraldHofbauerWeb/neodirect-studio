@@ -1,5 +1,6 @@
 package net.geraldhofbauer.neodirect.control;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -7,7 +8,9 @@ import net.geraldhofbauer.neodirect.NeoDirect;
 import net.geraldhofbauer.neodirect.client.Screenshots;
 import net.geraldhofbauer.neodirect.timeline.Director;
 import net.geraldhofbauer.neodirect.timeline.Timeline;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -67,6 +70,7 @@ public final class ControlServer {
             server.createContext("/run", ControlServer::handleRun);
             server.createContext("/screenshot", ControlServer::handleScreenshot);
             server.createContext("/verify", ControlServer::handleVerify);
+            server.createContext("/block", ControlServer::handleBlock);
             // A small pool: takes are serialised by the director anyway, this is only so a /health
             // probe is not stuck behind a running take.
             server.setExecutor(Executors.newFixedThreadPool(2));
@@ -165,6 +169,65 @@ public final class ControlServer {
             Thread.currentThread().interrupt();
             respondError(exchange, 500, "interrupted");
         }
+    }
+
+    /**
+     * What is actually at a position: block state and, if there is one, the block entity's NBT.
+     *
+     * <p>{@code GET /block?pos=1,2,3&pos=4,5,6}. Added after an afternoon of deducing the state of a
+     * machine from screenshots — whether a wheel was turning, whether a clutch had engaged, whether
+     * a boiler had any water in it. All three are one field in a block entity, and none of them is
+     * legible in a still frame.
+     */
+    private static void handleBlock(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        String query = exchange.getRequestURI().getQuery();
+        if (query == null || query.isBlank()) {
+            respondError(exchange, 400, "pass one or more pos=x,y,z");
+            return;
+        }
+
+        JsonArray out = new JsonArray();
+        try {
+            mc.submit(() -> {
+                ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+                if (player == null) {
+                    return null;
+                }
+                var level = player.serverLevel();
+                for (String part : query.split("&")) {
+                    if (!part.startsWith("pos=")) {
+                        continue;
+                    }
+                    String[] xyz = part.substring(4).split(",");
+                    if (xyz.length != 3) {
+                        continue;
+                    }
+                    BlockPos pos = new BlockPos(Integer.parseInt(xyz[0].trim()),
+                            Integer.parseInt(xyz[1].trim()), Integer.parseInt(xyz[2].trim()));
+                    JsonObject entry = new JsonObject();
+                    entry.addProperty("pos", pos.toShortString());
+                    entry.addProperty("state", level.getBlockState(pos).toString());
+                    var be = level.getBlockEntity(pos);
+                    if (be != null) {
+                        entry.addProperty("nbt", be.saveWithoutMetadata(mc.registryAccess()).toString());
+                    }
+                    out.add(entry);
+                }
+                return null;
+            }).get(10, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            respondError(exchange, 500, String.valueOf(e.getMessage()));
+            return;
+        }
+
+        JsonObject body = new JsonObject();
+        body.add("blocks", out);
+        respond(exchange, 200, body.toString());
     }
 
     private static void handleRun(HttpExchange exchange) throws IOException {
