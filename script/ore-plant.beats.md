@@ -35,19 +35,21 @@ before the narration starts and is never mentioned.
 *~34 s · the boiler builds first, 86 blocks over four seconds*
 
 > Start at the boiler, because nothing here moves without it and everything else
-> is hung off what it turns. Five columns of fluid tanks, four blocks high, and
-> underneath them a row of magma blocks — no blaze burners anywhere, which
-> surprised me the first time I went looking for them. Magma gives you passive
-> heat, which is the lowest setting there is, and passive heat under five
-> engines is enough for a plant this size and not a great deal more. Water comes
-> up from the pool underneath through five mechanical pumps, and the pumps are
-> turned by three water wheels sitting in the same water they are pumping. Five
-> steam engines on top of the tanks, a shaft above those, and that shaft is the
-> only thing connecting this end of the room to the machine at the other end.
+> is hung off what it turns. It looks like one boiler and it is five: five
+> separate columns of fluid tank, four blocks high, each with its own steam
+> engine on top. Under all of them runs a row of magma blocks, and no blaze
+> burner anywhere — magma gives you passive heat, the lowest setting there is,
+> and five small boilers on passive heat is enough for a plant this size and not
+> a great deal more. Water comes up from the pool underneath through five
+> mechanical pumps, and the pumps are turned by three water wheels standing in
+> the same water they are pumping. Above the engines, one shaft. That shaft is
+> the only thing connecting this end of the room to the machine at the other
+> end.
 
-**Check** — passive heat from magma, no blaze burners: right, or is there a
-burner somewhere I have not found? And do the water wheels drive the pumps, or
-something else?
+**Verified** — read out of the block entities on both sides: `PassiveHeat 1`,
+`ActiveHeat 0`, `Engines 1`, `Size 1`, `Height 4`, on the server and in the
+studio alike. Five separate boilers is how it is built, not a multiblock that
+failed to merge.
 
 ---
 
@@ -167,13 +169,17 @@ throughput?
 > twelve chests underneath them for the part a hopper or a hand can actually
 > reach. What sits under the chests is the interesting half. A content observer
 > beneath each one, a display link above, and a wall of sixteen display boards
-> fed from those links — each link carrying a label and a count, so the wall
-> reads out what is actually in the machine. That sounds like decoration right
-> up to the first time a lane stops quietly, and a number that has not moved all
-> evening tells you which of the twenty filters to go and look at.
+> fed from those links. Eight lines: the power on the network in stress units,
+> the fill level of the storage, and then one line per lane — gold and iron,
+> copper and zinc, coal and redstone, byproducts, valuables, experience nuggets.
+> That sounds like decoration right up to the first time a lane stops quietly,
+> and a number that has not moved all evening tells you which of the twenty
+> filters to go and look at.
 
-**Check** — the labels in the links say things like `xpnuggets:`, so I am
-fairly confident the boards show stock. Confirm what they read on the server?
+**Verified** — the eight display links carry `create:kinetic_stress`,
+`create:fill_level` and six `create:count_items`, with those labels. The wall
+needs turning to change a line, which is a nice detail on its own: an unpowered
+readout keeps showing the last thing it knew.
 
 ---
 
@@ -181,16 +187,18 @@ fairly confident the boards show stock. Confirm what they read on the server?
 
 *~24 s · the boiler lights, ore goes in at three points, one long slow orbit*
 
-> Fire the boiler and feed it. Ore into the crusher, crushed ore onto the
-> washer, nuggets straight onto the sorter, all at the same time — a single
-> batch takes longer to travel the whole line than we have here, and a plant
-> working in only its first third looks broken rather than busy. Give it a
-> moment. Every lane moving, the wall counting up, and that is a Create ore
-> plant.
+> One lever starts all of it. Off, a redstone torch burns, the wire beside it
+> carries fifteen, and a powered clutch is a disengaged one — so the wheels turn
+> nothing, the pumps stay still and the boiler stays dry. Throw it and the torch
+> goes out and everything downstream of it wakes up at once. Then feed it: ore
+> into the crusher, crushed ore onto the washer, nuggets straight onto the
+> sorter, all at the same time, because a single batch takes longer to travel
+> the whole line than we have here and a plant working in only its first third
+> looks broken rather than busy. Give it a moment. Every lane moving, the wall
+> counting up, and that is a Create ore plant.
 
-**Check** — I have not yet seen the boiler start on its own in the studio. If
-the water wheels will not turn without flowing water it needs help, and then
-this beat has to say so rather than pretend.
+**Verified** — it starts. Wheels at 8, pumps at 32, belts at 64, crushing
+wheels and presses at 256, the wall reading 10,240 SU and the counts climbing.
 
 ---
 
