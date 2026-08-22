@@ -10,12 +10,17 @@ test('a beat counts as spoken only when the audio says the same words', async ()
   assert.ok(pilot.measured, 'the pilot should be fully measured');
   assert.ok(pilot.beats.every((b) => b.state === 'fresh'));
 
-  // The ore plant has not been spoken at all — and shares its beat ids with the pilot, which is
-  // exactly why the audio lives per episode rather than in one flat directory.
+  // The ore plant shares its beat ids with the pilot, which is exactly why the audio lives per
+  // episode rather than in one flat directory — that separation is the thing worth asserting.
+  // Whether it happens to have been spoken yet is a fact about today: this used to require it to
+  // be unspoken and failed the hour somebody rendered it.
   const orePlant = await pipeline.beats('script/ore-plant.beats.json');
   assert.equal(orePlant.voice, 'out/voice/ore-plant');
-  assert.ok(!orePlant.measured);
-  assert.ok(orePlant.beats.every((b) => b.state === 'missing'));
+  assert.notEqual(orePlant.voice, pilot.voice, 'two episodes must not share one voice directory');
+  for (const beat of orePlant.beats) {
+    assert.ok(['fresh', 'suspect', 'stale', 'missing'].includes(beat.state));
+    if (beat.state !== 'missing') assert.ok(orePlant.measured, 'a spoken beat means a measured episode');
+  }
 });
 
 test('every link says what it is and, when it is not fresh, how to fix it', async () => {

@@ -45,6 +45,14 @@ export const COMMANDS = {
       ...(msPerBlock ? ['--ms-per-block', String(msPerBlock)] : [])]],
     capture: 'stdout',
   },
+  'mk-episode': {
+    describe: 'Fit the follow-style build to the measured narration',
+    build: ({ shots, stations, beats }) => ['node', ['tools/mk-episode.mjs',
+      ...(shots ? ['--shots', shots] : []),
+      ...(stations ? ['--stations', stations] : []),
+      ...(beats ? ['--beats', beats] : [])]],
+    capture: 'stdout',
+  },
   'mk-flow-take': {
     describe: 'Generate the live-flow take',
     build: ({ stations }) => ['node', ['tools/mk-flow-take.mjs', ...(stations ? [stations] : [])]],
