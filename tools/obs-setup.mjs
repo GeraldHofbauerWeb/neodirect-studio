@@ -107,12 +107,28 @@ for (const [name, value] of [
   ['RecEncoder', 'x264'],
   ['RecQuality', 'HQ'],
   ['FilePath', OUTPUT_DIR],
+  // The game's own sounds are quiet and sparse; give them room rather than making the encoder
+  // choose what to throw away. Levelling happens once, on delivery.
+  ['RecAudioBitrate', '192'],
 ]) {
   await obs.request('SetProfileParameter', {
     parameterCategory: 'SimpleOutput', parameterName: name, parameterValue: value,
   });
 }
 console.log(`recording: x264, HQ, into ${OUTPUT_DIR}`);
+
+// Only the game. OBS's default scene collection carries a microphone input and it is unmuted out
+// of the box, so every take so far recorded the room as well as the machine — nobody noticed
+// because the room happened to be quiet. Muting rather than removing: it is the user's global
+// input, and a recording tool has no business deleting it.
+for (const [name, muted] of [['Mikrofon-/AUX-Audio', true], ['Mic/Aux', true], ['Desktop-Audio', false], ['Desktop Audio', false]]) {
+  try {
+    await obs.request('SetInputMute', { inputName: name, inputMuted: muted });
+    console.log(`${muted ? 'muted' : 'unmuted'} ${name}`);
+  } catch {
+    // Not every install names them the same, and an absent input is not a problem.
+  }
+}
 
 await obs.request('SetVideoSettings', {
   baseWidth: WIDTH,

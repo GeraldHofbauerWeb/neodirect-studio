@@ -782,12 +782,12 @@
     },
     {
       "type": "marker",
-      "atMs": 132500,
+      "atMs": 132000,
       "label": "filters — the dock"
     },
     {
       "type": "camera",
-      "atMs": 132500,
+      "atMs": 132000,
       "durationMs": 3000,
       "_what": "smart chute — allow: the eight stone types",
       "keyframes": [
@@ -813,7 +813,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 133200,
+      "atMs": 132700,
       "pos": [
         19,
         3,
@@ -823,12 +823,12 @@
     },
     {
       "type": "screen",
-      "atMs": 135100,
+      "atMs": 134600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 135500,
+      "atMs": 135000,
       "durationMs": 3000,
       "_what": "smart chute — deny: the same eight",
       "keyframes": [
@@ -854,7 +854,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 136200,
+      "atMs": 135700,
       "pos": [
         18,
         3,
@@ -864,12 +864,12 @@
     },
     {
       "type": "screen",
-      "atMs": 138100,
+      "atMs": 137600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 138500,
+      "atMs": 138000,
       "durationMs": 3000,
       "_what": "smart chute — deny: rail, so the train keeps its own track",
       "keyframes": [
@@ -895,7 +895,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 139200,
+      "atMs": 138700,
       "pos": [
         19,
         5,
@@ -905,17 +905,17 @@
     },
     {
       "type": "screen",
-      "atMs": 141100,
+      "atMs": 140600,
       "action": "close"
     },
     {
       "type": "marker",
-      "atMs": 141500,
+      "atMs": 141000,
       "label": "filters — the crusher"
     },
     {
       "type": "camera",
-      "atMs": 141500,
+      "atMs": 141000,
       "durationMs": 3000,
       "_what": "brass funnel — allow: crushed iron, gold, copper, zinc",
       "keyframes": [
@@ -941,7 +941,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 142200,
+      "atMs": 141700,
       "pos": [
         13,
         5,
@@ -951,12 +951,12 @@
     },
     {
       "type": "screen",
-      "atMs": 144100,
+      "atMs": 143600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 144500,
+      "atMs": 144000,
       "durationMs": 3000,
       "_what": "brass funnel — deny: the same four",
       "keyframes": [
@@ -982,7 +982,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 145200,
+      "atMs": 144700,
       "pos": [
         13,
         5,
@@ -992,12 +992,12 @@
     },
     {
       "type": "screen",
-      "atMs": 147100,
+      "atMs": 146600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 147500,
+      "atMs": 147000,
       "durationMs": 3000,
       "_what": "belt funnel — allow: the eight stone types again",
       "keyframes": [
@@ -1023,7 +1023,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 148200,
+      "atMs": 147700,
       "pos": [
         12,
         5,
@@ -1033,12 +1033,12 @@
     },
     {
       "type": "screen",
-      "atMs": 150100,
+      "atMs": 149600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 150500,
+      "atMs": 150000,
       "durationMs": 3000,
       "_what": "belt funnel — allow: what comes back out",
       "keyframes": [
@@ -1064,7 +1064,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 151200,
+      "atMs": 150700,
       "pos": [
         10,
         5,
@@ -1074,12 +1074,12 @@
     },
     {
       "type": "screen",
-      "atMs": 153100,
+      "atMs": 152600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 153500,
+      "atMs": 153000,
       "durationMs": 3000,
       "_what": "brass funnel — allow: the crushed four, a floor down",
       "keyframes": [
@@ -1105,7 +1105,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 154200,
+      "atMs": 153700,
       "pos": [
         10,
         3,
@@ -1115,17 +1115,17 @@
     },
     {
       "type": "screen",
-      "atMs": 156100,
+      "atMs": 155600,
       "action": "close"
     },
     {
       "type": "marker",
-      "atMs": 156500,
+      "atMs": 156000,
       "label": "filters — the washer"
     },
     {
       "type": "camera",
-      "atMs": 156500,
+      "atMs": 156000,
       "durationMs": 3000,
       "_what": "brass funnel — allow: clay",
       "keyframes": [
@@ -1151,7 +1151,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 157200,
+      "atMs": 156700,
       "pos": [
         13,
         4,
@@ -1161,12 +1161,12 @@
     },
     {
       "type": "screen",
-      "atMs": 159100,
+      "atMs": 158600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 159500,
+      "atMs": 159000,
       "durationMs": 3000,
       "_what": "belt funnel — deny: clay",
       "keyframes": [
@@ -1192,7 +1192,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 160200,
+      "atMs": 159700,
       "pos": [
         13,
         5,
@@ -1202,17 +1202,17 @@
     },
     {
       "type": "screen",
-      "atMs": 162100,
+      "atMs": 161600,
       "action": "close"
     },
     {
       "type": "marker",
-      "atMs": 162500,
+      "atMs": 162000,
       "label": "filters — the sorter"
     },
     {
       "type": "camera",
-      "atMs": 162500,
+      "atMs": 162000,
       "durationMs": 3000,
       "_what": "lane 1 — experience nuggets",
       "keyframes": [
@@ -1238,7 +1238,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 163200,
+      "atMs": 162700,
       "pos": [
         8,
         5,
@@ -1248,12 +1248,12 @@
     },
     {
       "type": "screen",
-      "atMs": 165100,
+      "atMs": 164600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 165500,
+      "atMs": 165000,
       "durationMs": 3000,
       "_what": "lane 2 — lapis, emerald, diamond, ore and gem alike",
       "keyframes": [
@@ -1279,7 +1279,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 166200,
+      "atMs": 165700,
       "pos": [
         9,
         5,
@@ -1289,12 +1289,12 @@
     },
     {
       "type": "screen",
-      "atMs": 168100,
+      "atMs": 167600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 168500,
+      "atMs": 168000,
       "durationMs": 3000,
       "_what": "lane 3 — gunpowder and quartz",
       "keyframes": [
@@ -1320,7 +1320,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 169200,
+      "atMs": 168700,
       "pos": [
         10,
         5,
@@ -1330,12 +1330,12 @@
     },
     {
       "type": "screen",
-      "atMs": 171100,
+      "atMs": 170600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 171500,
+      "atMs": 171000,
       "durationMs": 3000,
       "_what": "lane 4 — redstone and coal",
       "keyframes": [
@@ -1361,7 +1361,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 172200,
+      "atMs": 171700,
       "pos": [
         11,
         5,
@@ -1371,12 +1371,12 @@
     },
     {
       "type": "screen",
-      "atMs": 174100,
+      "atMs": 173600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 174500,
+      "atMs": 174000,
       "durationMs": 3000,
       "_what": "lane 5 — copper and zinc",
       "keyframes": [
@@ -1402,7 +1402,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 175200,
+      "atMs": 174700,
       "pos": [
         12,
         5,
@@ -1412,12 +1412,12 @@
     },
     {
       "type": "screen",
-      "atMs": 177100,
+      "atMs": 176600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 177500,
+      "atMs": 177000,
       "durationMs": 3000,
       "_what": "lane 6 — iron and gold",
       "keyframes": [
@@ -1443,7 +1443,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 178200,
+      "atMs": 177700,
       "pos": [
         13,
         5,
@@ -1453,17 +1453,17 @@
     },
     {
       "type": "screen",
-      "atMs": 180100,
+      "atMs": 179600,
       "action": "close"
     },
     {
       "type": "marker",
-      "atMs": 180500,
+      "atMs": 180000,
       "label": "filters — the presses"
     },
     {
       "type": "camera",
-      "atMs": 180500,
+      "atMs": 180000,
       "durationMs": 3000,
       "_what": "basin — redstone and coal",
       "keyframes": [
@@ -1489,7 +1489,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 181200,
+      "atMs": 180700,
       "pos": [
         11,
         5,
@@ -1499,12 +1499,12 @@
     },
     {
       "type": "screen",
-      "atMs": 183100,
+      "atMs": 182600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 183500,
+      "atMs": 183000,
       "durationMs": 3000,
       "_what": "basin — copper and zinc",
       "keyframes": [
@@ -1530,7 +1530,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 184200,
+      "atMs": 183700,
       "pos": [
         12,
         5,
@@ -1540,12 +1540,12 @@
     },
     {
       "type": "screen",
-      "atMs": 186100,
+      "atMs": 185600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 186500,
+      "atMs": 186000,
       "durationMs": 3000,
       "_what": "basin — iron and gold",
       "keyframes": [
@@ -1571,7 +1571,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 187200,
+      "atMs": 186700,
       "pos": [
         13,
         5,
@@ -1581,12 +1581,12 @@
     },
     {
       "type": "screen",
-      "atMs": 189100,
+      "atMs": 188600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 189500,
+      "atMs": 189000,
       "durationMs": 3000,
       "_what": "output funnel — the finished block only",
       "keyframes": [
@@ -1612,7 +1612,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 190200,
+      "atMs": 189700,
       "pos": [
         11,
         5,
@@ -1622,12 +1622,12 @@
     },
     {
       "type": "screen",
-      "atMs": 192100,
+      "atMs": 191600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 192500,
+      "atMs": 192000,
       "durationMs": 3000,
       "_what": "output funnel — the finished block only",
       "keyframes": [
@@ -1653,7 +1653,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 193200,
+      "atMs": 192700,
       "pos": [
         12,
         5,
@@ -1663,12 +1663,12 @@
     },
     {
       "type": "screen",
-      "atMs": 195100,
+      "atMs": 194600,
       "action": "close"
     },
     {
       "type": "camera",
-      "atMs": 195500,
+      "atMs": 195000,
       "durationMs": 3000,
       "_what": "output funnel — the finished block only",
       "keyframes": [
@@ -1694,7 +1694,7 @@
     },
     {
       "type": "showFilter",
-      "atMs": 196200,
+      "atMs": 195700,
       "pos": [
         13,
         5,
@@ -1704,17 +1704,17 @@
     },
     {
       "type": "screen",
-      "atMs": 198100,
+      "atMs": 197600,
       "action": "close"
     },
     {
       "type": "marker",
-      "atMs": 199500,
+      "atMs": 199000,
       "label": "the dock"
     },
     {
       "type": "camera",
-      "atMs": 199500,
+      "atMs": 199000,
       "durationMs": 5500,
       "_what": "dock — the chest the train unloads into, and the two chutes under it",
       "keyframes": [
@@ -1749,7 +1749,7 @@
     },
     {
       "type": "fill",
-      "atMs": 201000,
+      "atMs": 200500,
       "pos": [
         18,
         4,
@@ -1817,7 +1817,7 @@
     },
     {
       "type": "camera",
-      "atMs": 205000,
+      "atMs": 204500,
       "durationMs": 4000,
       "_what": "dock — the chutes emptying it",
       "keyframes": [
@@ -1843,17 +1843,17 @@
     },
     {
       "type": "gameMode",
-      "atMs": 208500,
+      "atMs": 208000,
       "mode": "spectator"
     },
     {
       "type": "marker",
-      "atMs": 209500,
+      "atMs": 209000,
       "label": "crusher"
     },
     {
       "type": "camera",
-      "atMs": 209500,
+      "atMs": 209000,
       "durationMs": 5000,
       "_what": "crusher — two wheels, the controller between them, and the belt that carries the crushed ore out",
       "keyframes": [
@@ -1888,7 +1888,7 @@
     },
     {
       "type": "camera",
-      "atMs": 214500,
+      "atMs": 214000,
       "durationMs": 7000,
       "_what": "crusher — held while the material comes through",
       "keyframes": [
@@ -1914,12 +1914,12 @@
     },
     {
       "type": "marker",
-      "atMs": 222000,
+      "atMs": 221500,
       "label": "washer"
     },
     {
       "type": "camera",
-      "atMs": 222000,
+      "atMs": 221500,
       "durationMs": 5000,
       "_what": "washer — the fan, the waterlogged leaf in front of it, and what comes off the belt below",
       "keyframes": [
@@ -1954,7 +1954,7 @@
     },
     {
       "type": "camera",
-      "atMs": 227000,
+      "atMs": 226500,
       "durationMs": 7000,
       "_what": "washer — held while the material comes through",
       "keyframes": [
@@ -1980,12 +1980,12 @@
     },
     {
       "type": "marker",
-      "atMs": 234500,
+      "atMs": 234000,
       "label": "press"
     },
     {
       "type": "camera",
-      "atMs": 234500,
+      "atMs": 234000,
       "durationMs": 5000,
       "_what": "press — three basins with a press over each, and the funnels that feed them off the lanes",
       "keyframes": [
@@ -2020,7 +2020,7 @@
     },
     {
       "type": "camera",
-      "atMs": 239500,
+      "atMs": 239000,
       "durationMs": 7000,
       "_what": "press — held while the material comes through",
       "keyframes": [
@@ -2046,12 +2046,12 @@
     },
     {
       "type": "marker",
-      "atMs": 247000,
+      "atMs": 246500,
       "label": "the whole line"
     },
     {
       "type": "camera",
-      "atMs": 247000,
+      "atMs": 246500,
       "durationMs": 10000,
       "_what": "the plant working, end to end",
       "keyframes": [

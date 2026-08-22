@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "neodirect": {
+      "command": "node",
+      "args": ["studio/mcp.mjs"],
+      "description": "The whole pipeline as tools: documents, narration, storyboard, camera, parts, takes and verification."
+    }
+  }
+}

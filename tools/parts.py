@@ -36,8 +36,33 @@ def load_blocks(path):
             'pos': tuple(int(c) for c in block['pos']),
             'name': entry['Name'],
             'properties': dict(entry.get('Properties', {})),
+            'filter': describe_filter(block.get('nbt')),
         })
     return root, blocks
+
+
+def describe_filter(nbt):
+    """What a block's filter is set to, or None if it has no filter or an empty one.
+
+    Written down here rather than in the shot tools because this file is the one that already has
+    the NBT open. A filter is the point of most of this machine — twenty-two of them, no two the
+    same — and a list of which blocks carry one kept by hand somewhere else would drift the first
+    time the schematic is re-cut.
+    """
+    if not isinstance(nbt, dict):
+        return None
+    spec = nbt.get('Filter')
+    if not isinstance(spec, dict):
+        return None
+    components = spec.get('components') or {}
+    items = components.get('create:filter_items')
+    if items:
+        names = [entry['item']['id'].split(':')[-1] for entry in items]
+        deny = int(components.get('create:filter_items_blacklist', 0))
+        return {'kind': 'deny' if deny else 'allow', 'items': names}
+    if spec.get('id'):
+        return {'kind': 'item', 'items': [str(spec['id']).split(':')[-1]]}
+    return None
 
 
 def in_box(pos, box):
@@ -169,6 +194,13 @@ def main():
             # crushing wheel without opening the NBT from JavaScript.
             'ids': {name: [blocks[i]['name'] for i in indices]
                     for name, indices in groups.items()},
+            # Which blocks carry a configured filter, and what it says. A take that shows a filter
+            # being set has to know which funnel of the seven is the one worth stopping on.
+            'filters': [
+                {'pos': list(blocks[i]['pos']), **blocks[i]['filter']}
+                for i in sorted(index for indices in groups.values() for index in indices)
+                if blocks[i]['filter']
+            ],
         }
         Path(args.json).write_text(json.dumps(resolved, indent=1) + '\n')
         print(f'\n-> {args.json}')

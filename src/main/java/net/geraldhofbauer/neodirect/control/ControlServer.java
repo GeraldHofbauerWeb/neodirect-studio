@@ -2,15 +2,27 @@ package net.geraldhofbauer.neodirect.control;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import net.geraldhofbauer.neodirect.NeoDirect;
+import net.geraldhofbauer.neodirect.client.ClientBridge;
 import net.geraldhofbauer.neodirect.client.Screenshots;
+import net.geraldhofbauer.neodirect.timeline.Cue;
 import net.geraldhofbauer.neodirect.timeline.Director;
 import net.geraldhofbauer.neodirect.timeline.Timeline;
+import net.geraldhofbauer.neodirect.timeline.Verifier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -22,6 +34,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +54,22 @@ import java.util.concurrent.TimeoutException;
  *   <li>{@code POST /run} — body is a timeline JSON; responds when the take is done, with a log of
  *       every step's planned versus actual time. That log is what later lets ffmpeg line the
  *       narration up against the footage.</li>
+ *   <li>{@code GET  /screenshot}, {@code POST /verify}, {@code GET /block} — see below</li>
+ * </ul>
+ *
+ * <p>The rest exist for the studio, which composes shots against a running game rather than
+ * against a finished video:
+ *
+ * <ul>
+ *   <li>{@code GET  /pose} — where the camera is and what it is looking at, so a stance can become
+ *       a keyframe</li>
+ *   <li>{@code GET  /look} — the block at the crosshair, so a target can be pointed at rather than
+ *       typed</li>
+ *   <li>{@code POST /camera} — stand the camera on a keyframe now, or fly it there</li>
+ *   <li>{@code POST /scrub} — build the world as it stands at a given millisecond of a take</li>
+ *   <li>{@code POST /path} — sample a camera move along the curve it will fly, with clearance</li>
+ *   <li>{@code POST /abort} — stop the take that is running</li>
+ *   <li>{@code GET  /blockcolors} — the colour the map would paint each block, for a viewport</li>
  * </ul>
  */
 @EventBusSubscriber(modid = NeoDirect.MOD_ID)
@@ -71,6 +100,13 @@ public final class ControlServer {
             server.createContext("/screenshot", ControlServer::handleScreenshot);
             server.createContext("/verify", ControlServer::handleVerify);
             server.createContext("/block", ControlServer::handleBlock);
+            server.createContext("/pose", ControlServer::handlePose);
+            server.createContext("/look", ControlServer::handleLook);
+            server.createContext("/camera", ControlServer::handleCamera);
+            server.createContext("/scrub", ControlServer::handleScrub);
+            server.createContext("/path", ControlServer::handlePath);
+            server.createContext("/abort", ControlServer::handleAbort);
+            server.createContext("/blockcolors", ControlServer::handleBlockColors);
             // A small pool: takes are serialised by the director anyway, this is only so a /health
             // probe is not stuck behind a running take.
             server.setExecutor(Executors.newFixedThreadPool(2));
@@ -246,6 +282,347 @@ public final class ControlServer {
         JsonObject body = new JsonObject();
         body.add("blocks", out);
         respond(exchange, 200, body.toString());
+    }
+
+
+    /**
+     * Where the camera is, and what it is looking at.
+     *
+     * <p>{@code /health} already says where the eye is, because that is the question a drifting
+     * take asks. This is the other half of it: the direction, so that standing somewhere in the
+     * world and liking the view can become a keyframe without anybody doing trigonometry.
+     */
+    private static void handlePose(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+        if (player == null) {
+            respondError(exchange, 503, "no player in the world");
+            return;
+        }
+        // Read off the server thread on purpose, like /health: a pose that has to queue behind a
+        // take is no use during one, and a tick-stale position still answers the question.
+        JsonObject body = new JsonObject();
+        JsonArray pos = new JsonArray();
+        pos.add(player.getX());
+        pos.add(player.getY());
+        pos.add(player.getZ());
+        body.add("pos", pos);
+        JsonArray eye = new JsonArray();
+        eye.add(player.getX());
+        eye.add(player.getEyeY());
+        eye.add(player.getZ());
+        body.add("eye", eye);
+        body.addProperty("yaw", player.getYRot());
+        body.addProperty("pitch", player.getXRot());
+        body.addProperty("gameMode", player.gameMode.getGameModeForPlayer().getName());
+        body.addProperty("pose", player.getPose().name());
+        body.addProperty("noPhysics", player.noPhysics);
+        respond(exchange, 200, body.toString());
+    }
+
+    /**
+     * The block at the crosshair.
+     *
+     * <p>Only what the game knows: where it is and what it is. Which block of the schematic that
+     * happens to be, and which assembly it belongs to, the studio works out for itself — it has
+     * the schematic and the origin, and putting that arithmetic here would be a second place for
+     * it to be wrong.
+     */
+    private static void handleLook(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        double reach = 48;
+        String query = exchange.getRequestURI().getQuery();
+        if (query != null) {
+            for (String part : query.split("&")) {
+                if (part.startsWith("maxDistance=")) {
+                    reach = Double.parseDouble(part.substring("maxDistance=".length()));
+                }
+            }
+        }
+        final double distance = reach;
+        try {
+            JsonObject body = mc.submit(() -> {
+                ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+                JsonObject out = new JsonObject();
+                if (player == null) {
+                    out.addProperty("hit", false);
+                    return out;
+                }
+                Vec3 from = player.getEyePosition(1.0F);
+                Vec3 to = from.add(player.getViewVector(1.0F).scale(distance));
+                BlockHitResult hit = player.serverLevel().clip(new ClipContext(
+                        from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+                if (hit.getType() != HitResult.Type.BLOCK) {
+                    out.addProperty("hit", false);
+                    return out;
+                }
+                BlockPos pos = hit.getBlockPos();
+                out.addProperty("hit", true);
+                JsonArray where = new JsonArray();
+                where.add(pos.getX());
+                where.add(pos.getY());
+                where.add(pos.getZ());
+                out.add("pos", where);
+                out.addProperty("face", hit.getDirection().getName());
+                out.addProperty("state", player.serverLevel().getBlockState(pos).toString());
+                out.addProperty("block", BuiltInRegistries.BLOCK
+                        .getKey(player.serverLevel().getBlockState(pos).getBlock()).toString());
+                var be = player.serverLevel().getBlockEntity(pos);
+                if (be != null) {
+                    out.addProperty("nbt", be.saveWithoutMetadata(mc.registryAccess()).toString());
+                }
+                return out;
+            }).get(10, TimeUnit.SECONDS);
+            respond(exchange, 200, body.toString());
+        } catch (Exception e) {
+            respondError(exchange, 500, String.valueOf(e.getMessage()));
+        }
+    }
+
+    /**
+     * Stands the camera on a keyframe, now, or flies it there.
+     *
+     * <p>Body is {@code {pos:[x,y,z], yaw, pitch, durationMs?, release?}}. Outside a take the
+     * camera keeps the filming body — the small intangible box — because a standpoint inside a
+     * machine is only worth looking at from inside the machine; {@code release} hands the player
+     * back their own body.
+     */
+    private static void handleCamera(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        JsonObject request;
+        try (InputStream in = exchange.getRequestBody()) {
+            request = JsonParser.parseString(new String(in.readAllBytes(), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+        } catch (RuntimeException e) {
+            respondError(exchange, 400, "could not read the camera pose: " + e.getMessage());
+            return;
+        }
+
+        boolean release = request.has("release") && request.get("release").getAsBoolean();
+        if (release) {
+            ClientBridge.send(new ClientBridge.Command.SetPose(0, 0, 0, 0, 0, false));
+            mc.submit(() -> {
+                for (ServerPlayer player : mc.getPlayerList().getPlayers()) {
+                    player.noPhysics = false;
+                    player.setForcedPose(null);
+                }
+                return null;
+            });
+            JsonObject body = new JsonObject();
+            body.addProperty("released", true);
+            respond(exchange, 200, body.toString());
+            return;
+        }
+
+        JsonArray pos = request.getAsJsonArray("pos");
+        if (pos == null || pos.size() != 3) {
+            respondError(exchange, 400, "pass pos as [x, y, z]");
+            return;
+        }
+        double x = pos.get(0).getAsDouble();
+        double y = pos.get(1).getAsDouble();
+        double z = pos.get(2).getAsDouble();
+        float yaw = request.has("yaw") ? request.get("yaw").getAsFloat() : 0;
+        float pitch = request.has("pitch") ? request.get("pitch").getAsFloat() : 0;
+        long durationMs = request.has("durationMs") ? request.get("durationMs").getAsLong() : 0;
+
+        if (Director.isRunning()) {
+            respondError(exchange, 409, "a take is running — it is flying the camera");
+            return;
+        }
+
+        // The server half of holding the camera still: without noPhysics the server replays the
+        // move, finds the box overlapping something, and teleports it back out of the shot.
+        mc.submit(() -> {
+            for (ServerPlayer player : mc.getPlayerList().getPlayers()) {
+                player.noPhysics = true;
+                player.setForcedPose(Pose.SWIMMING);
+                player.teleportTo(x, y - (player.getEyeY() - player.getY()), z);
+                player.setYRot(yaw);
+                player.setXRot(pitch);
+            }
+            return null;
+        });
+
+        if (durationMs > 0) {
+            Cue.Keyframe here = new Cue.Keyframe(x, y, z, yaw, pitch);
+            ClientBridge.send(new ClientBridge.Command.MoveCamera(List.of(here, here), durationMs, false));
+        } else {
+            ClientBridge.send(new ClientBridge.Command.SetPose(x, y, z, yaw, pitch, true));
+        }
+        JsonObject body = new JsonObject();
+        body.addProperty("ok", true);
+        respond(exchange, 200, body.toString());
+    }
+
+    /**
+     * Builds the world as it stands part-way through a take.
+     *
+     * <p>Body is a timeline with {@code scrubToMs}. A shot is composed for a moment in the build,
+     * and judging it against the finished machine is judging a different picture.
+     */
+    private static void handleScrub(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        String requestBody;
+        try (InputStream in = exchange.getRequestBody()) {
+            requestBody = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        long ms;
+        Timeline timeline;
+        try {
+            JsonObject root = JsonParser.parseString(requestBody).getAsJsonObject();
+            ms = root.has("scrubToMs") ? root.get("scrubToMs").getAsLong() : 0;
+            timeline = Timeline.parse(requestBody);
+        } catch (RuntimeException e) {
+            respondError(exchange, 400, "could not parse timeline: " + e.getMessage());
+            return;
+        }
+        try {
+            JsonObject report = mc.submit(() -> {
+                try {
+                    return Director.scrub(timeline, mc, ms);
+                } catch (IOException e) {
+                    throw new java.io.UncheckedIOException(e);
+                }
+            }).get(120, TimeUnit.SECONDS);
+            respond(exchange, 200, report.toString());
+        } catch (TimeoutException e) {
+            respondError(exchange, 504, "the scrub did not finish in time");
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            respondError(exchange, 409, String.valueOf(cause.getMessage()));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            respondError(exchange, 500, "interrupted");
+        }
+    }
+
+    /**
+     * Samples a camera move along the curve it will fly.
+     *
+     * <p>Body is {@code {keyframes, durationMs, ease, samples}}. Same curve, same easing and the
+     * same body as the clearance check that can fail a take — the studio draws what it is told
+     * here rather than keeping its own idea of the path, because two ideas of a path is how a shot
+     * passes a check and clips a wall anyway.
+     */
+    private static void handlePath(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        JsonObject request;
+        try (InputStream in = exchange.getRequestBody()) {
+            request = JsonParser.parseString(new String(in.readAllBytes(), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+        } catch (RuntimeException e) {
+            respondError(exchange, 400, "could not read the move: " + e.getMessage());
+            return;
+        }
+        final Cue.Camera camera;
+        try {
+            JsonObject asCue = new JsonObject();
+            asCue.addProperty("type", "camera");
+            asCue.addProperty("atMs", 0);
+            asCue.addProperty("durationMs", request.has("durationMs") ? request.get("durationMs").getAsLong() : 1000);
+            asCue.add("keyframes", request.getAsJsonArray("keyframes"));
+            if (request.has("ease")) {
+                asCue.addProperty("ease", request.get("ease").getAsString());
+            }
+            camera = (Cue.Camera) Cue.parse(asCue);
+        } catch (RuntimeException e) {
+            respondError(exchange, 400, String.valueOf(e.getMessage()));
+            return;
+        }
+        int samples = request.has("samples") ? request.get("samples").getAsInt() : 240;
+
+        try {
+            JsonObject body = mc.submit(() -> {
+                ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+                JsonObject out = new JsonObject();
+                if (player == null) {
+                    out.addProperty("error", "no player in the world");
+                    return out;
+                }
+                JsonArray points = Verifier.sampleMove(player.serverLevel(), camera.keyframes(),
+                        camera.linear(), samples);
+                int blocked = 0;
+                for (var element : points) {
+                    if (element.getAsJsonObject().get("blocked").getAsBoolean()) {
+                        blocked++;
+                    }
+                }
+                out.add("samples", points);
+                out.addProperty("blockedSamples", blocked);
+                out.addProperty("clear", blocked == 0);
+                out.addProperty("ease", camera.linear() ? "linear" : "inOut");
+                return out;
+            }).get(30, TimeUnit.SECONDS);
+            respond(exchange, 200, body.toString());
+        } catch (Exception e) {
+            respondError(exchange, 500, String.valueOf(e.getMessage()));
+        }
+    }
+
+    /** Stops the take that is running. */
+    private static void handleAbort(HttpExchange exchange) throws IOException {
+        boolean was = Director.isRunning();
+        Director.abort("the studio asked");
+        JsonObject body = new JsonObject();
+        body.addProperty("aborted", was);
+        respond(exchange, 200, body.toString());
+    }
+
+    /**
+     * The colour the map would paint each block of a schematic.
+     *
+     * <p>A viewport has to draw a thousand blocks in something other than grey, and Minecraft
+     * already has an opinion about what colour a block is — the one it uses on maps. Reading it
+     * here costs a line and saves unpacking a texture atlas.
+     *
+     * <p>It doubles as the honest answer to "does this instance have the mods this build needs".
+     * Every block the registry knows is in here, so a namespace that is missing from the reply is
+     * a mod that is missing from the instance — which is the failure that otherwise shows up as
+     * four hundred blocks quietly read as air.
+     */
+    private static void handleBlockColors(HttpExchange exchange) throws IOException {
+        MinecraftServer mc = minecraftServer;
+        if (mc == null) {
+            respondError(exchange, 503, "no world loaded");
+            return;
+        }
+        try {
+            JsonObject body = mc.submit(() -> {
+                ServerPlayer player = mc.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+                var level = player != null ? player.serverLevel() : mc.overworld();
+                JsonObject out = new JsonObject();
+                for (Block block : BuiltInRegistries.BLOCK) {
+                    ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+                    int colour = block.defaultBlockState().getMapColor(level, BlockPos.ZERO).col;
+                    out.addProperty(id.toString(), String.format("#%06x", colour & 0xffffff));
+                }
+                return out;
+            }).get(30, TimeUnit.SECONDS);
+            respond(exchange, 200, body.toString());
+        } catch (Exception e) {
+            respondError(exchange, 500, String.valueOf(e.getMessage()));
+        }
     }
 
     private static void handleRun(HttpExchange exchange) throws IOException {

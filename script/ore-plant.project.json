@@ -1,0 +1,96 @@
+{
+  "formatVersion": 1,
+  "_what": "Ties one episode together: which prose, which beats, which storyboard, which schematic, and which takes come out of them. Written and maintained by the studio; the documents it names are still the source of truth, this only says which ones belong to each other.",
+  "name": "Ore Plant",
+  "slug": "ore-plant",
+  "created": "2026-08-22T14:44:20.595Z",
+  "modified": "2026-08-22T14:44:20.595Z",
+  "world": "neodirect-ore-plant",
+  "origin": [
+    0,
+    -61,
+    0
+  ],
+  "documents": {
+    "storyboard": "script/ore-plant.storyboard.json",
+    "beats": "script/ore-plant.beats.json",
+    "prose": "script/ore-plant.beats.md",
+    "shots": "script/ore-plant.shots.json",
+    "stations": "script/ore-plant.stations.json",
+    "partsManifest": "schematics/ore_plant.parts.json",
+    "clip": "schematics/ore_plant.clip.json"
+  },
+  "derived": {
+    "schematic": "schematics/ore_plant.nbt",
+    "groups": "schematics/ore_plant.groups.json"
+  },
+  "takes": [
+    {
+      "name": "build-follow",
+      "generator": "mk-build-take",
+      "args": {
+        "style": "follow",
+        "lockedExcept": "shell"
+      },
+      "out": "script/ore-plant-build-follow.json"
+    },
+    {
+      "name": "build",
+      "generator": "mk-build-take",
+      "args": {
+        "style": "arc",
+        "lockedExcept": ""
+      },
+      "out": "script/ore-plant-build.json"
+    },
+    {
+      "name": "flow",
+      "generator": "mk-flow-take",
+      "out": "script/ore-plant-flow.json"
+    },
+    {
+      "name": "run-follow",
+      "generator": "join-takes",
+      "args": {
+        "of": [
+          "build-follow",
+          "flow"
+        ],
+        "gap": 2000
+      },
+      "out": "script/ore-plant-run-follow.json"
+    },
+    {
+      "name": "run",
+      "generator": "join-takes",
+      "args": {
+        "of": [
+          "build",
+          "flow"
+        ],
+        "gap": 2000
+      },
+      "out": "script/ore-plant-run.json"
+    }
+  ],
+  "requires": {
+    "mods": [
+      "create",
+      "quark"
+    ],
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.x"
+  },
+  "voice": {
+    "voiceId": "Z2fsAwk7IblvPhYzfslC",
+    "voiceName": "Davis - Casual Deeper American Male"
+  },
+  "stats": {
+    "blocks": 926,
+    "size": [
+      20,
+      14,
+      28
+    ]
+  }
+}

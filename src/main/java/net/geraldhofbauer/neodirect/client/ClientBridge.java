@@ -25,10 +25,22 @@ public final class ClientBridge {
     }
 
     /** Something the client half has to do. */
-    public sealed interface Command permits Command.BeginRun, Command.MoveCamera, Command.Swing, Command.EndRun {
+    public sealed interface Command permits Command.BeginRun, Command.MoveCamera, Command.Swing,
+            Command.SetPose, Command.EndRun {
 
         /** Take the wheel: freeze player input and put the camera where the first keyframe is. */
         record BeginRun(double x, double y, double z, float yaw, float pitch) implements Command {}
+
+        /**
+         * Stand the camera somewhere, outside a take.
+         *
+         * <p>What the studio uses to look through the lens while a shot is being composed: put the
+         * camera on this keyframe, hold it there, and let a screenshot answer whether the framing
+         * is any good. {@code hold} keeps the filming body — the small box, intangible — so a
+         * standpoint inside a machine can be judged from inside the machine rather than from
+         * wherever the server shoves a solid player next.
+         */
+        record SetPose(double x, double y, double z, float yaw, float pitch, boolean hold) implements Command {}
 
         record MoveCamera(List<Cue.Keyframe> keyframes, long durationMs, boolean linear) implements Command {}
 

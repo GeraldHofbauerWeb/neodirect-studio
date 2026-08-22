@@ -183,6 +183,19 @@ export function countSrtCues(srt) {
   return srt ? srt.split('\n\n').filter((block) => block.trim()).length : 0;
 }
 
+/**
+ * Where one episode's audio lives.
+ *
+ * Beat ids are only unique inside an episode — every episode here starts at `b0` — so a single
+ * flat `out/voice/` means the second episode rendered silently overwrites the first one's audio,
+ * its alignments and its subtitles. The directory follows the beats file instead:
+ * `script/pilot.beats.json` speaks into `out/voice/pilot/`.
+ */
+export function voiceDir(beatsPath) {
+  const name = beatsPath.split('/').pop().replace(/\.beats\.json$/, '').replace(/\.json$/, '');
+  return `out/voice/${name}`;
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const [mode, beatsPath, beatId] = process.argv.slice(2);
   if (!mode || !beatsPath) {
@@ -195,21 +208,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (mode === 'audition') {
     const beat = beatId ? beats.beats.find((b) => b.id === beatId) : beats.beats[0];
     if (!beat) throw new Error(`no beat ${beatId} in ${beatsPath}`);
-    await mkdir('out/audition', { recursive: true });
+    const auditionDir = `out/audition/${voiceDir(beatsPath).split('/').pop()}`;
+    await mkdir(auditionDir, { recursive: true });
     console.log(`auditioning beat "${beat.id}" (${beat.text.length} characters) with ${AUDITION_VOICES.length} voices\n`);
     for (const voice of AUDITION_VOICES) {
-      const out = `out/audition/${beat.id}-${voice.name}.mp3`;
+      const out = `${auditionDir}/${beat.id}-${voice.name}.mp3`;
       const result = await speak({ text: beat.text, voiceId: voice.id, out, key });
       console.log(`  ${voice.name.padEnd(9)} ${String(result.durationMs).padStart(6)} ms  ${voice.note}`);
     }
-    console.log('\nfiles in out/audition/');
+    console.log(`\nfiles in ${auditionDir}/`);
     process.exit(0);
   }
 
   if (mode === 'render') {
     const voiceId = beats.voiceId ?? process.env.ELEVENLABS_VOICE_ID;
     if (!voiceId) throw new Error(`set "voiceId" in ${beatsPath} (or ELEVENLABS_VOICE_ID) first`);
-    await mkdir('out/voice', { recursive: true });
+    const dir = voiceDir(beatsPath);
+    await mkdir(dir, { recursive: true });
 
     // Naming a beat re-speaks only that one. Text-to-speech is not deterministic, so re-rendering
     // the whole episode to fix one sentence rerolls every other beat's phrasing and length for no
@@ -219,7 +234,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (beatId) console.log(`re-rendering ${beatId} only; other beats keep their measured audio\n`);
 
     for (const beat of toRender) {
-      const out = `out/voice/${beat.id}.mp3`;
+      const out = `${dir}/${beat.id}.mp3`;
       const result = await speak({ text: beat.text, voiceId, out, key });
       beat.measuredMs = result.durationMs;
       const drift = result.durationMs - beat.plannedMs;
@@ -228,7 +243,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       // Kept alongside the audio so phrasing can be inspected later without spending another
       // render — the alignment is the only record of where the voice actually breathed, and it is
       // what lets an untouched beat keep its subtitles when a neighbour is re-rendered.
-      await writeFile(`out/voice/${beat.id}.alignment.json`, JSON.stringify(result.alignment));
+      await writeFile(`${dir}/${beat.id}.alignment.json`, JSON.stringify(result.alignment));
       for (const p of pauses(result.alignment, { minMs: 300 })) {
         console.log(`      ${String(p.ms).padStart(4)} ms pause after "…${p.after}" before "${p.before}…"`);
       }
@@ -240,7 +255,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     let offsetMs = 0;
     let cueIndex = 1;
     for (const beat of beats.beats) {
-      const alignmentPath = `out/voice/${beat.id}.alignment.json`;
+      const alignmentPath = `${dir}/${beat.id}.alignment.json`;
       const alignment = JSON.parse(await readFile(alignmentPath, 'utf8').catch(() => {
         throw new Error(`${alignmentPath} is missing — run a full render (no beat id) once`);
       }));
@@ -254,15 +269,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`\ntotal narration: ${offsetMs} ms`);
 
     // One continuous track, so the take can be muxed in a single ffmpeg call.
-    const listPath = 'out/voice/beats.txt';
-    await writeFile(listPath, beats.beats.map((b) => `file '${process.cwd()}/out/voice/${b.id}.mp3'`).join('\n'));
+    const listPath = `${dir}/beats.txt`;
+    await writeFile(listPath, beats.beats.map((b) => `file '${process.cwd()}/${dir}/${b.id}.mp3'`).join('\n'));
     await exec('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error',
-      '-f', 'concat', '-safe', '0', '-i', listPath, '-c', 'copy', 'out/voice/narration.mp3']);
-    console.log('joined narration in out/voice/narration.mp3');
+      '-f', 'concat', '-safe', '0', '-i', listPath, '-c', 'copy', `${dir}/narration.mp3`]);
+    console.log(`joined narration in ${dir}/narration.mp3`);
     await writeFile(beatsPath, JSON.stringify(beats, null, 2) + '\n');
-    await writeFile('out/voice/subtitles.srt', srt);
+    await writeFile(`${dir}/subtitles.srt`, srt);
     console.log(`\nmeasured durations written back to ${beatsPath}`);
-    console.log('subtitles in out/voice/subtitles.srt');
+    console.log(`subtitles in ${dir}/subtitles.srt`);
     process.exit(0);
   }
 

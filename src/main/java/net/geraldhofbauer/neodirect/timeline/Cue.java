@@ -365,6 +365,11 @@ public sealed interface Cue permits Cue.Place, Cue.Camera, Cue.Entities, Cue.Mat
      * the same four frames on the four hundredth cobblestone of a floor as on the crushing wheel —
      * and the floor is not what anybody is watching.
      *
+     * <p>A key may also be a position, {@code "13,5,4"}, relative to the timeline origin, and a
+     * position beats a block id. That is for the one funnel out of seven that has a filter to set:
+     * a builder pauses on it to configure it, and the pause has to be on that funnel rather than
+     * on every funnel of its kind.
+     *
      * <p>Relative on purpose: the cue still finishes exactly when it said it would, whatever is in
      * it. An absolute per-block delay would make the length of a beat depend on its contents.
      */

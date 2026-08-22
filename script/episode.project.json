@@ -1,0 +1,48 @@
+{
+  "formatVersion": 1,
+  "_what": "Ties one episode together: which prose, which beats, which storyboard, which schematic, and which takes come out of them. Written and maintained by the studio; the documents it names are still the source of truth, this only says which ones belong to each other.",
+  "name": "Mining Train (pilot)",
+  "slug": "episode",
+  "created": "2026-08-22T14:44:20.664Z",
+  "modified": "2026-08-22T14:44:20.664Z",
+  "world": "neodirect-episode",
+  "origin": [
+    0,
+    -60,
+    0
+  ],
+  "documents": {
+    "storyboard": "script/episode.storyboard.json",
+    "beats": "script/pilot.beats.json"
+  },
+  "derived": {
+    "schematic": "schematics/mining_drill_1.nbt"
+  },
+  "takes": [
+    {
+      "name": "episode",
+      "generator": "make-timeline",
+      "out": "script/episode.json"
+    }
+  ],
+  "requires": {
+    "mods": [
+      "create",
+      "quark"
+    ],
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.x"
+  },
+  "voice": {
+    "voiceId": "iP95p4xoKVk53GoZ742B",
+    "voiceName": "Chris - Charming, Down-to-Earth"
+  },
+  "stats": {
+    "blocks": 270,
+    "size": [
+      8,
+      8,
+      11
+    ]
+  }
+}

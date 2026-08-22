@@ -1,0 +1,88 @@
+/**
+ * Where things are, and what is allowed to be written.
+ *
+ * The studio runs against the repository it lives in, and every path that arrives from a browser
+ * or from an MCP call is resolved against that root and checked to be inside it. Not because a
+ * loopback tool has an attacker, but because a typo in a pointer should fail loudly instead of
+ * writing a beats file into a home directory.
+ */
+
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+/** The repository root: two levels up from this file, which lives in `studio/lib/`. */
+export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
+
+/** Absolute path for a repository-relative one, refusing anything that leaves the tree. */
+export function resolve(relative) {
+  const full = path.resolve(ROOT, relative);
+  const rel = path.relative(ROOT, full);
+  if (rel.startsWith('..') || path.isAbsolute(rel)) {
+    throw new Error(`path leaves the project: ${relative}`);
+  }
+  return full;
+}
+
+/** The repository-relative form of an absolute path, with forward slashes. */
+export function relative(absolute) {
+  return path.relative(ROOT, absolute).split(path.sep).join('/');
+}
+
+/**
+ * The documents a person authors, and which the studio may therefore write.
+ *
+ * Everything else in the tree is either generated — and gets rewritten by the tool that owns it —
+ * or is not ours. `parts.py` writes `*.groups.json`, `make-timeline.mjs` writes the timelines,
+ * `render-voice.mjs` writes `out/voice/`. Letting the studio edit those directly would put a
+ * second author on a file that already has one.
+ */
+export const WRITABLE = [
+  /^script\/[^/]+\.beats\.json$/,
+  /^script\/[^/]+\.beats\.md$/,
+  /^script\/[^/]+\.storyboard\.json$/,
+  /^script\/[^/]+\.shots\.json$/,
+  /^script\/[^/]+\.stations\.json$/,
+  /^script\/[^/]+\.project\.json$/,
+  /^schematics\/[^/]+\.parts\.json$/,
+  /^schematics\/[^/]+\.clip\.json$/,
+  /^schematics\/edits\.json$/,
+  /^projects\/[^/]+\/.*$/,
+  /^snapshots\/[^/]+\/.*$/,
+];
+
+/** Whether the studio is allowed to write this repository-relative path. */
+export function isWritable(relPath) {
+  return WRITABLE.some((pattern) => pattern.test(relPath));
+}
+
+/**
+ * The files a generator writes.
+ *
+ * Separate from {@link WRITABLE} on purpose. A person editing a take by hand is a mistake — the
+ * next regeneration silently discards it — but the studio running the generator *for* them has to
+ * be able to put the result somewhere. So generated output has its own door, and the only things
+ * that go through it are the operations that own the tool that produced them.
+ */
+export const GENERATED = [
+  /^script\/[^/]+\.json$/,
+  /^schematics\/[^/]+\.(groups|report)\.json$/,
+  /^schematics\/[^/]+\.nbt$/,
+  /^out\/.*$/,
+  /^projects\/[^/]+\/.*$/,
+];
+
+/** Throws unless the path is somewhere a generator is allowed to write. */
+export function assertGenerated(relPath) {
+  if (!GENERATED.some((pattern) => pattern.test(relPath))) {
+    throw new Error(`${relPath} is not somewhere the studio generates into`);
+  }
+}
+
+/** Throws unless the path is one of the authored documents. */
+export function assertWritable(relPath) {
+  if (!isWritable(relPath)) {
+    throw new Error(
+      `${relPath} is generated or outside the studio's reach — edit the document it comes from, ` +
+      'or regenerate it with the tool that owns it');
+  }
+}

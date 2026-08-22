@@ -8,10 +8,21 @@ runs/
 out/*
 !out/voice/
 out/voice/*
-!out/voice/*.alignment.json
-!out/voice/subtitles.srt
+!out/voice/*/
+out/voice/*/*
+!out/voice/*/*.alignment.json
+!out/voice/*/subtitles.srt
+# The studio's front end is the one place with a build step. Its dependencies and its output are
+# products; the source beside them is not.
+studio/node_modules/
+studio/web/dist/
+studio/blockcolors.json
 libs/*.jar
 libs/create-nested/
 scratch/
+# Snapshots are the studio's undo, kept next to the project rather than in the history. Git is
+# still the record of what an episode was; these survive outside a checkout and travel in a
+# `full` export.
+snapshots/
 __pycache__/
 ffmpeg2pass-0.log*

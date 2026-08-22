@@ -45,6 +45,16 @@ public final class ClientDirector {
     private static boolean restoreNoPhysics;
 
     /**
+     * Whether the camera is being held on a pose outside a take.
+     *
+     * <p>Composing a shot is the same problem as flying one: the moment the body is solid again
+     * the server pushes it out of the machine it was standing in, and the frame the studio shows
+     * is not the frame the take will record. So a parked camera keeps the filming body until
+     * something releases it — a take starting, or the studio saying so.
+     */
+    private static boolean parked;
+
+    /**
      * The camera's body while filming: 0.6 blocks cubed instead of 0.6 by 1.8, with the eye 0.4
      * off the floor of it rather than 1.62.
      *
@@ -70,7 +80,7 @@ public final class ClientDirector {
      */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (!running || !(event.getEntity() instanceof LocalPlayer player)) {
+        if ((!running && !parked) || !(event.getEntity() instanceof LocalPlayer player)) {
             return;
         }
         player.noPhysics = true;
@@ -140,6 +150,18 @@ public final class ClientDirector {
     private static void handle(ClientBridge.Command command, LocalPlayer player) {
         if (command instanceof ClientBridge.Command.BeginRun begin) {
             beginRun(player, begin);
+        } else if (command instanceof ClientBridge.Command.SetPose set) {
+            if (set.hold() && !running) {
+                restoreNoPhysics = parked ? restoreNoPhysics : player.noPhysics;
+                parked = true;
+                player.getAbilities().flying = true;
+            } else if (!set.hold()) {
+                parked = false;
+                player.noPhysics = restoreNoPhysics;
+                player.setForcedPose(null);
+            }
+            applyPose(player, new CameraPath.Pose(
+                    new Vec3(set.x(), set.y(), set.z()), set.yaw(), set.pitch()));
         } else if (command instanceof ClientBridge.Command.MoveCamera move) {
             rig = new CameraRig(move.keyframes(), move.durationMs(), move.linear());
         } else if (command instanceof ClientBridge.Command.Swing) {
@@ -153,10 +175,16 @@ public final class ClientDirector {
     }
 
     private static void beginRun(LocalPlayer player, ClientBridge.Command.BeginRun begin) {
+        // A take may start while the studio has the camera parked on a keyframe. What the player
+        // had before *that* is what gets handed back at the end, so the parked state is not
+        // captured as though it were the human's own.
+        if (!parked) {
+            restoreNoPhysics = player.noPhysics;
+        }
+        parked = false;
         running = true;
         rig = null;
 
-        restoreNoPhysics = player.noPhysics;
         player.getAbilities().flying = true;
         player.noPhysics = true;
         player.setForcedPose(FILMING_POSE);

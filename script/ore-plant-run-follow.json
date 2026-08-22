@@ -235,7 +235,10 @@
       "blocks": {
         "part": "boiler"
       },
-      "staggerMs": 300,
+      "spanMs": 25800,
+      "pace": {
+        "default": 1
+      },
       "_what": "tanks, magma, engines, pumps, wheels"
     },
     {
@@ -1010,7 +1013,7 @@
     },
     {
       "type": "camera",
-      "atMs": 38300,
+      "atMs": 38000,
       "durationMs": 3200,
       "_what": "boiler — finished",
       "keyframes": [
@@ -1036,12 +1039,12 @@
     },
     {
       "type": "marker",
-      "atMs": 39500,
+      "atMs": 39200,
       "label": "boiler"
     },
     {
       "type": "camera",
-      "atMs": 42386,
+      "atMs": 42086,
       "durationMs": 900,
       "ease": "linear",
       "_what": "drive — blocks 1-4",
@@ -1086,16 +1089,19 @@
     },
     {
       "type": "place",
-      "atMs": 42500,
+      "atMs": 42200,
       "blocks": {
         "part": "drive"
       },
-      "staggerMs": 300,
+      "spanMs": 12300,
+      "pace": {
+        "default": 1
+      },
       "_what": "chain drives, gearboxes, the speed controller"
     },
     {
       "type": "camera",
-      "atMs": 43586,
+      "atMs": 43286,
       "durationMs": 300,
       "ease": "linear",
       "_what": "drive — blocks 5-6",
@@ -1122,7 +1128,7 @@
     },
     {
       "type": "camera",
-      "atMs": 44186,
+      "atMs": 43886,
       "durationMs": 1,
       "_what": "drive — block 7, cut",
       "keyframes": [
@@ -1148,7 +1154,7 @@
     },
     {
       "type": "camera",
-      "atMs": 44486,
+      "atMs": 44186,
       "durationMs": 600,
       "ease": "linear",
       "_what": "drive — blocks 8-10",
@@ -1184,7 +1190,7 @@
     },
     {
       "type": "camera",
-      "atMs": 45386,
+      "atMs": 45086,
       "durationMs": 300,
       "ease": "linear",
       "_what": "drive — blocks 11-12",
@@ -1211,7 +1217,7 @@
     },
     {
       "type": "camera",
-      "atMs": 45986,
+      "atMs": 45686,
       "durationMs": 5100,
       "ease": "linear",
       "_what": "drive — blocks 13-30",
@@ -1382,7 +1388,7 @@
     },
     {
       "type": "camera",
-      "atMs": 51386,
+      "atMs": 51086,
       "durationMs": 1500,
       "ease": "linear",
       "_what": "drive — blocks 31-36",
@@ -1445,7 +1451,7 @@
     },
     {
       "type": "camera",
-      "atMs": 53186,
+      "atMs": 52886,
       "durationMs": 300,
       "ease": "linear",
       "_what": "drive — blocks 37-38",
@@ -1472,7 +1478,7 @@
     },
     {
       "type": "camera",
-      "atMs": 53786,
+      "atMs": 53486,
       "durationMs": 300,
       "ease": "linear",
       "_what": "drive — blocks 39-40",
@@ -1499,7 +1505,7 @@
     },
     {
       "type": "camera",
-      "atMs": 54386,
+      "atMs": 54086,
       "durationMs": 300,
       "ease": "linear",
       "_what": "drive — blocks 41-42",
@@ -1526,7 +1532,7 @@
     },
     {
       "type": "camera",
-      "atMs": 55100,
+      "atMs": 54500,
       "durationMs": 3200,
       "_what": "drive — finished",
       "keyframes": [
@@ -1552,12 +1558,12 @@
     },
     {
       "type": "marker",
-      "atMs": 56300,
+      "atMs": 55700,
       "label": "drive"
     },
     {
       "type": "camera",
-      "atMs": 59186,
+      "atMs": 58586,
       "durationMs": 300,
       "ease": "linear",
       "_what": "dock — blocks 1-2",
@@ -1584,17 +1590,23 @@
     },
     {
       "type": "place",
-      "atMs": 59300,
+      "atMs": 58700,
       "blocks": {
         "part": "dock"
       },
-      "staggerMs": 300,
+      "spanMs": 11700,
+      "pace": {
+        "default": 1,
+        "18,3,10": 8,
+        "19,3,10": 8,
+        "19,5,10": 8
+      },
       "_what": "belt, chutes, the interface the train unloads through"
     },
     {
       "type": "camera",
-      "atMs": 59786,
-      "durationMs": 3300,
+      "atMs": 59186,
+      "durationMs": 5400,
       "ease": "linear",
       "_what": "dock — blocks 3-14",
       "keyframes": [
@@ -1705,16 +1717,157 @@
           ],
           "yaw": -135,
           "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
         }
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 63000,
+      "pos": [
+        18,
+        3,
+        10
+      ],
+      "_what": "deny: cobblestone, cobbled_deepslate, gravel, flint, basalt, soul_sand, netherrack, blackstone"
+    },
+    {
+      "type": "screen",
+      "atMs": 64600,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 63386,
-      "durationMs": 1200,
+      "atMs": 64886,
+      "durationMs": 5400,
       "ease": "linear",
       "_what": "dock — blocks 15-19",
       "keyframes": [
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
         {
           "pos": [
             20.5,
@@ -1754,6 +1907,69 @@
         {
           "pos": [
             20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
             -53.5,
             13.5
           ],
@@ -1763,8 +1979,38 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 65400,
+      "pos": [
+        19,
+        3,
+        10
+      ],
+      "_what": "allow: cobblestone, cobbled_deepslate, gravel, flint, basalt, soul_sand, netherrack, blackstone"
+    },
+    {
+      "type": "screen",
+      "atMs": 67000,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 68400,
+      "pos": [
+        19,
+        5,
+        10
+      ],
+      "_what": "deny: rail"
+    },
+    {
+      "type": "screen",
+      "atMs": 70000,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 65000,
+      "atMs": 70400,
       "durationMs": 3200,
       "_what": "dock — finished",
       "keyframes": [
@@ -1790,15 +2036,70 @@
     },
     {
       "type": "marker",
-      "atMs": 66200,
+      "atMs": 71600,
       "label": "dock"
     },
     {
       "type": "camera",
-      "atMs": 69086,
-      "durationMs": 1,
-      "_what": "crushing — block 1, cut",
+      "atMs": 74486,
+      "durationMs": 2100,
+      "ease": "linear",
+      "_what": "crushing — blocks 1-1",
       "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
         {
           "pos": [
             7.5,
@@ -1821,16 +2122,39 @@
     },
     {
       "type": "place",
-      "atMs": 69200,
+      "atMs": 74600,
       "blocks": {
         "part": "crushing"
       },
-      "staggerMs": 300,
+      "spanMs": 21600,
+      "pace": {
+        "default": 1,
+        "10,3,6": 8,
+        "13,5,4": 8,
+        "12,5,5": 8,
+        "13,5,5": 8,
+        "10,5,8": 8
+      },
       "_what": "two wheels, the controller, the belt loop"
     },
     {
+      "type": "showFilter",
+      "atMs": 75000,
+      "pos": [
+        10,
+        3,
+        6
+      ],
+      "_what": "allow: cobblestone, cobbled_deepslate, flint, netherrack"
+    },
+    {
+      "type": "screen",
+      "atMs": 76600,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 69386,
+      "atMs": 76886,
       "durationMs": 2100,
       "ease": "linear",
       "_what": "crushing — blocks 2-9",
@@ -1911,7 +2235,7 @@
     },
     {
       "type": "camera",
-      "atMs": 71786,
+      "atMs": 79286,
       "durationMs": 1,
       "_what": "crushing — block 10, cut",
       "keyframes": [
@@ -1937,8 +2261,8 @@
     },
     {
       "type": "camera",
-      "atMs": 72086,
-      "durationMs": 3300,
+      "atMs": 79586,
+      "durationMs": 9600,
       "ease": "linear",
       "_what": "crushing — blocks 11-22",
       "keyframes": [
@@ -2025,6 +2349,69 @@
         },
         {
           "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
             14.5,
             -54.5,
             5.5
@@ -2043,6 +2430,132 @@
         },
         {
           "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
             16.5,
             -54.5,
             5.5
@@ -2053,8 +2566,53 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 82500,
+      "pos": [
+        13,
+        5,
+        4
+      ],
+      "_what": "allow: crushed_raw_iron, crushed_raw_gold, crushed_raw_copper, crushed_raw_zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 84100,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 85200,
+      "pos": [
+        12,
+        5,
+        5
+      ],
+      "_what": "allow: redstone, coal, experience_nugget, quartz, iron_nugget, gold_nugget, copper_nugget, zinc_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 86800,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 87600,
+      "pos": [
+        13,
+        5,
+        5
+      ],
+      "_what": "deny: crushed_raw_iron, crushed_raw_gold, crushed_raw_copper, crushed_raw_zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 89200,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 75686,
+      "atMs": 89486,
       "durationMs": 1,
       "_what": "crushing — block 23, cut",
       "keyframes": [
@@ -2080,7 +2638,7 @@
     },
     {
       "type": "camera",
-      "atMs": 75986,
+      "atMs": 89786,
       "durationMs": 1,
       "_what": "crushing — block 24, cut",
       "keyframes": [
@@ -2106,8 +2664,8 @@
     },
     {
       "type": "camera",
-      "atMs": 76286,
-      "durationMs": 2400,
+      "atMs": 90086,
+      "durationMs": 4500,
       "ease": "linear",
       "_what": "crushing — blocks 25-33",
       "keyframes": [
@@ -2137,6 +2695,69 @@
           ],
           "yaw": 90,
           "pitch": 26.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
         },
         {
           "pos": [
@@ -2195,8 +2816,23 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 91500,
+      "pos": [
+        10,
+        5,
+        8
+      ],
+      "_what": "allow: filter, filter"
+    },
+    {
+      "type": "screen",
+      "atMs": 93100,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 78986,
+      "atMs": 94886,
       "durationMs": 1200,
       "ease": "linear",
       "_what": "crushing — blocks 34-38",
@@ -2250,7 +2886,7 @@
     },
     {
       "type": "camera",
-      "atMs": 80600,
+      "atMs": 96200,
       "durationMs": 3200,
       "_what": "crushing — finished",
       "keyframes": [
@@ -2276,12 +2912,12 @@
     },
     {
       "type": "marker",
-      "atMs": 81800,
+      "atMs": 97400,
       "label": "crushing"
     },
     {
       "type": "camera",
-      "atMs": 84686,
+      "atMs": 100286,
       "durationMs": 300,
       "ease": "linear",
       "_what": "washing — blocks 1-2",
@@ -2308,19 +2944,79 @@
     },
     {
       "type": "place",
-      "atMs": 84800,
+      "atMs": 100400,
       "blocks": {
         "part": "washing"
       },
-      "staggerMs": 300,
+      "spanMs": 3900,
+      "pace": {
+        "default": 1,
+        "13,4,6": 8,
+        "13,5,7": 8
+      },
       "_what": "fan, leaf, water wheel, and the clay pair"
     },
     {
       "type": "camera",
-      "atMs": 85286,
-      "durationMs": 1,
-      "_what": "washing — block 3, cut",
+      "atMs": 100886,
+      "durationMs": 2100,
+      "ease": "linear",
+      "_what": "washing — blocks 3-3",
       "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
         {
           "pos": [
             15.5,
@@ -2342,8 +3038,23 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 101400,
+      "pos": [
+        13,
+        4,
+        6
+      ],
+      "_what": "holds: clay_ball"
+    },
+    {
+      "type": "screen",
+      "atMs": 103000,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 85586,
+      "atMs": 103286,
       "durationMs": 1,
       "_what": "washing — block 4, cut",
       "keyframes": [
@@ -2369,8 +3080,8 @@
     },
     {
       "type": "camera",
-      "atMs": 85886,
-      "durationMs": 600,
+      "atMs": 103586,
+      "durationMs": 2700,
       "ease": "linear",
       "_what": "washing — blocks 5-7",
       "keyframes": [
@@ -2400,12 +3111,75 @@
           ],
           "yaw": -45,
           "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
         }
       ]
     },
     {
       "type": "camera",
-      "atMs": 86900,
+      "atMs": 104300,
       "durationMs": 3200,
       "_what": "washing — finished",
       "keyframes": [
@@ -2430,13 +3204,28 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 104700,
+      "pos": [
+        13,
+        5,
+        7
+      ],
+      "_what": "deny: clay_ball"
+    },
+    {
       "type": "marker",
-      "atMs": 88100,
+      "atMs": 105500,
       "label": "washing"
     },
     {
+      "type": "screen",
+      "atMs": 106300,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 90986,
+      "atMs": 108386,
       "durationMs": 1500,
       "ease": "linear",
       "_what": "sorting — blocks 1-6",
@@ -2499,16 +3288,25 @@
     },
     {
       "type": "place",
-      "atMs": 91100,
+      "atMs": 108500,
       "blocks": {
         "part": "sorting"
       },
-      "staggerMs": 300,
+      "spanMs": 24900,
+      "pace": {
+        "default": 1,
+        "8,5,11": 8,
+        "9,5,11": 8,
+        "10,5,11": 8,
+        "11,5,11": 8,
+        "12,5,11": 8,
+        "13,5,11": 8
+      },
       "_what": "six belts, six funnels"
     },
     {
       "type": "camera",
-      "atMs": 92786,
+      "atMs": 110186,
       "durationMs": 6900,
       "ease": "linear",
       "_what": "sorting — blocks 7-30",
@@ -2733,8 +3531,8 @@
     },
     {
       "type": "camera",
-      "atMs": 99986,
-      "durationMs": 2400,
+      "atMs": 117386,
+      "durationMs": 15000,
       "ease": "linear",
       "_what": "sorting — blocks 31-39",
       "keyframes": [
@@ -2746,6 +3544,132 @@
           ],
           "yaw": 149,
           "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
         },
         {
           "pos": [
@@ -2771,6 +3695,132 @@
             -53.5,
             16.5
           ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
           "yaw": -180,
           "pitch": 26.6
         },
@@ -2782,6 +3832,132 @@
           ],
           "yaw": -168.7,
           "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
         },
         {
           "pos": [
@@ -2822,8 +3998,98 @@
       ]
     },
     {
+      "type": "showFilter",
+      "atMs": 117900,
+      "pos": [
+        8,
+        5,
+        11
+      ],
+      "_what": "holds: experience_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 119500,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 120300,
+      "pos": [
+        9,
+        5,
+        11
+      ],
+      "_what": "allow: lapis_ore, deepslate_lapis_ore, lapis_lazuli, emerald_ore, deepslate_emerald_ore, emerald, diamond_ore, deepslate_diamond_ore, diamond, ancient_debris, obsidian"
+    },
+    {
+      "type": "screen",
+      "atMs": 121900,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 122700,
+      "pos": [
+        10,
+        5,
+        11
+      ],
+      "_what": "allow: gunpowder, quartz"
+    },
+    {
+      "type": "screen",
+      "atMs": 124300,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 125100,
+      "pos": [
+        11,
+        5,
+        11
+      ],
+      "_what": "allow: redstone, coal"
+    },
+    {
+      "type": "screen",
+      "atMs": 126700,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 127500,
+      "pos": [
+        12,
+        5,
+        11
+      ],
+      "_what": "allow: copper_nugget, zinc_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 129100,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 129900,
+      "pos": [
+        13,
+        5,
+        11
+      ],
+      "_what": "allow: iron_nugget, gold_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 131500,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 102686,
+      "atMs": 132686,
       "durationMs": 600,
       "ease": "linear",
       "_what": "sorting — blocks 40-42",
@@ -2859,7 +4125,7 @@
     },
     {
       "type": "camera",
-      "atMs": 103700,
+      "atMs": 133400,
       "durationMs": 3200,
       "_what": "sorting — finished",
       "keyframes": [
@@ -2885,13 +4151,13 @@
     },
     {
       "type": "marker",
-      "atMs": 104900,
+      "atMs": 134600,
       "label": "sorting"
     },
     {
       "type": "camera",
-      "atMs": 107786,
-      "durationMs": 5100,
+      "atMs": 137486,
+      "durationMs": 17700,
       "ease": "linear",
       "_what": "compacting — blocks 1-18",
       "keyframes": [
@@ -2937,6 +4203,195 @@
             -54.5,
             15.5
           ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
           "yaw": -123.7,
           "pitch": 22.6
         },
@@ -2961,6 +4416,195 @@
         {
           "pos": [
             9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
             -53.5,
             15.5
           ],
@@ -3061,16 +4705,115 @@
     },
     {
       "type": "place",
-      "atMs": 107900,
+      "atMs": 137600,
       "blocks": {
         "part": "compacting"
       },
-      "staggerMs": 300,
+      "spanMs": 18900,
+      "pace": {
+        "default": 1,
+        "11,5,13": 8,
+        "12,5,13": 8,
+        "13,5,13": 8,
+        "11,5,14": 8,
+        "12,5,14": 8,
+        "13,5,14": 8
+      },
       "_what": "three basins, three presses"
     },
     {
+      "type": "showFilter",
+      "atMs": 138900,
+      "pos": [
+        11,
+        5,
+        13
+      ],
+      "_what": "allow: redstone_block, coal_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 140500,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 141300,
+      "pos": [
+        12,
+        5,
+        13
+      ],
+      "_what": "allow: copper_ingot, copper_block, zinc_ingot, zinc_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 142900,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 143700,
+      "pos": [
+        13,
+        5,
+        13
+      ],
+      "_what": "allow: iron_ingot, iron_block, gold_ingot, gold_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 145300,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 146100,
+      "pos": [
+        11,
+        5,
+        14
+      ],
+      "_what": "allow: coal_block, redstone_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 147700,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 148500,
+      "pos": [
+        12,
+        5,
+        14
+      ],
+      "_what": "allow: copper_block, zinc_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 150100,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 150900,
+      "pos": [
+        13,
+        5,
+        14
+      ],
+      "_what": "allow: iron_block, gold_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 152500,
+      "action": "close"
+    },
+    {
       "type": "camera",
-      "atMs": 113186,
+      "atMs": 155486,
       "durationMs": 600,
       "ease": "linear",
       "_what": "compacting — blocks 19-21",
@@ -3106,7 +4849,7 @@
     },
     {
       "type": "camera",
-      "atMs": 114086,
+      "atMs": 156386,
       "durationMs": 1,
       "_what": "compacting — block 22, cut",
       "keyframes": [
@@ -3132,7 +4875,7 @@
     },
     {
       "type": "camera",
-      "atMs": 114500,
+      "atMs": 156500,
       "durationMs": 3200,
       "_what": "compacting — finished",
       "keyframes": [
@@ -3158,12 +4901,12 @@
     },
     {
       "type": "marker",
-      "atMs": 115700,
+      "atMs": 157700,
       "label": "compacting"
     },
     {
       "type": "camera",
-      "atMs": 118586,
+      "atMs": 160586,
       "durationMs": 300,
       "ease": "linear",
       "_what": "storage — blocks 1-2",
@@ -3190,16 +4933,19 @@
     },
     {
       "type": "place",
-      "atMs": 118700,
+      "atMs": 160700,
       "blocks": {
         "part": "storage"
       },
-      "staggerMs": 300,
+      "spanMs": 10500,
+      "pace": {
+        "default": 1
+      },
       "_what": "27 vaults, 12 chests"
     },
     {
       "type": "camera",
-      "atMs": 119186,
+      "atMs": 161186,
       "durationMs": 1,
       "_what": "storage — block 3, cut",
       "keyframes": [
@@ -3225,7 +4971,7 @@
     },
     {
       "type": "camera",
-      "atMs": 119486,
+      "atMs": 161486,
       "durationMs": 2400,
       "ease": "linear",
       "_what": "storage — blocks 4-12",
@@ -3315,7 +5061,7 @@
     },
     {
       "type": "camera",
-      "atMs": 122186,
+      "atMs": 164186,
       "durationMs": 3600,
       "ease": "linear",
       "_what": "storage — blocks 13-25",
@@ -3441,7 +5187,7 @@
     },
     {
       "type": "camera",
-      "atMs": 126086,
+      "atMs": 168086,
       "durationMs": 3000,
       "ease": "linear",
       "_what": "storage — blocks 26-36",
@@ -3549,7 +5295,7 @@
     },
     {
       "type": "camera",
-      "atMs": 129500,
+      "atMs": 171200,
       "durationMs": 3200,
       "_what": "storage — finished",
       "keyframes": [
@@ -3575,12 +5321,12 @@
     },
     {
       "type": "marker",
-      "atMs": 130700,
+      "atMs": 172400,
       "label": "storage"
     },
     {
       "type": "camera",
-      "atMs": 133586,
+      "atMs": 175286,
       "durationMs": 1,
       "_what": "readout — block 1, cut",
       "keyframes": [
@@ -3606,16 +5352,19 @@
     },
     {
       "type": "place",
-      "atMs": 133700,
+      "atMs": 175400,
       "blocks": {
         "part": "readout"
       },
-      "staggerMs": 300,
+      "spanMs": 9000,
+      "pace": {
+        "default": 1
+      },
       "_what": "observers, links, sixteen boards"
     },
     {
       "type": "camera",
-      "atMs": 133886,
+      "atMs": 175586,
       "durationMs": 1,
       "_what": "readout — block 2, cut",
       "keyframes": [
@@ -3641,7 +5390,7 @@
     },
     {
       "type": "camera",
-      "atMs": 134186,
+      "atMs": 175886,
       "durationMs": 900,
       "ease": "linear",
       "_what": "readout — blocks 3-6",
@@ -3686,7 +5435,7 @@
     },
     {
       "type": "camera",
-      "atMs": 135386,
+      "atMs": 177086,
       "durationMs": 1,
       "_what": "readout — block 7, cut",
       "keyframes": [
@@ -3712,7 +5461,7 @@
     },
     {
       "type": "camera",
-      "atMs": 135686,
+      "atMs": 177386,
       "durationMs": 600,
       "ease": "linear",
       "_what": "readout — blocks 8-10",
@@ -3748,7 +5497,7 @@
     },
     {
       "type": "camera",
-      "atMs": 136586,
+      "atMs": 178286,
       "durationMs": 300,
       "ease": "linear",
       "_what": "readout — blocks 11-12",
@@ -3775,7 +5524,7 @@
     },
     {
       "type": "camera",
-      "atMs": 137186,
+      "atMs": 178886,
       "durationMs": 300,
       "ease": "linear",
       "_what": "readout — blocks 13-14",
@@ -3802,7 +5551,7 @@
     },
     {
       "type": "camera",
-      "atMs": 137786,
+      "atMs": 179486,
       "durationMs": 300,
       "ease": "linear",
       "_what": "readout — blocks 15-16",
@@ -3829,7 +5578,7 @@
     },
     {
       "type": "camera",
-      "atMs": 138386,
+      "atMs": 180086,
       "durationMs": 300,
       "ease": "linear",
       "_what": "readout — blocks 17-18",
@@ -3856,7 +5605,7 @@
     },
     {
       "type": "camera",
-      "atMs": 138986,
+      "atMs": 180686,
       "durationMs": 1,
       "_what": "readout — block 19, cut",
       "keyframes": [
@@ -3882,7 +5631,7 @@
     },
     {
       "type": "camera",
-      "atMs": 139286,
+      "atMs": 180986,
       "durationMs": 3300,
       "ease": "linear",
       "_what": "readout — blocks 20-31",
@@ -3999,7 +5748,7 @@
     },
     {
       "type": "camera",
-      "atMs": 143000,
+      "atMs": 184400,
       "durationMs": 3200,
       "_what": "readout — finished",
       "keyframes": [
@@ -4025,12 +5774,12 @@
     },
     {
       "type": "marker",
-      "atMs": 144200,
+      "atMs": 185600,
       "label": "readout"
     },
     {
       "type": "use",
-      "atMs": 147200,
+      "atMs": 188600,
       "pos": [
         7,
         5,
@@ -4040,7 +5789,7 @@
     },
     {
       "type": "reseat",
-      "atMs": 149700,
+      "atMs": 191100,
       "ofType": [
         "create:andesite_encased_cogwheel",
         "create:andesite_encased_large_cogwheel",
@@ -4064,7 +5813,7 @@
     },
     {
       "type": "camera",
-      "atMs": 150700,
+      "atMs": 192100,
       "durationMs": 12000,
       "_what": "the wall, once it is running",
       "keyframes": [
@@ -4099,944 +5848,17 @@
     },
     {
       "type": "marker",
-      "atMs": 163200,
+      "atMs": 204600,
       "label": "running"
     },
     {
       "type": "marker",
-      "atMs": 165700,
-      "label": "filters — the dock"
-    },
-    {
-      "type": "camera",
-      "atMs": 165700,
-      "durationMs": 3000,
-      "_what": "smart chute — allow: the eight stone types",
-      "keyframes": [
-        {
-          "pos": [
-            18.5,
-            -57.5,
-            7.5
-          ],
-          "yaw": -18.4,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            18.5,
-            -57.5,
-            7.5
-          ],
-          "yaw": -18.4,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 166400,
-      "pos": [
-        19,
-        3,
-        10
-      ],
-      "_what": "smart chute — allow: the eight stone types"
-    },
-    {
-      "type": "screen",
-      "atMs": 168300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 168700,
-      "durationMs": 3000,
-      "_what": "smart chute — deny: the same eight",
-      "keyframes": [
-        {
-          "pos": [
-            15.5,
-            -57.5,
-            9.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            15.5,
-            -57.5,
-            9.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 169400,
-      "pos": [
-        18,
-        3,
-        10
-      ],
-      "_what": "smart chute — deny: the same eight"
-    },
-    {
-      "type": "screen",
-      "atMs": 171300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 171700,
-      "durationMs": 3000,
-      "_what": "smart chute — deny: rail, so the train keeps its own track",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            10.5
-          ],
-          "yaw": -90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            10.5
-          ],
-          "yaw": -90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 172400,
-      "pos": [
-        19,
-        5,
-        10
-      ],
-      "_what": "smart chute — deny: rail, so the train keeps its own track"
-    },
-    {
-      "type": "screen",
-      "atMs": 174300,
-      "action": "close"
-    },
-    {
-      "type": "marker",
-      "atMs": 174700,
-      "label": "filters — the crusher"
-    },
-    {
-      "type": "camera",
-      "atMs": 174700,
-      "durationMs": 3000,
-      "_what": "brass funnel — allow: crushed iron, gold, copper, zinc",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            4.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            4.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 175400,
-      "pos": [
-        13,
-        5,
-        4
-      ],
-      "_what": "brass funnel — allow: crushed iron, gold, copper, zinc"
-    },
-    {
-      "type": "screen",
-      "atMs": 177300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 177700,
-      "durationMs": 3000,
-      "_what": "brass funnel — deny: the same four",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            5.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            5.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 178400,
-      "pos": [
-        13,
-        5,
-        5
-      ],
-      "_what": "brass funnel — deny: the same four"
-    },
-    {
-      "type": "screen",
-      "atMs": 180300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 180700,
-      "durationMs": 3000,
-      "_what": "belt funnel — allow: the eight stone types again",
-      "keyframes": [
-        {
-          "pos": [
-            9.5,
-            -55.5,
-            6.5
-          ],
-          "yaw": -108.4,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            9.5,
-            -55.5,
-            6.5
-          ],
-          "yaw": -108.4,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 181400,
-      "pos": [
-        12,
-        5,
-        5
-      ],
-      "_what": "belt funnel — allow: the eight stone types again"
-    },
-    {
-      "type": "screen",
-      "atMs": 183300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 183700,
-      "durationMs": 3000,
-      "_what": "belt funnel — allow: what comes back out",
-      "keyframes": [
-        {
-          "pos": [
-            7.5,
-            -54.5,
-            8.5
-          ],
-          "yaw": -90,
-          "pitch": 18.4
-        },
-        {
-          "pos": [
-            7.5,
-            -54.5,
-            8.5
-          ],
-          "yaw": -90,
-          "pitch": 18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 184400,
-      "pos": [
-        10,
-        5,
-        8
-      ],
-      "_what": "belt funnel — allow: what comes back out"
-    },
-    {
-      "type": "screen",
-      "atMs": 186300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 186700,
-      "durationMs": 3000,
-      "_what": "brass funnel — allow: the crushed four, a floor down",
-      "keyframes": [
-        {
-          "pos": [
-            7.5,
-            -58.5,
-            6.5
-          ],
-          "yaw": -90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            7.5,
-            -58.5,
-            6.5
-          ],
-          "yaw": -90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 187400,
-      "pos": [
-        10,
-        3,
-        6
-      ],
-      "_what": "brass funnel — allow: the crushed four, a floor down"
-    },
-    {
-      "type": "screen",
-      "atMs": 189300,
-      "action": "close"
-    },
-    {
-      "type": "marker",
-      "atMs": 189700,
-      "label": "filters — the washer"
-    },
-    {
-      "type": "camera",
-      "atMs": 189700,
-      "durationMs": 3000,
-      "_what": "brass funnel — allow: clay",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -57.5,
-            6.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -57.5,
-            6.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 190400,
-      "pos": [
-        13,
-        4,
-        6
-      ],
-      "_what": "brass funnel — allow: clay"
-    },
-    {
-      "type": "screen",
-      "atMs": 192300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 192700,
-      "durationMs": 3000,
-      "_what": "belt funnel — deny: clay",
-      "keyframes": [
-        {
-          "pos": [
-            10.5,
-            -55.5,
-            6.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            10.5,
-            -55.5,
-            6.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 193400,
-      "pos": [
-        13,
-        5,
-        7
-      ],
-      "_what": "belt funnel — deny: clay"
-    },
-    {
-      "type": "screen",
-      "atMs": 195300,
-      "action": "close"
-    },
-    {
-      "type": "marker",
-      "atMs": 195700,
-      "label": "filters — the sorter"
-    },
-    {
-      "type": "camera",
-      "atMs": 195700,
-      "durationMs": 3000,
-      "_what": "lane 1 — experience nuggets",
-      "keyframes": [
-        {
-          "pos": [
-            7.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            7.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 196400,
-      "pos": [
-        8,
-        5,
-        11
-      ],
-      "_what": "lane 1 — experience nuggets"
-    },
-    {
-      "type": "screen",
-      "atMs": 198300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 198700,
-      "durationMs": 3000,
-      "_what": "lane 2 — lapis, emerald, diamond, ore and gem alike",
-      "keyframes": [
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 199400,
-      "pos": [
-        9,
-        5,
-        11
-      ],
-      "_what": "lane 2 — lapis, emerald, diamond, ore and gem alike"
-    },
-    {
-      "type": "screen",
-      "atMs": 201300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 201700,
-      "durationMs": 3000,
-      "_what": "lane 3 — gunpowder and quartz",
-      "keyframes": [
-        {
-          "pos": [
-            9.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            9.5,
-            -55.5,
-            14.5
-          ],
-          "yaw": -161.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 202400,
-      "pos": [
-        10,
-        5,
-        11
-      ],
-      "_what": "lane 3 — gunpowder and quartz"
-    },
-    {
-      "type": "screen",
-      "atMs": 204300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 204700,
-      "durationMs": 3000,
-      "_what": "lane 4 — redstone and coal",
-      "keyframes": [
-        {
-          "pos": [
-            9.5,
-            -54.5,
-            13.5
-          ],
-          "yaw": -135,
-          "pitch": 19.5
-        },
-        {
-          "pos": [
-            9.5,
-            -54.5,
-            13.5
-          ],
-          "yaw": -135,
-          "pitch": 19.5
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 205400,
-      "pos": [
-        11,
-        5,
-        11
-      ],
-      "_what": "lane 4 — redstone and coal"
-    },
-    {
-      "type": "screen",
-      "atMs": 207300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 207700,
-      "durationMs": 3000,
-      "_what": "lane 5 — copper and zinc",
-      "keyframes": [
-        {
-          "pos": [
-            11.5,
-            -53.5,
-            8.5
-          ],
-          "yaw": -18.4,
-          "pitch": 32.3
-        },
-        {
-          "pos": [
-            11.5,
-            -53.5,
-            8.5
-          ],
-          "yaw": -18.4,
-          "pitch": 32.3
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 208400,
-      "pos": [
-        12,
-        5,
-        11
-      ],
-      "_what": "lane 5 — copper and zinc"
-    },
-    {
-      "type": "screen",
-      "atMs": 210300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 210700,
-      "durationMs": 3000,
-      "_what": "lane 6 — iron and gold",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            11.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            11.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 211400,
-      "pos": [
-        13,
-        5,
-        11
-      ],
-      "_what": "lane 6 — iron and gold"
-    },
-    {
-      "type": "screen",
-      "atMs": 213300,
-      "action": "close"
-    },
-    {
-      "type": "marker",
-      "atMs": 213700,
-      "label": "filters — the presses"
-    },
-    {
-      "type": "camera",
-      "atMs": 213700,
-      "durationMs": 3000,
-      "_what": "basin — redstone and coal",
-      "keyframes": [
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            12.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            12.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 214400,
-      "pos": [
-        11,
-        5,
-        13
-      ],
-      "_what": "basin — redstone and coal"
-    },
-    {
-      "type": "screen",
-      "atMs": 216300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 216700,
-      "durationMs": 3000,
-      "_what": "basin — copper and zinc",
-      "keyframes": [
-        {
-          "pos": [
-            11.5,
-            -53.5,
-            10.5
-          ],
-          "yaw": -18.4,
-          "pitch": 32.3
-        },
-        {
-          "pos": [
-            11.5,
-            -53.5,
-            10.5
-          ],
-          "yaw": -18.4,
-          "pitch": 32.3
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 217400,
-      "pos": [
-        12,
-        5,
-        13
-      ],
-      "_what": "basin — copper and zinc"
-    },
-    {
-      "type": "screen",
-      "atMs": 219300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 219700,
-      "durationMs": 3000,
-      "_what": "basin — iron and gold",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            13.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            13.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 220400,
-      "pos": [
-        13,
-        5,
-        13
-      ],
-      "_what": "basin — iron and gold"
-    },
-    {
-      "type": "screen",
-      "atMs": 222300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 222700,
-      "durationMs": 3000,
-      "_what": "output funnel — the finished block only",
-      "keyframes": [
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            13.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        },
-        {
-          "pos": [
-            8.5,
-            -55.5,
-            13.5
-          ],
-          "yaw": -71.6,
-          "pitch": 0
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 223400,
-      "pos": [
-        11,
-        5,
-        14
-      ],
-      "_what": "output funnel — the finished block only"
-    },
-    {
-      "type": "screen",
-      "atMs": 225300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 225700,
-      "durationMs": 3000,
-      "_what": "output funnel — the finished block only",
-      "keyframes": [
-        {
-          "pos": [
-            9.5,
-            -53.5,
-            15.5
-          ],
-          "yaw": -108.4,
-          "pitch": 32.3
-        },
-        {
-          "pos": [
-            9.5,
-            -53.5,
-            15.5
-          ],
-          "yaw": -108.4,
-          "pitch": 32.3
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 226400,
-      "pos": [
-        12,
-        5,
-        14
-      ],
-      "_what": "output funnel — the finished block only"
-    },
-    {
-      "type": "screen",
-      "atMs": 228300,
-      "action": "close"
-    },
-    {
-      "type": "camera",
-      "atMs": 228700,
-      "durationMs": 3000,
-      "_what": "output funnel — the finished block only",
-      "keyframes": [
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            14.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        },
-        {
-          "pos": [
-            16.5,
-            -56.5,
-            14.5
-          ],
-          "yaw": 90,
-          "pitch": -18.4
-        }
-      ]
-    },
-    {
-      "type": "showFilter",
-      "atMs": 229400,
-      "pos": [
-        13,
-        5,
-        14
-      ],
-      "_what": "output funnel — the finished block only"
-    },
-    {
-      "type": "screen",
-      "atMs": 231300,
-      "action": "close"
-    },
-    {
-      "type": "marker",
-      "atMs": 232700,
+      "atMs": 208100,
       "label": "the dock"
     },
     {
       "type": "camera",
-      "atMs": 232700,
+      "atMs": 208100,
       "durationMs": 5500,
       "_what": "dock — the chest the train unloads into, and the two chutes under it",
       "keyframes": [
@@ -5071,7 +5893,7 @@
     },
     {
       "type": "fill",
-      "atMs": 234200,
+      "atMs": 209600,
       "pos": [
         18,
         4,
@@ -5139,7 +5961,7 @@
     },
     {
       "type": "camera",
-      "atMs": 238200,
+      "atMs": 213600,
       "durationMs": 4000,
       "_what": "dock — the chutes emptying it",
       "keyframes": [
@@ -5165,17 +5987,17 @@
     },
     {
       "type": "gameMode",
-      "atMs": 241700,
+      "atMs": 217100,
       "mode": "spectator"
     },
     {
       "type": "marker",
-      "atMs": 242700,
+      "atMs": 218100,
       "label": "crusher"
     },
     {
       "type": "camera",
-      "atMs": 242700,
+      "atMs": 218100,
       "durationMs": 5000,
       "_what": "crusher — two wheels, the controller between them, and the belt that carries the crushed ore out",
       "keyframes": [
@@ -5210,7 +6032,7 @@
     },
     {
       "type": "camera",
-      "atMs": 247700,
+      "atMs": 223100,
       "durationMs": 7000,
       "_what": "crusher — held while the material comes through",
       "keyframes": [
@@ -5236,12 +6058,12 @@
     },
     {
       "type": "marker",
-      "atMs": 255200,
+      "atMs": 230600,
       "label": "washer"
     },
     {
       "type": "camera",
-      "atMs": 255200,
+      "atMs": 230600,
       "durationMs": 5000,
       "_what": "washer — the fan, the waterlogged leaf in front of it, and what comes off the belt below",
       "keyframes": [
@@ -5276,7 +6098,7 @@
     },
     {
       "type": "camera",
-      "atMs": 260200,
+      "atMs": 235600,
       "durationMs": 7000,
       "_what": "washer — held while the material comes through",
       "keyframes": [
@@ -5302,12 +6124,12 @@
     },
     {
       "type": "marker",
-      "atMs": 267700,
+      "atMs": 243100,
       "label": "press"
     },
     {
       "type": "camera",
-      "atMs": 267700,
+      "atMs": 243100,
       "durationMs": 5000,
       "_what": "press — three basins with a press over each, and the funnels that feed them off the lanes",
       "keyframes": [
@@ -5342,7 +6164,7 @@
     },
     {
       "type": "camera",
-      "atMs": 272700,
+      "atMs": 248100,
       "durationMs": 7000,
       "_what": "press — held while the material comes through",
       "keyframes": [
@@ -5368,12 +6190,12 @@
     },
     {
       "type": "marker",
-      "atMs": 280200,
+      "atMs": 255600,
       "label": "the whole line"
     },
     {
       "type": "camera",
-      "atMs": 280200,
+      "atMs": 255600,
       "durationMs": 10000,
       "_what": "the plant working, end to end",
       "keyframes": [

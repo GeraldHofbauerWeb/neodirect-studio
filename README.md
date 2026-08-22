@@ -127,7 +127,7 @@ edit the `localRuntime` lines in `build.gradle`.
 curl 127.0.0.1:8777/health          # is the director up?
 
 QT_QPA_PLATFORM=xcb obs &           # the platform variable is not optional, see Recording
-node tools/obs-setup.mjs            # scene, source, 1920x1080@60, x264
+node tools/obs-setup.mjs            # scene, source, 1920x1080@30, x264
 node tools/take.mjs script/pilot-b.json --capture obs
 ```
 
@@ -144,9 +144,13 @@ Credentials are read from `~/.config/neodirect/` — `obs.env` and `elevenlabs.e
 node tools/render-voice.mjs render script/pilot.beats.json          # measure every beat
 node tools/render-voice.mjs render script/pilot.beats.json b0       # …or re-speak just one
 node tools/make-timeline.mjs script/episode.storyboard.json script/episode.json
-node tools/take.mjs script/episode.json --capture obs --voice out/voice/narration.mp3
+node tools/take.mjs script/episode.json --capture obs --voice out/voice/pilot/narration.mp3
 node tools/verify.mjs script/episode.json
 ```
+
+Audio lands in `out/voice/<episode>/`, named after the beats file. Beat ids are only unique inside
+an episode — every episode here starts at `b0` — so a single flat directory means the second
+episode rendered silently overwrites the first one's audio, its alignments and its subtitles.
 
 Three files, in order of authority:
 
@@ -168,7 +172,7 @@ measured narration into absolute milliseconds.
 `render` prints every pause over 300 ms with the words on either side:
 
 ```
-b0: 23917 ms (estimate 24000 ms, -83)  -> out/voice/b0.mp3
+b0: 23917 ms (estimate 24000 ms, -83)  -> out/voice/pilot/b0.mp3
        441 ms pause after "…achine is made of." before "All of it fits in…"
        696 ms pause after "…k before we start." before "A hundred and eigh…"
 ```
@@ -178,6 +182,66 @@ Two things are worth knowing here. ElevenLabs returns a *contiguous* timeline: s
 characters finds nothing at all in a beat that pauses eight times. And a comma is not a pause: the
 voice used here barely pauses at one (150 ms) and reliably pauses at a full stop (450–700 ms), so a
 break the script needs has to be a sentence boundary rather than punctuation inside a sentence.
+
+## The studio
+
+Everything above is a file and a command, and for a long time that was the whole interface: an
+editor, a terminal, and knowing which command belonged to which file. The studio is the same
+pipeline with a face on it — and, more to the point, with an API, so an agent can drive it too.
+
+```bash
+cd studio && npm install
+npm run build && node ../studio/server.mjs     # 127.0.0.1:8778
+npm run dev                                    # or Vite on 5173, proxying to it
+```
+
+One core, three ways in. `studio/lib/ops.mjs` defines every operation once — what it takes, whether
+it writes anything, whether it needs the game running — and the browser front end, the MCP server
+and the HTTP API are all generated from that table. A test fails the moment an operation exists in
+one and not the others, which is what stops the button and the tool from drifting apart.
+
+| | |
+|---|---|
+| Projects | an episode as one thing: prose, beats, storyboard, schematic, parts, and every take that comes out of them. Snapshots to come back to, and `.ndproj` to hand to somebody |
+| Dashboard | what is stale and the button that fixes it — asked of content rather than of modification times |
+| Text & voice | beats, what the voice measured, which beats have been rewritten since they were spoken, and where the voice actually paused |
+| Timeline | cues on the narration's clock, dragged as fractions of a beat; an inspector for each of the twelve cue types; the blocks a `place` cue resolves to, and the blocks no cue claims |
+| Camera | both styles, the curve the game will fly, and the camera's own body rather than a point. `follow` shots list where the camera had to cut and where nothing could see the block |
+| Parts | the manifest as rules, resolved on save, with the build in three dimensions and each assembly in its own colour |
+| Shot list | style, bearing and pacing per assembly, and the take variants side by side |
+| Record & verify | the take, its drift per cue, the verifier's report, and how far the camera strayed from its curve |
+
+### Driving it from an agent
+
+`studio/mcp.mjs` is an MCP server over the same operations, registered by the `.mcp.json` in the
+repository root. Every tool in `tools/` has one, so a change to an episode need not go through a
+shell at all: `neodirect_beat_set`, `neodirect_voice_render`, `neodirect_scrub`,
+`neodirect_camera_set`, `neodirect_screenshot`, `neodirect_take_run`, `neodirect_verify`.
+
+Three things are shaped for a reader rather than a renderer. A screenshot comes back as an image
+rather than a path, so framing can actually be judged. A take returns a job handle immediately —
+a five-minute recording is not a tool call. And `neodirect_doc_patch` changes one field of a
+document and leaves every other byte alone, comments and key order included, which is the way an
+agent is most likely to do damage otherwise.
+
+### Projects, and giving one away
+
+`script/<episode>.project.json` ties an episode's documents together and lists its takes with the
+arguments that reproduce each one — the knowledge that used to live in somebody's shell history,
+which is how `ore-plant-build.json` and `ore-plant-build-follow.json` are told apart at all.
+
+`neodirect_project_export` writes the whole thing as one `.ndproj`, which is a zip with a manifest
+and a hash per file. `source` carries the documents, the schematic and the alignments; `full` adds
+the rendered audio; `delivery` is the video, its subtitles and a readable summary. An import checks
+the hashes, then checks the mods: `requires.mods` is read off the schematic's own blocks rather
+than typed, and a missing one is reported before the first take rather than discovered as four
+hundred blocks quietly read as air.
+
+Snapshots are the other half of saving. Editing writes through immediately, so what Final Cut does
+with versions is a labelled copy of everything authored, taken on request and automatically before
+anything that overwrites something a person cannot retype — speaking the beats, restoring another
+snapshot, re-cutting the schematic.
+
 
 ## Cue reference
 
@@ -193,7 +257,21 @@ Every cue carries an `atMs`; the storyboard generator fills it in from `beat` + 
 | `showFilter` | hold up a block's filter and open it, so the camera can read what the machine accepts |
 | `screen` | open or close a container's screen on camera |
 | `setBlocks` | put down blocks the schematic does not contain — a creative motor for a drive whose power came from off-schematic, say. The value is a block state spelled the way `/setblock` spells it, NBT included |
+| `use` | right-click a block — the lever that puts current into the boiler's clutch |
+| `reseat` | set blocks of a type to air and back, bare. `setBlock` returns early when handed the state already there, so a cloned water wheel keeps believing it is on its old kinetic network; it has to leave and come back with none of its saved data |
+| `gameMode` | creative, spectator, survival or adventure. Spectator takes the hand and the hotbar out of every frame for the stretch that only follows material; the mode is put back when the take ends however it ends |
 | `marker` | a no-op that shows up in the take log, for lining video up against narration |
+
+A `place` cue can spread itself: `staggerMs` puts a fixed interval between blocks, `spanMs` spreads
+them over a fixed stretch, and `pace` is a map of block id to a *share* of that stretch rather than
+a speed — `{"default": 6, "minecraft:stone": 1}` gives the floor a sixth of the dwell a component
+gets, and the cue still ends exactly when it said it would.
+
+A `camera` cue takes `ease`: `inOut` by default, which is what a shot that starts still and ends
+still wants, and `linear` for one leg of a longer journey. A camera following a build passes
+through a keyframe every few hundred milliseconds, and easing each leg separately turns a glide
+into a series of lurches — worse, it moves the keyframes off the clock, so a camera meant to arrive
+as a block does arrives somewhere else.
 
 ### Naming blocks
 
@@ -295,6 +373,14 @@ ships with zero dependencies and no classpath risk inside the mod loader.
 | `POST /run` | body is a timeline; responds when the take finishes, with every cue's planned vs. actual millisecond |
 | `GET /screenshot` | grabs the game's own framebuffer |
 | `POST /verify` | same timeline body; compares the built world against the schematic |
+| `GET /block` | block state and block-entity NBT at given positions — whether a clutch has engaged is one field and no screenshot shows it |
+| `GET /pose` | where the camera is and what it is looking at, so a stance can become a keyframe |
+| `GET /look` | the block at the crosshair |
+| `POST /camera` | stand the camera on a keyframe now, or fly it there |
+| `POST /scrub` | build the world as it stands at a given millisecond of a take, without flying anything — a shot is composed for a moment in the build, and judging it against the finished machine is judging a different picture |
+| `POST /path` | sample a camera move along the curve it will fly, with clearance per sample |
+| `POST /abort` | stop the take that is running |
+| `GET /blockcolors` | the colour the map would paint each block. Doubles as the list of blocks this instance knows, which is how a missing mod is caught before a take rather than after |
 
 **Director** (server side) — flattens cues into a time-ordered list of steps and runs them off
 `ServerTickEvent`. One `place` cue becomes up to three steps — equip, swing, set — because that is
@@ -350,6 +436,12 @@ checks it, so a shot cannot pass the check and then fly something else.
 | `tools/render-voice.mjs` | ElevenLabs: `audition` compares voices on a real beat, `render [beatId]` measures durations, reports pauses and writes subtitles |
 | `tools/make-timeline.mjs` | resolves a storyboard against the measured narration into a runnable timeline |
 | `tools/aim.mjs` | "camera here, looking at there" → the yaw/pitch a keyframe needs |
+| `tools/frame-parts.mjs` | the camera solvers: an arc past an assembly, a vantage inside one, and the follow style's standpoint-per-block walk |
+| `tools/mk-build-take.mjs` | writes the silent build take from `script/*.shots.json` |
+| `tools/mk-flow-take.mjs` | writes the flow take from `script/*.stations.json` |
+| `tools/join-takes.mjs` | lays several takes end to end, so a run is one recording |
+| `tools/camera-drift.mjs` | flies a path and measures how far the camera strayed from it |
+| `tools/schematic_json.py` | a schematic as JSON, in the order the director counts |
 | `tools/verify.mjs` | compares the built world against the schematic |
 | `tools/preview.mjs` | runs a take and grabs stills at chosen milliseconds, for iterating on framing without recording |
 | `tools/framegrab.mjs` | builds a take from the game's own framebuffer — no capture stack at all, but ~19 fps |
@@ -366,7 +458,7 @@ checks it, so a shot cannot pass the check and then fly something else.
 ```bash
 QT_QPA_PLATFORM=xcb obs &
 node tools/obs-setup.mjs
-node tools/take.mjs script/episode.json --capture obs --voice out/voice/narration.mp3
+node tools/take.mjs script/episode.json --capture obs --voice out/voice/pilot/narration.mp3
 ```
 
 Four things had to be true before OBS would record this reliably, none of them obvious:
@@ -441,9 +533,9 @@ Things that cost a take to discover, kept so they only cost one:
 
 ## Limits and open work
 
-- **Batch pacing.** A cue that places 54 drills fires them all in one tick with a single arm swing.
-  It reads as a deliberate time-lapse, but staggering each batch over a second or two would look
-  less abrupt.
+- **Camera styles.** `arc` and `follow` are both generated and both usable, but which one an
+  assembly wants is still a judgement — the visibility score detects a wall in the way and is a
+  poor judge of whether a shot reads.
 - **Camera clearance is checked against the finished build.** That is the safe direction — the
   director only ever adds blocks, so a path clear at the end was clear throughout — but it would not
   complain about a path that is only clear because the blocks are not there yet.

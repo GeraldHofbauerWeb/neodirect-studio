@@ -136,7 +136,7 @@ public final class Verifier {
      * is a check on what the take will actually do, and a check measuring a different body than
      * the one that flies is worse than no check, because it reads as a pass.
      */
-    private static AABB cameraBox(Vec3 eye) {
+    static AABB cameraBox(Vec3 eye) {
         return new AABB(eye.x - 0.3, eye.y - 0.4, eye.z - 0.3,
                 eye.x + 0.3, eye.y + 0.2, eye.z + 0.3);
     }
@@ -149,6 +149,41 @@ public final class Verifier {
             }
         }
         return null;
+    }
+
+    /**
+     * One camera move, sampled along the curve it will actually fly, with clearance at each point.
+     *
+     * <p>The studio draws this: where the shot passes, and where the camera's body would be inside
+     * something. It samples the same curve with the same easing and tests the same box as the
+     * check that fails a take, because a preview that measured any of those differently would be
+     * showing green for a shot that is about to clip a wall.
+     */
+    public static JsonArray sampleMove(ServerLevel level, List<Cue.Keyframe> keyframes,
+                                       boolean linear, int samples) {
+        JsonArray out = new JsonArray();
+        for (int i = 0; i <= samples; i++) {
+            double t = (double) i / samples;
+            CameraPath.Pose pose = CameraPath.sample(keyframes, linear ? t : CameraPath.easeInOut(t));
+            BlockPos hit = firstBlockIn(level, cameraBox(pose.position()));
+            JsonObject entry = new JsonObject();
+            entry.addProperty("t", t);
+            JsonArray position = new JsonArray();
+            position.add(pose.position().x);
+            position.add(pose.position().y);
+            position.add(pose.position().z);
+            entry.add("pos", position);
+            entry.addProperty("yaw", pose.yaw());
+            entry.addProperty("pitch", pose.pitch());
+            entry.addProperty("blocked", hit != null);
+            if (hit != null) {
+                entry.addProperty("insideBlock",
+                        BuiltInRegistries.BLOCK.getKey(level.getBlockState(hit).getBlock()).toString());
+                entry.addProperty("at", hit.toShortString());
+            }
+            out.add(entry);
+        }
+        return out;
     }
 
     public static JsonArray checkCameraClearance(ServerLevel level, Timeline timeline, int samplesPerMove) {

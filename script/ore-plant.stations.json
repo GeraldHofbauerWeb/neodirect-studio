@@ -1,0 +1,282 @@
+{
+ "_what": "The flow take for the ore plant: which filter is shown when, where each station is filmed from, and what a train-load consists of. Lived in tools/mk-flow-take.mjs as tables in the source until the studio needed to edit them. tools/mk-flow-take.mjs reads this and writes the take.",
+ "_stations": "A station is named by literal block coordinates rather than by a part name: a part is everything an assembly owns, and half of that is housing the shot does not want in frame. A station with a bearing is filmed from outside, arcing in; one with an inside range is filmed from within the plant, which is the only way to read the crusher at all.",
+ "schematic": "ore_plant.nbt",
+ "parts": "ore_plant.groups.json",
+ "origin": [
+  0,
+  -61,
+  0
+ ],
+ "framing": {
+  "_arc": "Subtracted from a station's bearing so the *final* frame lands on the bearing asked for, rather than starting there and swinging past it.",
+  "arc": 28,
+  "northwest": 45,
+  "_idealDistance": "The closest air to a funnel buried in a plant is usually the block directly above it, and a shot looking straight down tells a viewer nothing about which funnel it is — the first cut of this beat had nine of the twenty-two at a pitch of ninety. So a steep angle is paid for, and so is standing too close or too far to read the thing.",
+  "idealDistance": 3.2,
+  "filterCutMs": 3000,
+  "dockHoldMs": 5500,
+  "dockDrainMs": 4000,
+  "stationMoveMs": 5000,
+  "stationHoldMs": 7000,
+  "stationGapMs": 12500,
+  "wideMs": 10000
+ },
+ "dock": {
+  "fillPos": [
+   18,
+   4,
+   10
+  ],
+  "spectatorAtMs": 9000
+ },
+ "stations": [
+  {
+   "name": "dock",
+   "what": "the chest the train unloads into, and the two chutes under it",
+   "blocks": [
+    [
+     18,
+     4,
+     10
+    ],
+    [
+     19,
+     4,
+     10
+    ],
+    [
+     18,
+     3,
+     10
+    ],
+    [
+     19,
+     3,
+     10
+    ],
+    [
+     18,
+     2,
+     10
+    ],
+    [
+     17,
+     2,
+     10
+    ]
+   ],
+   "bearing": 126
+  },
+  {
+   "name": "crusher",
+   "what": "two wheels, the controller between them, and the belt that carries the crushed ore out",
+   "blocks": [
+    [
+     9,
+     5,
+     7
+    ],
+    [
+     10,
+     5,
+     7
+    ],
+    [
+     11,
+     5,
+     7
+    ]
+   ],
+   "inside": {
+    "near": 3.8,
+    "far": 7
+   },
+   "lookAt": [
+    [
+     9,
+     5,
+     7
+    ],
+    [
+     10,
+     5,
+     7
+    ],
+    [
+     11,
+     5,
+     7
+    ],
+    [
+     10,
+     4,
+     6
+    ],
+    [
+     10,
+     4,
+     7
+    ]
+   ]
+  },
+  {
+   "name": "washer",
+   "what": "the fan, the waterlogged leaf in front of it, and what comes off the belt below",
+   "blocks": [
+    [
+     13,
+     5,
+     2
+    ],
+    [
+     13,
+     5,
+     3
+    ],
+    [
+     13,
+     5,
+     4
+    ],
+    [
+     13,
+     5,
+     5
+    ],
+    [
+     12,
+     4,
+     5
+    ],
+    [
+     12,
+     4,
+     6
+    ]
+   ],
+   "bearing": 78
+  },
+  {
+   "name": "press",
+   "what": "three basins with a press over each, and the funnels that feed them off the lanes",
+   "blocks": [
+    [
+     11,
+     5,
+     13
+    ],
+    [
+     12,
+     5,
+     13
+    ],
+    [
+     13,
+     5,
+     13
+    ],
+    [
+     11,
+     7,
+     13
+    ],
+    [
+     12,
+     7,
+     13
+    ],
+    [
+     13,
+     7,
+     13
+    ],
+    [
+     11,
+     5,
+     12
+    ],
+    [
+     12,
+     5,
+     12
+    ],
+    [
+     13,
+     5,
+     12
+    ],
+    [
+     12,
+     4,
+     12
+    ],
+    [
+     12,
+     4,
+     14
+    ]
+   ],
+   "bearing": 45
+  }
+ ],
+ "load": [
+  {
+   "id": "minecraft:raw_iron",
+   "count": 64
+  },
+  {
+   "id": "minecraft:raw_gold",
+   "count": 64
+  },
+  {
+   "id": "minecraft:raw_copper",
+   "count": 64
+  },
+  {
+   "id": "create:raw_zinc",
+   "count": 64
+  },
+  {
+   "id": "minecraft:iron_ore",
+   "count": 64
+  },
+  {
+   "id": "minecraft:deepslate_iron_ore",
+   "count": 64
+  },
+  {
+   "id": "minecraft:gold_ore",
+   "count": 64
+  },
+  {
+   "id": "minecraft:copper_ore",
+   "count": 64
+  },
+  {
+   "id": "create:zinc_ore",
+   "count": 64
+  },
+  {
+   "id": "minecraft:cobblestone",
+   "count": 64
+  },
+  {
+   "id": "minecraft:cobbled_deepslate",
+   "count": 64
+  },
+  {
+   "id": "minecraft:gravel",
+   "count": 64
+  },
+  {
+   "id": "minecraft:flint",
+   "count": 64
+  },
+  {
+   "id": "minecraft:netherrack",
+   "count": 64
+  }
+ ],
+ "_filters": "Gone, deliberately. A filter is set when its funnel is put down, not in a second pass over the finished plant — so the build take dwells on the block and opens it there. The positions come out of schematics/ore_plant.groups.json, which tools/parts.py fills in from the block entities."
+}

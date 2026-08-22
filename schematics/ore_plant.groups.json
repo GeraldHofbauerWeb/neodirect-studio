@@ -5601,5 +5601,304 @@
    "minecraft:water",
    "create:cogwheel"
   ]
- }
+ },
+ "filters": [
+  {
+   "pos": [
+    10,
+    3,
+    6
+   ],
+   "kind": "allow",
+   "items": [
+    "cobblestone",
+    "cobbled_deepslate",
+    "flint",
+    "netherrack"
+   ]
+  },
+  {
+   "pos": [
+    18,
+    3,
+    10
+   ],
+   "kind": "deny",
+   "items": [
+    "cobblestone",
+    "cobbled_deepslate",
+    "gravel",
+    "flint",
+    "basalt",
+    "soul_sand",
+    "netherrack",
+    "blackstone"
+   ]
+  },
+  {
+   "pos": [
+    19,
+    3,
+    10
+   ],
+   "kind": "allow",
+   "items": [
+    "cobblestone",
+    "cobbled_deepslate",
+    "gravel",
+    "flint",
+    "basalt",
+    "soul_sand",
+    "netherrack",
+    "blackstone"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    4,
+    6
+   ],
+   "kind": "item",
+   "items": [
+    "clay_ball"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    4
+   ],
+   "kind": "allow",
+   "items": [
+    "crushed_raw_iron",
+    "crushed_raw_gold",
+    "crushed_raw_copper",
+    "crushed_raw_zinc"
+   ]
+  },
+  {
+   "pos": [
+    12,
+    5,
+    5
+   ],
+   "kind": "allow",
+   "items": [
+    "redstone",
+    "coal",
+    "experience_nugget",
+    "quartz",
+    "iron_nugget",
+    "gold_nugget",
+    "copper_nugget",
+    "zinc_nugget"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    5
+   ],
+   "kind": "deny",
+   "items": [
+    "crushed_raw_iron",
+    "crushed_raw_gold",
+    "crushed_raw_copper",
+    "crushed_raw_zinc"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    7
+   ],
+   "kind": "deny",
+   "items": [
+    "clay_ball"
+   ]
+  },
+  {
+   "pos": [
+    10,
+    5,
+    8
+   ],
+   "kind": "allow",
+   "items": [
+    "filter",
+    "filter"
+   ]
+  },
+  {
+   "pos": [
+    19,
+    5,
+    10
+   ],
+   "kind": "deny",
+   "items": [
+    "rail"
+   ]
+  },
+  {
+   "pos": [
+    8,
+    5,
+    11
+   ],
+   "kind": "item",
+   "items": [
+    "experience_nugget"
+   ]
+  },
+  {
+   "pos": [
+    9,
+    5,
+    11
+   ],
+   "kind": "allow",
+   "items": [
+    "lapis_ore",
+    "deepslate_lapis_ore",
+    "lapis_lazuli",
+    "emerald_ore",
+    "deepslate_emerald_ore",
+    "emerald",
+    "diamond_ore",
+    "deepslate_diamond_ore",
+    "diamond",
+    "ancient_debris",
+    "obsidian"
+   ]
+  },
+  {
+   "pos": [
+    10,
+    5,
+    11
+   ],
+   "kind": "allow",
+   "items": [
+    "gunpowder",
+    "quartz"
+   ]
+  },
+  {
+   "pos": [
+    11,
+    5,
+    11
+   ],
+   "kind": "allow",
+   "items": [
+    "redstone",
+    "coal"
+   ]
+  },
+  {
+   "pos": [
+    12,
+    5,
+    11
+   ],
+   "kind": "allow",
+   "items": [
+    "copper_nugget",
+    "zinc_nugget"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    11
+   ],
+   "kind": "allow",
+   "items": [
+    "iron_nugget",
+    "gold_nugget"
+   ]
+  },
+  {
+   "pos": [
+    11,
+    5,
+    13
+   ],
+   "kind": "allow",
+   "items": [
+    "redstone_block",
+    "coal_block"
+   ]
+  },
+  {
+   "pos": [
+    12,
+    5,
+    13
+   ],
+   "kind": "allow",
+   "items": [
+    "copper_ingot",
+    "copper_block",
+    "zinc_ingot",
+    "zinc_block"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    13
+   ],
+   "kind": "allow",
+   "items": [
+    "iron_ingot",
+    "iron_block",
+    "gold_ingot",
+    "gold_block"
+   ]
+  },
+  {
+   "pos": [
+    11,
+    5,
+    14
+   ],
+   "kind": "allow",
+   "items": [
+    "coal_block",
+    "redstone_block"
+   ]
+  },
+  {
+   "pos": [
+    12,
+    5,
+    14
+   ],
+   "kind": "allow",
+   "items": [
+    "copper_block",
+    "zinc_block"
+   ]
+  },
+  {
+   "pos": [
+    13,
+    5,
+    14
+   ],
+   "kind": "allow",
+   "items": [
+    "iron_block",
+    "gold_block"
+   ]
+  }
+ ]
 }

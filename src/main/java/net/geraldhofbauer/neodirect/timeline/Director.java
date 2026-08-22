@@ -187,6 +187,63 @@ public final class Director {
     }
 
     /**
+     * Builds the world as it stands at a given millisecond of a take, without flying anything.
+     *
+     * <p>What makes composing a shot possible at all. A camera cue is written for a moment in the
+     * build — half the boiler up, the vault wall not yet there — and judging its framing against
+     * the finished plant is judging a different picture. This runs the same expansion a take does
+     * and executes every step due by {@code ms}, so the world stands as it will stand then.
+     *
+     * <p>Camera steps are skipped: this is about the world, and the studio parks the camera
+     * itself. So are game-mode steps, which would leave the player in spectator with nothing to
+     * put them back.
+     *
+     * <p>Refuses while a take is running, for the obvious reason.
+     */
+    public static JsonObject scrub(Timeline timeline, MinecraftServer server, long ms) throws IOException {
+        if (isRunning()) {
+            throw new IllegalStateException("a take is running — scrubbing would rebuild the world under it");
+        }
+        ServerPlayer player = server.getPlayerList().getPlayers().stream().findFirst().orElse(null);
+        if (player == null) {
+            throw new IllegalStateException("no player in the world");
+        }
+        SchematicSource.Schematic schematic = loadSchematic(server, timeline);
+        List<Step> steps = expand(timeline, schematic, loadParts(timeline, schematic.blocks()),
+                player.serverLevel(), player);
+
+        JsonArray events = new JsonArray();
+        int ran = 0;
+        for (Step step : steps) {
+            if (step.atMs() > ms) {
+                break;
+            }
+            if (step.kind().equals("camera") || step.kind().equals("gameMode")) {
+                continue;
+            }
+            try {
+                step.action().run();
+                ran++;
+                JsonObject entry = new JsonObject();
+                entry.addProperty("kind", step.kind());
+                entry.addProperty("atMs", step.atMs());
+                entry.addProperty("detail", step.detail().get());
+                events.add(entry);
+            } catch (RuntimeException e) {
+                NeoDirect.LOGGER.warn("scrub step '{}' at {} ms failed: {}", step.kind(), step.atMs(), e.toString());
+            }
+        }
+        JsonObject out = new JsonObject();
+        out.addProperty("take", timeline.take());
+        out.addProperty("toMs", ms);
+        out.addProperty("steps", ran);
+        out.addProperty("ofSteps", steps.size());
+        out.add("events", events);
+        NeoDirect.LOGGER.info("Scrubbed '{}' to {} ms — {} of {} steps.", timeline.take(), ms, ran, steps.size());
+        return out;
+    }
+
+    /**
      * Keeps the camera from being pushed out of the machine it is filming.
      *
      * <p>The stutter this fixes was invisible in the logs and took a source dive to find. A client
@@ -699,7 +756,7 @@ public final class Director {
                 double[] weights = new double[targets.size()];
                 double totalWeight = 0;
                 for (int i = 0; i < targets.size(); i++) {
-                    weights[i] = weightOf(place.pace(), targets.get(i).state());
+                    weights[i] = weightOf(place.pace(), targets.get(i));
                     totalWeight += weights[i];
                 }
                 boolean spreadOut = place.spanMs() > 0 && targets.size() > 1;
@@ -870,14 +927,20 @@ public final class Director {
     }
 
     /**
-     * A block's share of its cue: its own entry in the pace map, else {@code default}, else one.
+     * A block's share of its cue: its own position, else its block id, else {@code default}, else
+     * one. Position first, because it is the more specific statement of the two.
      */
-    private static double weightOf(java.util.Map<String, Double> pace, BlockState state) {
+    private static double weightOf(java.util.Map<String, Double> pace,
+                                   SchematicSource.SchematicBlock block) {
         if (pace.isEmpty()) {
             return 1.0;
         }
-        String id = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
-        Double own = pace.get(id);
+        BlockPos at = block.relPos();
+        Double here = pace.get(at.getX() + "," + at.getY() + "," + at.getZ());
+        if (here != null) {
+            return here;
+        }
+        Double own = pace.get(BuiltInRegistries.BLOCK.getKey(block.state().getBlock()).toString());
         if (own != null) {
             return own;
         }

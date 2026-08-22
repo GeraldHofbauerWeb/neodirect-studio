@@ -105,6 +105,16 @@ tasks.register('installPilotSchematic') {
     dependsOn 'installSchematics'
 }
 
+// The studio: one command rather than remembering which directory has the package.json. The build
+// step lives inside studio/web and nowhere else — the tools, the mod and the studio's own core stay
+// dependency-free, so the pipeline still runs on a machine that has never seen npm.
+tasks.register('studio', Exec) {
+    group = 'neodirect'
+    description = 'Build the studio front end and serve it on 127.0.0.1:8778'
+    workingDir = layout.projectDirectory.dir('studio').asFile
+    commandLine 'sh', '-c', 'npm install --silent && npm run build --silent && node server.mjs'
+}
+
 tasks.named('compileJava', JavaCompile) {
     options.compilerArgs << '-Xlint:deprecation'
 }
