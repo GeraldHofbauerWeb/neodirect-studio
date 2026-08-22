@@ -3,6 +3,7 @@
  *
  *   node tools/render-voice.mjs audition script/pilot.beats.json b1   # one beat, several voices
  *   node tools/render-voice.mjs render   script/pilot.beats.json      # all beats, the chosen voice
+ *   node tools/render-voice.mjs render   script/pilot.beats.json --resume   # only what is missing
  *
  * The measured durations are the point. A beat's real length is what the timeline is built from —
  * the `plannedMs` in the beats file is only a hand estimate to get a first take shot. `render`
@@ -15,6 +16,7 @@
  */
 
 import { execFile } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
@@ -66,14 +68,20 @@ export async function speak({ text, voiceId, out, key }) {
   await mkdir(join(out, '..'), { recursive: true }).catch(() => {});
   await writeFile(out, Buffer.from(body.audio_base64, 'base64'));
 
-  const { stdout } = await exec('ffprobe', [
-    '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out,
-  ]);
   return {
     path: out,
-    durationMs: Math.round(parseFloat(stdout.trim()) * 1000),
+    durationMs: await durationMs(out),
     alignment: body.alignment ?? null,
   };
+}
+
+/** How long a rendered beat actually is. Asked of the file rather than of the API, which reports
+ * characters and not seconds. */
+async function durationMs(path) {
+  const { stdout } = await exec('ffprobe', [
+    '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path,
+  ]);
+  return Math.round(parseFloat(stdout.trim()) * 1000);
 }
 
 /**
@@ -197,7 +205,9 @@ export function voiceDir(beatsPath) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [mode, beatsPath, beatId] = process.argv.slice(2);
+  // Flags are not positions: --resume sitting where a beat id goes used to be read as the
+  // name of a beat, and the run died complaining there was no beat called "--resume".
+  const [mode, beatsPath, beatId] = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   if (!mode || !beatsPath) {
     throw new Error('usage: node tools/render-voice.mjs <audition|render> <beats.json> [beatId]');
   }
@@ -225,6 +235,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (!voiceId) throw new Error(`set "voiceId" in ${beatsPath} (or ELEVENLABS_VOICE_ID) first`);
     const dir = voiceDir(beatsPath);
     await mkdir(dir, { recursive: true });
+    // Every beat costs characters, and a render that stops halfway — a quota runs out, a request
+    // fails — should not charge for the half that already worked when it is started again. Off by
+    // default: a beat whose text has been edited must be re-spoken, and silently keeping the old
+    // audio for it would be worse than the cost.
+    const resume = process.argv.includes('--resume');
 
     // Naming a beat re-speaks only that one. Text-to-speech is not deterministic, so re-rendering
     // the whole episode to fix one sentence rerolls every other beat's phrasing and length for no
@@ -235,6 +250,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
     for (const beat of toRender) {
       const out = `${dir}/${beat.id}.mp3`;
+      if (resume && existsSync(out) && existsSync(`${dir}/${beat.id}.alignment.json`)) {
+        beat.measuredMs = await durationMs(out);
+        console.log(`${beat.id}: kept, ${beat.measuredMs} ms  -> ${out}`);
+        continue;
+      }
       const result = await speak({ text: beat.text, voiceId, out, key });
       beat.measuredMs = result.durationMs;
       const drift = result.durationMs - beat.plannedMs;
