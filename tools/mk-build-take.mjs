@@ -32,7 +32,8 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import { bounds, curveClear, moveFor, occupancy, placementShots, waterReach } from './frame-parts.mjs';
+import { bounds, moveFor, occupancy, waterReach } from './frame-parts.mjs';
+import { followCues } from './follow-shots.mjs';
 
 const argv = process.argv.slice(2);
 const flag = (name, fallback) => {
@@ -65,14 +66,10 @@ const occupied = occupancy(groups, ORIGIN);
 const wet = waterReach(groups, ORIGIN);
 const noStanding = new Set([...occupied, ...wet]);
 
-// A block with a filter is not placed and left. Somebody puts the funnel down, opens it and sets
-// what it lets through, in one motion — nobody makes a second pass over the whole plant afterwards
-// setting filters. So the cue dwells on those blocks instead of moving straight on, and the filter
-// is opened inside the dwell. Whole intervals, because the camera's keyframes are laid out one per
-// interval and a fractional dwell would put them out of step with the placements.
-const FILTER_DWELL = 8;
+// Which blocks carry a filter, straight out of the schematic — tools/parts.py reads the block
+// entities and writes them into the groups file, so the list cannot drift from the build.
 const filterAt = new Map((groups.filters ?? []).map((f) => [f.pos.join(','), f]));
-const label = (f) => `${f.kind === 'item' ? 'holds' : f.kind}: ${f.items.join(', ')}`;
+
 
 // Where each assembly is filmed from, in the order it goes up — see script/ore-plant.shots.json,
 // which carries the reasoning along with the numbers.
@@ -137,94 +134,12 @@ for (const [name, shot] of Object.entries(SHOTS)) {
     continue;
   }
 
-  // One place cue for the whole assembly even though the camera moves inside it. Splitting the
-  // placement to match would split the settle step with it, and the settle is what makes a belt
-  // survive being laid one segment at a time — a Create belt with no neighbours yet is not a
-  // valid belt and removes itself.
-  const shots = placementShots(blocks, placed, ORIGIN, { neverStand: noStanding });
-  const settleMs = Math.round(MS_PER_BLOCK * (1 - GLIDE_SHARE));
-
-  // Weights first: everything is one interval except the blocks that carry a filter. The offsets
-  // are then the same arithmetic the director does, so a showFilter cue written here lands inside
-  // the dwell rather than next to it.
-  const weights = blocks.map((b) => (filterAt.has(b.join(',')) ? FILTER_DWELL : 1));
-  const total = weights.reduce((a, b) => a + b, 0);
-  const leading = total - weights[weights.length - 1];
-  const span = MS_PER_BLOCK * leading;
-  const offsets = [];
-  let running = 0;
-  for (const w of weights) {
-    offsets.push(Math.round(span * (running / leading)));
-    running += w;
-  }
-
-  const pace = { default: 1 };
-  blocks.forEach((b, i) => {
-    if (weights[i] !== 1) pace[b.join(',')] = weights[i];
+  const { cues: follow, span, runs, lastPose } = followCues({
+    name, what: shot.what, blocks, placed, noStanding, origin: ORIGIN, filterAt,
+    msPerBlock: MS_PER_BLOCK, glideShare: GLIDE_SHARE, startAt: at,
   });
-  cues.push({ type: 'place', atMs: at, blocks: { part: name }, spanMs: span, pace,
-              _what: shot.what });
-
-  // The filter, opened where it belongs: on the funnel that was just put down, with the camera
-  // already looking at it. Closed again in time for the next block's item to reach the hand.
-  blocks.forEach((b, i) => {
-    const f = filterAt.get(b.join(','));
-    if (!f) return;
-    cues.push({ type: 'showFilter', atMs: at + offsets[i] + 400, pos: b, _what: label(f) });
-    cues.push({ type: 'screen', atMs: at + offsets[i] + (FILTER_DWELL - 1) * MS_PER_BLOCK - 100,
-                action: 'close' });
-  });
-
-  // One cue per unbroken run, not one per block. A cue per block means the camera eases in and
-  // eases out twenty times a minute — it arrives, stops dead, and lurches off again, which is
-  // exactly what a glide is not. A single cue whose keyframes are the standpoints, walked at a
-  // constant rate, is one continuous move that happens to pass through each of them on time.
-  // One keyframe per interval, not one per block: a block the cue dwells on gets its pose repeated
-  // so the camera holds there while the filter is open, and every keyframe still falls on a whole
-  // interval of the linear cue.
-  const poses = [];
-  const firstKeyframe = [];
-  shots.forEach((s, i) => {
-    firstKeyframe.push(poses.length);
-    const pose = { pos: s.pos, yaw: s.aim.yaw, pitch: s.aim.pitch };
-    for (let k = 0; k < weights[i]; k++) poses.push(pose);
-  });
-  const runs = [];
-  shots.forEach((s, i) => {
-    // A run also has to end where the curve through it would bow into something. Checking the
-    // straight hops between standpoints is not enough once a run has more than two of them:
-    // Catmull-Rom passes through every keyframe and bulges outside the box they span, which is
-    // how a shot that clears every waypoint still clips a wall halfway along.
-    const open = runs.length ? runs[runs.length - 1] : null;
-    const bows = open && !curveClear(
-        poses.slice(firstKeyframe[open.from], firstKeyframe[i] + 1), noStanding);
-    if (i === 0 || s.cut || bows) runs.push({ from: i, to: i });
-    else open.to = i;
-  });
-
-  for (const run of runs) {
-    // The camera reaches each standpoint a beat before its block does, so the shot is settled and
-    // pointed at the spot when it appears rather than still swinging towards it.
-    const startAt = Math.max(0, at + offsets[run.from] - settleMs);
-    const frames = poses.slice(firstKeyframe[run.from],
-        firstKeyframe[run.to] + weights[run.to]);
-    if (frames.length < 2) {
-      cues.push({ type: 'camera', atMs: startAt, durationMs: 1,
-                  _what: `${name} — block ${run.from + 1}, cut`, keyframes: [frames[0], frames[0]] });
-      continue;
-    }
-    cues.push({
-      type: 'camera',
-      atMs: startAt,
-      durationMs: (frames.length - 1) * MS_PER_BLOCK,
-      // Linear, so keyframe three of seven really is three sevenths of the way through and the
-      // camera is where it should be when the block it is watching for turns up.
-      ease: 'linear',
-      _what: `${name} — blocks ${run.from + 1}-${run.to + 1}`,
-      keyframes: frames,
-    });
-  }
-  const previous = poses[poses.length - 1];
+  cues.push(...follow);
+  const previous = lastPose;
 
   // Hold on the finished assembly for a moment rather than cutting away from it.
   cues.push({ type: 'camera', atMs: at + span, durationMs: 3200,

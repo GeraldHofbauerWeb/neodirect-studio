@@ -1,0 +1,402 @@
+1
+00:00:00,000 --> 00:00:05,201
+Three hundred and one blocks, forty-nine different kinds, and the whole lot fits in one
+
+2
+00:00:05,201 --> 00:00:06,896
+double chest with room left over.
+
+3
+00:00:06,896 --> 00:00:12,527
+Most of it is repetition — forty-six belt segments, twenty-eight encased chain drives,
+
+4
+00:00:12,527 --> 00:00:15,825
+twenty-seven item vaults, twenty fluid tanks for the boiler.
+
+5
+00:00:15,825 --> 00:00:19,401
+Nothing on that list is expensive, and nothing on it is clever either, which is worth
+
+6
+00:00:19,401 --> 00:00:23,511
+saying now, because the part that makes this machine work is not really in the chest at
+
+7
+00:00:23,511 --> 00:00:23,708
+all.
+
+8
+00:00:23,708 --> 00:00:27,864
+It is the twenty filters, and the fact that no two of them are set the same way.
+9
+00:00:28,050 --> 00:00:32,566
+Start at the boiler, because nothing here moves without it and everything else is hung
+
+10
+00:00:32,566 --> 00:00:33,588
+off what it turns.
+
+11
+00:00:33,588 --> 00:00:38,743
+It looks like one boiler and it is five: five separate columns of fluid tank, four
+
+12
+00:00:38,743 --> 00:00:41,762
+blocks high, each with its own steam engine on top.
+
+13
+00:00:41,762 --> 00:00:47,300
+Under all of them runs a row of magma blocks, and no blaze burner anywhere — magma gives
+
+14
+00:00:47,300 --> 00:00:52,037
+you passive heat, the lowest setting there is, and five small boilers on passive heat is
+
+15
+00:00:52,037 --> 00:00:54,927
+enough for a plant this size and not a great deal more.
+
+16
+00:00:54,927 --> 00:01:00,012
+Water comes up from the pool underneath through five mechanical pumps, and the pumps are
+
+17
+00:01:00,012 --> 00:01:03,693
+turned by three water wheels standing in the same water they are pumping.
+
+18
+00:01:03,693 --> 00:01:06,560
+Above the engines, one shaft.
+
+19
+00:01:06,560 --> 00:01:12,191
+That shaft is the only thing connecting this end of the room to the machine at the other
+
+20
+00:01:12,191 --> 00:01:12,679
+end.
+21
+00:01:12,679 --> 00:01:17,160
+From the boiler the line runs north along the ceiling and drops into the plant, and from
+
+22
+00:01:17,160 --> 00:01:22,582
+there it is chain drives most of the way — twenty-eight of them, more of this build than
+
+23
+00:01:22,582 --> 00:01:26,936
+any other single component, and the part you will never see in a screenshot of it.
+
+24
+00:01:26,936 --> 00:01:28,468
+Gearboxes take the corners.
+
+25
+00:01:28,468 --> 00:01:32,973
+A rotation speed controller sets the pace for everything downstream, so the crusher and
+
+26
+00:01:32,973 --> 00:01:38,104
+the presses and the belts all run off one number instead of being tuned against each
+
+27
+00:01:38,104 --> 00:01:38,406
+other.
+
+28
+00:01:38,406 --> 00:01:42,574
+And there is a stressometer on the wall, which earns its place the first time you add
+
+29
+00:01:42,574 --> 00:01:44,443
+something and the whole plant slows down.
+30
+00:01:44,444 --> 00:01:46,348
+This end is where the ore arrives.
+
+31
+00:01:46,348 --> 00:01:52,060
+A mining train pulls in, parks, and empties itself through a portable storage interface
+
+32
+00:01:52,060 --> 00:01:57,854
+— and if it looks familiar, that is the machine from the last episode, which has no idea
+
+33
+00:01:57,854 --> 00:01:59,688
+what becomes of what it drops off.
+
+34
+00:01:59,688 --> 00:02:05,273
+What becomes of it is two smart chutes, one above the other, and they are the first
+
+35
+00:02:05,273 --> 00:02:08,361
+showing of a pattern that runs through this entire build.
+
+36
+00:02:08,361 --> 00:02:15,234
+Both are set to the same eight things: cobblestone, cobbled deepslate, gravel, flint,
+
+37
+00:02:15,234 --> 00:02:18,810
+basalt, soul sand, netherrack and blackstone.
+
+38
+00:02:18,810 --> 00:02:20,551
+One of them allows that list.
+
+39
+00:02:20,551 --> 00:02:22,258
+The one next to it denies it.
+
+40
+00:02:22,258 --> 00:02:24,464
+Same list, opposite switch.
+
+41
+00:02:24,464 --> 00:02:29,573
+Everything the train dropped goes down exactly one of the two, there is no priority to
+
+42
+00:02:29,573 --> 00:02:33,485
+get wrong, and nothing sits in the middle waiting for somebody to decide.
+43
+00:02:33,485 --> 00:02:38,129
+Two crushing wheels with the controller between them, fed over a short belt loop.
+
+44
+00:02:38,129 --> 00:02:42,425
+The wheels are not fussy about what you give them, which is mostly a virtue and
+
+45
+00:02:42,425 --> 00:02:47,951
+occasionally a problem, because tunnel stone goes in alongside the ore and comes back out
+
+46
+00:02:47,951 --> 00:02:48,520
+as gravel.
+
+47
+00:02:48,520 --> 00:02:53,373
+So the head of the crusher is that same trick again: one funnel set to allow crushed
+
+48
+00:02:53,373 --> 00:02:58,237
+iron, gold, copper and zinc, and the funnel beside it set to deny those four and nothing
+
+49
+00:02:58,237 --> 00:02:58,597
+else.
+
+50
+00:02:58,597 --> 00:03:00,757
+Ore carries on into the machine.
+
+51
+00:03:00,757 --> 00:03:02,649
+Everything else turns off here.
+52
+00:03:02,649 --> 00:03:06,132
+Washing comes next, and the fan looks wrong the first time you see it.
+
+53
+00:03:06,132 --> 00:03:11,809
+A fan only washes what it blows over if it is blowing through water, and there is no
+
+54
+00:03:11,809 --> 00:03:14,816
+water in front of this one — there is a leaf block.
+
+55
+00:03:14,816 --> 00:03:20,307
+It is waterlogged, and Create reads the fluid rather than the block holding it, so as
+
+56
+00:03:20,307 --> 00:03:23,999
+far as the fan is concerned it is facing a pond.
+
+57
+00:03:23,999 --> 00:03:29,038
+The whole stage is a fan, a leaf and a water wheel to turn it.
+
+58
+00:03:29,038 --> 00:03:33,903
+And since washing gravel gives you clay, and clay is not ore, the clay comes out here
+
+59
+00:03:33,903 --> 00:03:39,580
+the way everything comes out of everywhere in this machine: allow clay on one funnel,
+
+60
+00:03:39,580 --> 00:03:41,287
+deny clay on the next.
+61
+00:03:41,287 --> 00:03:47,974
+Six belts side by side, a funnel over each, one filter per funnel, and this is where the
+
+62
+00:03:47,974 --> 00:03:50,122
+machine keeps most of its cleverness.
+
+63
+00:03:50,122 --> 00:03:52,386
+Experience nuggets on the first lane.
+
+64
+00:03:52,386 --> 00:03:58,424
+Lapis, emerald and diamond on the second — and each of those is listed twice there, once
+
+65
+00:03:58,424 --> 00:04:04,496
+as the ore and once as the gem, because a crushing wheel handed a whole stone block gives
+
+66
+00:04:04,496 --> 00:04:06,806
+you the ore back rather than what is inside it.
+
+67
+00:04:06,806 --> 00:04:08,048
+Gunpowder and quartz.
+
+68
+00:04:08,048 --> 00:04:09,279
+Redstone and coal.
+
+69
+00:04:09,279 --> 00:04:10,707
+Copper and zinc nuggets.
+
+70
+00:04:10,707 --> 00:04:11,996
+Iron and gold nuggets.
+
+71
+00:04:11,996 --> 00:04:16,071
+Anything matching none of the six stays on the belt and comes round again, which means
+
+72
+00:04:16,071 --> 00:04:21,040
+adding a metal later is a question of adding a lane rather than rebuilding the sorter.
+73
+00:04:21,040 --> 00:04:25,777
+Nuggets are awkward to store and worse to carry, so they get pressed on the way past.
+
+74
+00:04:25,777 --> 00:04:30,792
+Three basins with a mechanical press over each, and the filter on the basin decides
+
+75
+00:04:30,792 --> 00:04:36,655
+which metals are allowed to meet: redstone and coal in the first, copper and zinc in the
+
+76
+00:04:36,655 --> 00:04:39,488
+second, iron and gold in the third.
+
+77
+00:04:39,488 --> 00:04:41,984
+That separation is not tidiness.
+
+78
+00:04:41,984 --> 00:04:47,580
+A basin with two metals in it will happily make you something — it just will not be the
+
+79
+00:04:47,580 --> 00:04:48,393
+thing you wanted.
+
+80
+00:04:48,393 --> 00:04:54,546
+Over each output is a funnel set to the finished block, so nothing half-pressed gets
+
+81
+00:04:54,546 --> 00:04:55,359
+past.
+82
+00:04:55,359 --> 00:05:00,688
+Storage is deliberately dull: twenty-seven item vaults for bulk, and a row of twelve
+
+83
+00:05:00,688 --> 00:05:05,088
+chests underneath them for the part a hopper or a hand can actually reach.
+
+84
+00:05:05,088 --> 00:05:08,699
+What sits under the chests is the interesting half.
+
+85
+00:05:08,699 --> 00:05:15,781
+A content observer beneath each one, a display link above, and a wall of sixteen display
+
+86
+00:05:15,781 --> 00:05:17,650
+boards fed from those links.
+
+87
+00:05:17,650 --> 00:05:23,734
+Eight lines: the power on the network in stress units, the fill level of the storage,
+
+88
+00:05:23,734 --> 00:05:29,643
+and then one line per lane — gold and iron, copper and zinc, coal and redstone,
+
+89
+00:05:29,643 --> 00:05:32,790
+byproducts, valuables, experience nuggets.
+
+90
+00:05:32,790 --> 00:05:38,130
+That sounds like decoration right up to the first time a lane stops quietly, and a
+
+91
+00:05:38,130 --> 00:05:44,051
+number that has not moved all evening tells you which of the twenty filters to go and
+
+92
+00:05:44,051 --> 00:05:44,771
+look at.
+93
+00:05:44,771 --> 00:05:46,362
+One lever starts all of it.
+
+94
+00:05:46,362 --> 00:05:52,643
+Off, a redstone torch burns, the wire beside it carries fifteen, and a powered clutch is
+
+95
+00:05:52,643 --> 00:05:57,983
+a disengaged one — so the wheels turn nothing, the pumps stay still and the boiler stays
+
+96
+00:05:57,983 --> 00:05:58,459
+dry.
+
+97
+00:05:58,459 --> 00:06:03,672
+Throw it and the torch goes out and everything downstream of it wakes up at once.
+
+98
+00:06:03,672 --> 00:06:08,792
+Then feed it: ore into the crusher, crushed ore onto the washer, nuggets straight onto
+
+99
+00:06:08,792 --> 00:06:13,470
+the sorter, all at the same time, because a single batch takes longer to travel the whole
+
+100
+00:06:13,470 --> 00:06:19,241
+line than we have here and a plant working in only its first third looks broken rather
+
+101
+00:06:19,241 --> 00:06:19,902
+than busy.
+
+102
+00:06:19,902 --> 00:06:20,878
+Give it a moment.
+
+103
+00:06:20,878 --> 00:06:24,941
+Every lane moving, the wall counting up, and that is a Create ore plant.

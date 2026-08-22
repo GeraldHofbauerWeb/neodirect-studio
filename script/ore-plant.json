@@ -1,0 +1,5989 @@
+{
+  "take": "ore-plant",
+  "_generated": "from script/ore-plant.beats.json by tools/mk-episode.mjs — edit the script or the shot list and run it again, never this file.",
+  "schematic": "ore_plant.nbt",
+  "parts": "ore_plant.groups.json",
+  "origin": [
+    0,
+    -61,
+    0
+  ],
+  "clearStage": true,
+  "presentation": {
+    "heldItem": true,
+    "swing": true,
+    "sound": true,
+    "particles": true
+  },
+  "cues": [
+    {
+      "type": "camera",
+      "atMs": 0,
+      "durationMs": 28050,
+      "_what": "the chest",
+      "keyframes": [
+        {
+          "pos": [
+            29,
+            -58,
+            8
+          ],
+          "yaw": 85.6,
+          "pitch": 12.1
+        },
+        {
+          "pos": [
+            26,
+            -58.6,
+            8
+          ],
+          "yaw": 81.9,
+          "pitch": 12.8
+        },
+        {
+          "pos": [
+            24.6,
+            -59,
+            8
+          ],
+          "yaw": 76.6,
+          "pitch": 10.5
+        }
+      ]
+    },
+    {
+      "type": "materialsChest",
+      "atMs": 200,
+      "pos": [
+        22,
+        1,
+        8
+      ],
+      "facing": "west",
+      "large": true,
+      "ignoreContentsOf": [
+        "create:item_vault",
+        "minecraft:chest",
+        "quark:oak_chest",
+        "minecraft:barrel"
+      ],
+      "_what": "every kind in the build, once — the chests inside the plant hold product, which is stock and not a cost"
+    },
+    {
+      "type": "place",
+      "atMs": 300,
+      "blocks": {
+        "part": "shell"
+      },
+      "spanMs": 12000,
+      "pace": {
+        "default": 6,
+        "minecraft:stone": 1,
+        "minecraft:deepslate": 1,
+        "minecraft:deepslate_bricks": 1,
+        "minecraft:cracked_deepslate_bricks": 1,
+        "minecraft:deepslate_brick_stairs": 1,
+        "minecraft:smooth_stone": 1,
+        "minecraft:cobblestone": 1,
+        "minecraft:cobbled_deepslate": 1,
+        "minecraft:infested_stone": 1,
+        "minecraft:iron_ore": 1,
+        "minecraft:deepslate_iron_ore": 1,
+        "minecraft:redstone_ore": 1,
+        "minecraft:glowstone": 1,
+        "minecraft:spruce_trapdoor": 1,
+        "minecraft:water": 1,
+        "create:cut_deepslate_bricks": 1,
+        "create:item_vault": 1
+      },
+      "_what": "floor and the walls things hang on"
+    },
+    {
+      "type": "screen",
+      "atMs": 3366,
+      "action": "open",
+      "pos": [
+        22,
+        1,
+        8
+      ]
+    },
+    {
+      "type": "screen",
+      "atMs": 26367,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 27855,
+      "durationMs": 7182,
+      "ease": "linear",
+      "_what": "boiler — blocks 1-15",
+      "keyframes": [
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            23.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            23.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            24.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            24.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            24.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            25.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            25.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            25.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            26.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            26.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            26.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            6.5,
+            -56.5,
+            27.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            27.5
+          ],
+          "yaw": 123.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            27.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            27.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 28050,
+      "blocks": {
+        "part": "boiler"
+      },
+      "spanMs": 44118,
+      "pace": {
+        "default": 1
+      },
+      "_what": "tanks, magma, engines, pumps, wheels"
+    },
+    {
+      "type": "marker",
+      "atMs": 28050,
+      "label": "b1 · boiler"
+    },
+    {
+      "type": "camera",
+      "atMs": 35550,
+      "durationMs": 1,
+      "_what": "boiler — block 16, cut",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            24.5
+          ],
+          "yaw": -171.3,
+          "pitch": 8.6
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            24.5
+          ],
+          "yaw": -171.3,
+          "pitch": 8.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 36063,
+      "durationMs": 5130,
+      "ease": "linear",
+      "_what": "boiler — blocks 17-27",
+      "keyframes": [
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            22.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            22.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            22.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            22.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            22.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            23.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            23.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            24.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            24.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            25.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            8.5,
+            -55.5,
+            25.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 41706,
+      "durationMs": 9747,
+      "ease": "linear",
+      "_what": "boiler — blocks 28-47",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            21.5
+          ],
+          "yaw": -180,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            21.5
+          ],
+          "yaw": 164.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 111.8,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 116.6,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 123.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 116.6,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 101.3,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 116.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 90,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            8.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 90,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            8.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 76,
+          "pitch": 31.2
+        },
+        {
+          "pos": [
+            8.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 71.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            8.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 63.4,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            8.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            23.5
+          ],
+          "yaw": 56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            23.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            7.5,
+            -52.5,
+            23.5
+          ],
+          "yaw": 121,
+          "pitch": 23.2
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 51966,
+      "durationMs": 1,
+      "_what": "boiler — block 48, cut",
+      "keyframes": [
+        {
+          "pos": [
+            6.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            6.5,
+            -53.5,
+            21.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 52479,
+      "durationMs": 3078,
+      "ease": "linear",
+      "_what": "boiler — blocks 49-55",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -52.5,
+            21.5
+          ],
+          "yaw": 90,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            8.5,
+            -52.5,
+            21.5
+          ],
+          "yaw": 76,
+          "pitch": 31.2
+        },
+        {
+          "pos": [
+            8.5,
+            -52.5,
+            21.5
+          ],
+          "yaw": 71.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            8.5,
+            -52.5,
+            21.5
+          ],
+          "yaw": 56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            7.5,
+            -52.5,
+            22.5
+          ],
+          "yaw": 56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            7.5,
+            -52.5,
+            22.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            22.5
+          ],
+          "yaw": 33.7,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 56070,
+      "durationMs": 3078,
+      "ease": "linear",
+      "_what": "boiler — blocks 56-62",
+      "keyframes": [
+        {
+          "pos": [
+            4.5,
+            -52.5,
+            24.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            4.5,
+            -52.5,
+            24.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            4.5,
+            -51.5,
+            25.5
+          ],
+          "yaw": 161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            4.5,
+            -51.5,
+            25.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            4.5,
+            -51.5,
+            25.5
+          ],
+          "yaw": -153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            3.5,
+            -51.5,
+            26.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            3.5,
+            -51.5,
+            26.5
+          ],
+          "yaw": -116.6,
+          "pitch": 48.2
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 59661,
+      "durationMs": 6669,
+      "ease": "linear",
+      "_what": "boiler — blocks 63-76",
+      "keyframes": [
+        {
+          "pos": [
+            5.5,
+            -50.5,
+            24.5
+          ],
+          "yaw": 135,
+          "pitch": 23.8
+        },
+        {
+          "pos": [
+            4.5,
+            -50.5,
+            23.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            4.5,
+            -50.5,
+            24.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            4.5,
+            -50.5,
+            24.5
+          ],
+          "yaw": -153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            3.5,
+            -50.5,
+            25.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            3.5,
+            -50.5,
+            25.5
+          ],
+          "yaw": -116.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            2.5,
+            -50.5,
+            25.5
+          ],
+          "yaw": -90,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            2.5,
+            -50.5,
+            24.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            3.5,
+            -49.5,
+            24.5
+          ],
+          "yaw": -146.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            3.5,
+            -49.5,
+            25.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            3.5,
+            -49.5,
+            25.5
+          ],
+          "yaw": -146.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            3.5,
+            -49.5,
+            25.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            3.5,
+            -49.5,
+            25.5
+          ],
+          "yaw": -116.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            2.5,
+            -49.5,
+            25.5
+          ],
+          "yaw": -90,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 66843,
+      "durationMs": 4104,
+      "ease": "linear",
+      "_what": "boiler — blocks 77-85",
+      "keyframes": [
+        {
+          "pos": [
+            3.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            3.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            22.5
+          ],
+          "yaw": -116.6,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            23.5
+          ],
+          "yaw": -116.6,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            24.5
+          ],
+          "yaw": -116.6,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            25.5
+          ],
+          "yaw": -116.6,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            2.5,
+            -48.5,
+            26.5
+          ],
+          "yaw": -116.6,
+          "pitch": 16.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 71460,
+      "durationMs": 1,
+      "_what": "boiler — block 86, cut",
+      "keyframes": [
+        {
+          "pos": [
+            4.5,
+            -46.5,
+            22.5
+          ],
+          "yaw": -141.3,
+          "pitch": 21.3
+        },
+        {
+          "pos": [
+            4.5,
+            -46.5,
+            22.5
+          ],
+          "yaw": -141.3,
+          "pitch": 21.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 71973,
+      "durationMs": 1,
+      "_what": "boiler — block 87, cut",
+      "keyframes": [
+        {
+          "pos": [
+            4.5,
+            -45.5,
+            24.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            4.5,
+            -45.5,
+            24.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 72168,
+      "durationMs": 511,
+      "_what": "boiler — finished",
+      "keyframes": [
+        {
+          "pos": [
+            4.5,
+            -45.5,
+            24.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            4.5,
+            -45.5,
+            24.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 72392,
+      "durationMs": 2268,
+      "ease": "linear",
+      "_what": "drive — blocks 1-4",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -57.5,
+            8.5
+          ],
+          "yaw": 33.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            11.5,
+            -57.5,
+            8.5
+          ],
+          "yaw": 18.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            11.5,
+            -57.5,
+            8.5
+          ],
+          "yaw": 0,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -57.5,
+            8.5
+          ],
+          "yaw": -18.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 72679,
+      "blocks": {
+        "part": "drive"
+      },
+      "spanMs": 30996,
+      "pace": {
+        "default": 1
+      },
+      "_what": "chain drives, gearboxes, the speed controller"
+    },
+    {
+      "type": "marker",
+      "atMs": 72679,
+      "label": "b2 · drive"
+    },
+    {
+      "type": "camera",
+      "atMs": 75416,
+      "durationMs": 756,
+      "ease": "linear",
+      "_what": "drive — blocks 5-6",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -55.5,
+            8.5
+          ],
+          "yaw": 45,
+          "pitch": 30.5
+        },
+        {
+          "pos": [
+            11.5,
+            -55.5,
+            8.5
+          ],
+          "yaw": 33.7,
+          "pitch": 34.7
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 76928,
+      "durationMs": 1,
+      "_what": "drive — block 7, cut",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            8.5
+          ],
+          "yaw": 32,
+          "pitch": 23
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            8.5
+          ],
+          "yaw": 32,
+          "pitch": 23
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 77684,
+      "durationMs": 1512,
+      "ease": "linear",
+      "_what": "drive — blocks 8-10",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 0,
+          "pitch": 41.2
+        },
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 51.3
+        },
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 63.4,
+          "pitch": 48.2
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 79952,
+      "durationMs": 756,
+      "ease": "linear",
+      "_what": "drive — blocks 11-12",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 116.6,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 116.6,
+          "pitch": 48.2
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 81464,
+      "durationMs": 12852,
+      "ease": "linear",
+      "_what": "drive — blocks 13-30",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            12.5
+          ],
+          "yaw": 116.6,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            12.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            12.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            9.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": 15.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 71.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            13.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            13.5
+          ],
+          "yaw": 71.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            9.5,
+            -52.5,
+            13.5
+          ],
+          "yaw": -180,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            13.5
+          ],
+          "yaw": -180,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            13.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            13.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            13.5
+          ],
+          "yaw": 128.7,
+          "pitch": 17.3
+        },
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            14.5
+          ],
+          "yaw": 153.4,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            11.5,
+            -52.5,
+            14.5
+          ],
+          "yaw": 153.4,
+          "pitch": 16.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 95072,
+      "durationMs": 3780,
+      "ease": "linear",
+      "_what": "drive — blocks 31-36",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -52.5,
+            15.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            8.5,
+            -51.5,
+            15.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            8.5,
+            -50.5,
+            14.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            8.5,
+            -49.5,
+            14.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            8.5,
+            -48.5,
+            13.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            7.5,
+            -48.5,
+            12.5
+          ],
+          "yaw": 45,
+          "pitch": 27.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 99608,
+      "durationMs": 756,
+      "ease": "linear",
+      "_what": "drive — blocks 37-38",
+      "keyframes": [
+        {
+          "pos": [
+            5.5,
+            -47.5,
+            12.5
+          ],
+          "yaw": 0,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            6.5,
+            -48.5,
+            12.5
+          ],
+          "yaw": -18.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 101120,
+      "durationMs": 756,
+      "ease": "linear",
+      "_what": "drive — blocks 39-40",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -47.5,
+            14.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            7.5,
+            -47.5,
+            14.5
+          ],
+          "yaw": 0,
+          "pitch": 51.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 102632,
+      "durationMs": 756,
+      "ease": "linear",
+      "_what": "drive — blocks 41-42",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -46.5,
+            12.5
+          ],
+          "yaw": 0,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            7.5,
+            -46.5,
+            13.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 103675,
+      "durationMs": 769,
+      "_what": "drive — finished",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -46.5,
+            13.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            7.5,
+            -46.5,
+            13.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 104102,
+      "durationMs": 900,
+      "ease": "linear",
+      "_what": "dock — blocks 1-2",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -58.5,
+            13.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            15.5,
+            -58.5,
+            13.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 104444,
+      "blocks": {
+        "part": "dock"
+      },
+      "spanMs": 35100,
+      "pace": {
+        "default": 1,
+        "18,3,10": 8,
+        "19,3,10": 8,
+        "19,5,10": 8
+      },
+      "_what": "belt, chutes, the interface the train unloads through"
+    },
+    {
+      "type": "marker",
+      "atMs": 104444,
+      "label": "b3 · dock"
+    },
+    {
+      "type": "camera",
+      "atMs": 105902,
+      "durationMs": 16200,
+      "ease": "linear",
+      "_what": "dock — blocks 3-14",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            11.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            12.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            12.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            12.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            13.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            13.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            13.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            15.5,
+            -57.5,
+            12.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            16.5,
+            -57.5,
+            12.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            16.5,
+            -56.5,
+            12.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 116544,
+      "pos": [
+        18,
+        3,
+        10
+      ],
+      "_what": "deny: cobblestone, cobbled_deepslate, gravel, flint, basalt, soul_sand, netherrack, blackstone"
+    },
+    {
+      "type": "screen",
+      "atMs": 122344,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 123002,
+      "durationMs": 16200,
+      "ease": "linear",
+      "_what": "dock — blocks 15-19",
+      "keyframes": [
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 153.4,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            20.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            20.5,
+            -53.5,
+            13.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 123744,
+      "pos": [
+        19,
+        3,
+        10
+      ],
+      "_what": "allow: cobblestone, cobbled_deepslate, gravel, flint, basalt, soul_sand, netherrack, blackstone"
+    },
+    {
+      "type": "screen",
+      "atMs": 129544,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 132744,
+      "pos": [
+        19,
+        5,
+        10
+      ],
+      "_what": "deny: rail"
+    },
+    {
+      "type": "screen",
+      "atMs": 138544,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 139544,
+      "durationMs": 13941,
+      "_what": "dock — finished, while the narration carries on",
+      "keyframes": [
+        {
+          "pos": [
+            25.6,
+            -53.4,
+            4.8
+          ],
+          "yaw": 60.3,
+          "pitch": 19
+        },
+        {
+          "pos": [
+            22.3,
+            -53.4,
+            4.4
+          ],
+          "yaw": 46,
+          "pitch": 24.1
+        },
+        {
+          "pos": [
+            19.5,
+            -53.4,
+            5.3
+          ],
+          "yaw": 32.6,
+          "pitch": 32.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 153333,
+      "durationMs": 2800,
+      "ease": "linear",
+      "_what": "crushing — blocks 1-1",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        },
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            4.5
+          ],
+          "yaw": -50.2,
+          "pitch": -14.4
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 153485,
+      "blocks": {
+        "part": "crushing"
+      },
+      "spanMs": 28800,
+      "pace": {
+        "default": 1,
+        "10,3,6": 8,
+        "13,5,4": 8,
+        "12,5,5": 8,
+        "13,5,5": 8,
+        "10,5,8": 8
+      },
+      "_what": "two wheels, the controller, the belt loop"
+    },
+    {
+      "type": "marker",
+      "atMs": 153485,
+      "label": "b4 · crushing"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 153885,
+      "pos": [
+        10,
+        3,
+        6
+      ],
+      "_what": "allow: cobblestone, cobbled_deepslate, flint, netherrack"
+    },
+    {
+      "type": "screen",
+      "atMs": 156185,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 156533,
+      "durationMs": 2800,
+      "ease": "linear",
+      "_what": "crushing — blocks 2-9",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": -56.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -71.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -71.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -26.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -45,
+          "pitch": 30.5
+        },
+        {
+          "pos": [
+            11.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": -33.7,
+          "pitch": 34.7
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 159733,
+      "durationMs": 1,
+      "_what": "crushing — block 10, cut",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": 56.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            6.5
+          ],
+          "yaw": 56.3,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 160133,
+      "durationMs": 12800,
+      "ease": "linear",
+      "_what": "crushing — blocks 11-22",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 33.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 18.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 0,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            11.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": -18.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            13.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 163885,
+      "pos": [
+        13,
+        5,
+        4
+      ],
+      "_what": "allow: crushed_raw_iron, crushed_raw_gold, crushed_raw_copper, crushed_raw_zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 166185,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 167485,
+      "pos": [
+        12,
+        5,
+        5
+      ],
+      "_what": "allow: redstone, coal, experience_nugget, quartz, iron_nugget, gold_nugget, copper_nugget, zinc_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 169785,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 170685,
+      "pos": [
+        13,
+        5,
+        5
+      ],
+      "_what": "deny: crushed_raw_iron, crushed_raw_gold, crushed_raw_copper, crushed_raw_zinc"
+    },
+    {
+      "type": "screen",
+      "atMs": 172985,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 173333,
+      "durationMs": 1,
+      "_what": "crushing — block 23, cut",
+      "keyframes": [
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": 80.5,
+          "pitch": 22.3
+        },
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": 80.5,
+          "pitch": 22.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 173733,
+      "durationMs": 1,
+      "_what": "crushing — block 24, cut",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            7.5
+          ],
+          "yaw": -126.9,
+          "pitch": 38.7
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            7.5
+          ],
+          "yaw": -126.9,
+          "pitch": 38.7
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 174133,
+      "durationMs": 6000,
+      "ease": "linear",
+      "_what": "crushing — blocks 25-33",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            7.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            13.5,
+            -54.5,
+            7.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            7.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 20.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 108.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 110,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            8.5
+          ],
+          "yaw": 114,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 175885,
+      "pos": [
+        10,
+        5,
+        8
+      ],
+      "_what": "allow: filter, filter"
+    },
+    {
+      "type": "screen",
+      "atMs": 178185,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 180533,
+      "durationMs": 1600,
+      "ease": "linear",
+      "_what": "crushing — blocks 34-38",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -53.5,
+            9.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            12.5,
+            -53.5,
+            10.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            12.5,
+            -52.5,
+            9.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            12.5,
+            -52.5,
+            9.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            12.5,
+            -52.5,
+            9.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 182285,
+      "durationMs": 364,
+      "_what": "crushing — finished",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -52.5,
+            9.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            12.5,
+            -52.5,
+            9.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 182307,
+      "durationMs": 900,
+      "ease": "linear",
+      "_what": "washing — blocks 1-2",
+      "keyframes": [
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            -1.5
+          ],
+          "yaw": 33.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            -1.5
+          ],
+          "yaw": 18.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 182649,
+      "blocks": {
+        "part": "washing"
+      },
+      "spanMs": 11700,
+      "pace": {
+        "default": 1,
+        "13,4,6": 8,
+        "13,5,7": 8
+      },
+      "_what": "fan, leaf, water wheel, and the clay pair"
+    },
+    {
+      "type": "marker",
+      "atMs": 182649,
+      "label": "b5 · washing"
+    },
+    {
+      "type": "camera",
+      "atMs": 184107,
+      "durationMs": 6300,
+      "ease": "linear",
+      "_what": "washing — blocks 3-3",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            3.5
+          ],
+          "yaw": 39.8,
+          "pitch": 14.4
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 184849,
+      "pos": [
+        13,
+        4,
+        6
+      ],
+      "_what": "holds: clay_ball"
+    },
+    {
+      "type": "screen",
+      "atMs": 190649,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 191307,
+      "durationMs": 1,
+      "_what": "washing — block 4, cut",
+      "keyframes": [
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            4.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 192207,
+      "durationMs": 8100,
+      "ease": "linear",
+      "_what": "washing — blocks 5-7",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            5.5
+          ],
+          "yaw": -153.4,
+          "pitch": 16.6
+        },
+        {
+          "pos": [
+            12.5,
+            -53.5,
+            6.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            5.5
+          ],
+          "yaw": -45,
+          "pitch": 41.5
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 194349,
+      "durationMs": 26938,
+      "_what": "washing — finished, while the narration carries on",
+      "keyframes": [
+        {
+          "pos": [
+            22.1,
+            -50.5,
+            9.8
+          ],
+          "yaw": 120.2,
+          "pitch": 27.6
+        },
+        {
+          "pos": [
+            20.7,
+            -50.5,
+            6.7
+          ],
+          "yaw": 105.9,
+          "pitch": 34.5
+        },
+        {
+          "pos": [
+            18.6,
+            -50.5,
+            4.7
+          ],
+          "yaw": 92,
+          "pitch": 44.5
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 194749,
+      "pos": [
+        13,
+        5,
+        7
+      ],
+      "_what": "deny: clay_ball"
+    },
+    {
+      "type": "screen",
+      "atMs": 200549,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 221107,
+      "durationMs": 2365,
+      "ease": "linear",
+      "_what": "sorting — blocks 1-6",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": 146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            14.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -55.5,
+            13.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 221287,
+      "blocks": {
+        "part": "sorting"
+      },
+      "spanMs": 39259,
+      "pace": {
+        "default": 1,
+        "8,5,11": 8,
+        "9,5,11": 8,
+        "10,5,11": 8,
+        "11,5,11": 8,
+        "12,5,11": 8,
+        "13,5,11": 8
+      },
+      "_what": "six belts, six funnels"
+    },
+    {
+      "type": "marker",
+      "atMs": 221287,
+      "label": "b6 · sorting"
+    },
+    {
+      "type": "camera",
+      "atMs": 223945,
+      "durationMs": 10879,
+      "ease": "linear",
+      "_what": "sorting — blocks 7-30",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            11.5,
+            -54.5,
+            13.5
+          ],
+          "yaw": 116.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            14.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            14.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 116.6,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 123.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": 116.6,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": 123.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            16.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": 116.6,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": 123.7,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            17.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            18.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            18.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 235297,
+      "durationMs": 23650,
+      "ease": "linear",
+      "_what": "sorting — blocks 31-39",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 149,
+          "pitch": 23.2
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -168.7,
+          "pitch": 26.1
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -158.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 116.6,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            12.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 116.6,
+          "pitch": 48.2
+        }
+      ]
+    },
+    {
+      "type": "showFilter",
+      "atMs": 235877,
+      "pos": [
+        8,
+        5,
+        11
+      ],
+      "_what": "holds: experience_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 238688,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 239661,
+      "pos": [
+        9,
+        5,
+        11
+      ],
+      "_what": "allow: lapis_ore, deepslate_lapis_ore, lapis_lazuli, emerald_ore, deepslate_emerald_ore, emerald, diamond_ore, deepslate_diamond_ore, diamond, ancient_debris, obsidian"
+    },
+    {
+      "type": "screen",
+      "atMs": 242472,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 243445,
+      "pos": [
+        10,
+        5,
+        11
+      ],
+      "_what": "allow: gunpowder, quartz"
+    },
+    {
+      "type": "screen",
+      "atMs": 246256,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 247229,
+      "pos": [
+        11,
+        5,
+        11
+      ],
+      "_what": "allow: redstone, coal"
+    },
+    {
+      "type": "screen",
+      "atMs": 250040,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 251013,
+      "pos": [
+        12,
+        5,
+        11
+      ],
+      "_what": "allow: copper_nugget, zinc_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 253824,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 254797,
+      "pos": [
+        13,
+        5,
+        11
+      ],
+      "_what": "allow: iron_nugget, gold_nugget"
+    },
+    {
+      "type": "screen",
+      "atMs": 257608,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 259420,
+      "durationMs": 946,
+      "ease": "linear",
+      "_what": "sorting — blocks 40-42",
+      "keyframes": [
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            17.5
+          ],
+          "yaw": 135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            17.5
+          ],
+          "yaw": 153.4,
+          "pitch": 48.2
+        },
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            18.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 260546,
+      "durationMs": 494,
+      "_what": "sorting — finished",
+      "keyframes": [
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            18.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            18.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 260836,
+      "durationMs": 31624,
+      "ease": "linear",
+      "_what": "compacting — blocks 1-18",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -54.5,
+            14.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            14.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            14.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": -135,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            10.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 164.1,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 153.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": -161.6,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            11.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 164.1,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            12.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 153.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            13.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 153.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            14.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 153.4,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            14.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 111.8,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            14.5,
+            -53.5,
+            16.5
+          ],
+          "yaw": 141.3,
+          "pitch": 0
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 261040,
+      "blocks": {
+        "part": "compacting"
+      },
+      "spanMs": 33768,
+      "pace": {
+        "default": 1,
+        "11,5,13": 8,
+        "12,5,13": 8,
+        "13,5,13": 8,
+        "11,5,14": 8,
+        "12,5,14": 8,
+        "13,5,14": 8
+      },
+      "_what": "three basins, three presses"
+    },
+    {
+      "type": "marker",
+      "atMs": 261040,
+      "label": "b7 · compacting"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 263048,
+      "pos": [
+        11,
+        5,
+        13
+      ],
+      "_what": "allow: redstone_block, coal_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 266300,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 267336,
+      "pos": [
+        12,
+        5,
+        13
+      ],
+      "_what": "allow: copper_ingot, copper_block, zinc_ingot, zinc_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 270588,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 271624,
+      "pos": [
+        13,
+        5,
+        13
+      ],
+      "_what": "allow: iron_ingot, iron_block, gold_ingot, gold_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 274876,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 275912,
+      "pos": [
+        11,
+        5,
+        14
+      ],
+      "_what": "allow: coal_block, redstone_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 279164,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 280200,
+      "pos": [
+        12,
+        5,
+        14
+      ],
+      "_what": "allow: copper_block, zinc_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 283452,
+      "action": "close"
+    },
+    {
+      "type": "showFilter",
+      "atMs": 284488,
+      "pos": [
+        13,
+        5,
+        14
+      ],
+      "_what": "allow: iron_block, gold_block"
+    },
+    {
+      "type": "screen",
+      "atMs": 287740,
+      "action": "close"
+    },
+    {
+      "type": "camera",
+      "atMs": 292996,
+      "durationMs": 1072,
+      "ease": "linear",
+      "_what": "compacting — blocks 19-21",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -51.5,
+            14.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            12.5,
+            -51.5,
+            15.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            12.5,
+            -51.5,
+            15.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 294604,
+      "durationMs": 1,
+      "_what": "compacting — block 22, cut",
+      "keyframes": [
+        {
+          "pos": [
+            13.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": 161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            13.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": 161.6,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 294808,
+      "durationMs": 551,
+      "_what": "compacting — finished",
+      "keyframes": [
+        {
+          "pos": [
+            13.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": 161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            13.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": 161.6,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 295098,
+      "durationMs": 686,
+      "ease": "linear",
+      "_what": "storage — blocks 1-2",
+      "keyframes": [
+        {
+          "pos": [
+            11.5,
+            -58.5,
+            9.5
+          ],
+          "yaw": 90,
+          "pitch": -29.7
+        },
+        {
+          "pos": [
+            11.5,
+            -58.5,
+            9.5
+          ],
+          "yaw": 90,
+          "pitch": -38.7
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 295359,
+      "blocks": {
+        "part": "storage"
+      },
+      "spanMs": 24010,
+      "pace": {
+        "default": 1
+      },
+      "_what": "27 vaults, 12 chests"
+    },
+    {
+      "type": "marker",
+      "atMs": 295359,
+      "label": "b8 · storage"
+    },
+    {
+      "type": "camera",
+      "atMs": 296470,
+      "durationMs": 1,
+      "_what": "storage — block 3, cut",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -58.5,
+            10.5
+          ],
+          "yaw": 111.8,
+          "pitch": -36.6
+        },
+        {
+          "pos": [
+            12.5,
+            -58.5,
+            10.5
+          ],
+          "yaw": 111.8,
+          "pitch": -36.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 297156,
+      "durationMs": 5488,
+      "ease": "linear",
+      "_what": "storage — blocks 4-12",
+      "keyframes": [
+        {
+          "pos": [
+            14.5,
+            -56.5,
+            10.5
+          ],
+          "yaw": 105.9,
+          "pitch": 0
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            11.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            11.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 8.7
+        },
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 10.3
+        },
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 12.5
+        },
+        {
+          "pos": [
+            14.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 15.9
+        },
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            16.5,
+            -55.5,
+            10.5
+          ],
+          "yaw": 90,
+          "pitch": 26.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 303330,
+      "durationMs": 8232,
+      "ease": "linear",
+      "_what": "storage — blocks 13-25",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 135,
+          "pitch": 27.9
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            12.5
+          ],
+          "yaw": 161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            12.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            12.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            12.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            11.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            13.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            11.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 312248,
+      "durationMs": 6860,
+      "ease": "linear",
+      "_what": "storage — blocks 26-36",
+      "keyframes": [
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 77.5,
+          "pitch": 12.2
+        },
+        {
+          "pos": [
+            12.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 74.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            13.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 74.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            14.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 74.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            15.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 74.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            16.5,
+            -54.5,
+            15.5
+          ],
+          "yaw": 74.1,
+          "pitch": 15.4
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 71.6,
+          "pitch": 21.6
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 68.2,
+          "pitch": 24.9
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 63.4,
+          "pitch": 29.2
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 56.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 319369,
+      "durationMs": 696,
+      "_what": "storage — finished",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        },
+        {
+          "pos": [
+            15.5,
+            -53.5,
+            15.5
+          ],
+          "yaw": 45,
+          "pitch": 41.5
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 319762,
+      "durationMs": 1,
+      "_what": "readout — block 1, cut",
+      "keyframes": [
+        {
+          "pos": [
+            5.5,
+            -56.5,
+            14.5
+          ],
+          "yaw": -56.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            5.5,
+            -56.5,
+            14.5
+          ],
+          "yaw": -56.3,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "place",
+      "atMs": 320065,
+      "blocks": {
+        "part": "readout"
+      },
+      "spanMs": 23910,
+      "pace": {
+        "default": 1
+      },
+      "_what": "observers, links, sixteen boards"
+    },
+    {
+      "type": "marker",
+      "atMs": 320065,
+      "label": "b8 · readout"
+    },
+    {
+      "type": "camera",
+      "atMs": 320559,
+      "durationMs": 1,
+      "_what": "readout — block 2, cut",
+      "keyframes": [
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            15.5
+          ],
+          "yaw": -71.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            6.5,
+            -55.5,
+            15.5
+          ],
+          "yaw": -71.6,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 321356,
+      "durationMs": 2391,
+      "ease": "linear",
+      "_what": "readout — blocks 3-6",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -56.5,
+            19.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -56.5,
+            19.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            10.5,
+            -56.5,
+            19.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            11.5,
+            -56.5,
+            19.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 324544,
+      "durationMs": 1,
+      "_what": "readout — block 7, cut",
+      "keyframes": [
+        {
+          "pos": [
+            5.5,
+            -55.5,
+            17.5
+          ],
+          "yaw": -108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            5.5,
+            -55.5,
+            17.5
+          ],
+          "yaw": -108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 325341,
+      "durationMs": 1594,
+      "ease": "linear",
+      "_what": "readout — blocks 8-10",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -58.5,
+            18.5
+          ],
+          "yaw": -135,
+          "pitch": -27.9
+        },
+        {
+          "pos": [
+            8.5,
+            -58.5,
+            18.5
+          ],
+          "yaw": -135,
+          "pitch": -27.9
+        },
+        {
+          "pos": [
+            9.5,
+            -58.5,
+            18.5
+          ],
+          "yaw": -135,
+          "pitch": -27.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 327732,
+      "durationMs": 797,
+      "ease": "linear",
+      "_what": "readout — blocks 11-12",
+      "keyframes": [
+        {
+          "pos": [
+            15.5,
+            -55.5,
+            17.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            16.5,
+            -55.5,
+            17.5
+          ],
+          "yaw": 108.4,
+          "pitch": 25.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 329326,
+      "durationMs": 797,
+      "ease": "linear",
+      "_what": "readout — blocks 13-14",
+      "keyframes": [
+        {
+          "pos": [
+            10.5,
+            -52.5,
+            11.5
+          ],
+          "yaw": 135,
+          "pitch": 39.5
+        },
+        {
+          "pos": [
+            9.5,
+            -52.5,
+            11.5
+          ],
+          "yaw": 161.6,
+          "pitch": 47.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 330920,
+      "durationMs": 797,
+      "ease": "linear",
+      "_what": "readout — blocks 15-16",
+      "keyframes": [
+        {
+          "pos": [
+            8.5,
+            -51.5,
+            15.5
+          ],
+          "yaw": 116.6,
+          "pitch": 30.8
+        },
+        {
+          "pos": [
+            7.5,
+            -51.5,
+            15.5
+          ],
+          "yaw": -45,
+          "pitch": 27.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 332514,
+      "durationMs": 797,
+      "ease": "linear",
+      "_what": "readout — blocks 17-18",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": -90,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            8.5,
+            -50.5,
+            17.5
+          ],
+          "yaw": -90,
+          "pitch": 39.8
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 334108,
+      "durationMs": 1,
+      "_what": "readout — block 19, cut",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -50.5,
+            18.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -50.5,
+            18.5
+          ],
+          "yaw": -108.4,
+          "pitch": 38.3
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 334905,
+      "durationMs": 8767,
+      "ease": "linear",
+      "_what": "readout — blocks 20-31",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -180,
+          "pitch": 39.8
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -161.6,
+          "pitch": 38.3
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -146.3,
+          "pitch": 34.7
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -135,
+          "pitch": 30.5
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            20.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -49.5,
+            19.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -180,
+          "pitch": 26.6
+        },
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -161.6,
+          "pitch": 25.4
+        },
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            20.5
+          ],
+          "yaw": -146.3,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            19.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 343975,
+      "durationMs": 796,
+      "_what": "readout — finished",
+      "keyframes": [
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            19.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        },
+        {
+          "pos": [
+            9.5,
+            -48.5,
+            19.5
+          ],
+          "yaw": -123.7,
+          "pitch": 22.6
+        }
+      ]
+    },
+    {
+      "type": "use",
+      "atMs": 346378,
+      "pos": [
+        7,
+        5,
+        19
+      ],
+      "_what": "the boiler switch, pulled"
+    },
+    {
+      "type": "reseat",
+      "atMs": 348386,
+      "ofType": [
+        "create:andesite_encased_cogwheel",
+        "create:andesite_encased_large_cogwheel",
+        "create:andesite_encased_shaft",
+        "create:clutch",
+        "create:crushing_wheel",
+        "create:crushing_wheel_controller",
+        "create:encased_chain_drive",
+        "create:encased_fan",
+        "create:gearbox",
+        "create:large_cogwheel",
+        "create:mechanical_press",
+        "create:mechanical_pump",
+        "create:powered_shaft",
+        "create:shaft",
+        "create:steam_engine",
+        "create:stressometer",
+        "create:water_wheel"
+      ],
+      "_what": "every pure kinetic block, bare, so it finds the network it is actually on"
+    },
+    {
+      "type": "gameMode",
+      "atMs": 349592,
+      "mode": "spectator"
+    },
+    {
+      "type": "fill",
+      "atMs": 350395,
+      "pos": [
+        18,
+        4,
+        10
+      ],
+      "items": [
+        {
+          "id": "minecraft:raw_iron",
+          "count": 64
+        },
+        {
+          "id": "minecraft:raw_gold",
+          "count": 64
+        },
+        {
+          "id": "minecraft:raw_copper",
+          "count": 64
+        },
+        {
+          "id": "create:raw_zinc",
+          "count": 64
+        },
+        {
+          "id": "minecraft:iron_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:deepslate_iron_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:gold_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:copper_ore",
+          "count": 64
+        },
+        {
+          "id": "create:zinc_ore",
+          "count": 64
+        },
+        {
+          "id": "minecraft:cobblestone",
+          "count": 64
+        },
+        {
+          "id": "minecraft:cobbled_deepslate",
+          "count": 64
+        },
+        {
+          "id": "minecraft:gravel",
+          "count": 64
+        },
+        {
+          "id": "minecraft:flint",
+          "count": 64
+        },
+        {
+          "id": "minecraft:netherrack",
+          "count": 64
+        }
+      ],
+      "_what": "a train-load: ore, raw ore, and the stone that came up with it"
+    },
+    {
+      "type": "marker",
+      "atMs": 351198,
+      "label": "b9 · crusher"
+    },
+    {
+      "type": "marker",
+      "atMs": 354412,
+      "label": "b9 · washer"
+    },
+    {
+      "type": "marker",
+      "atMs": 358429,
+      "label": "b9 · press"
+    },
+    {
+      "type": "camera",
+      "atMs": 361643,
+      "durationMs": 27299,
+      "_what": "the wall, once it is running",
+      "keyframes": [
+        {
+          "pos": [
+            1.4,
+            -47.5,
+            27
+          ],
+          "yaw": -149.9,
+          "pitch": 20.4
+        },
+        {
+          "pos": [
+            6,
+            -47.5,
+            25.2
+          ],
+          "yaw": -164,
+          "pitch": 25.3
+        },
+        {
+          "pos": [
+            9.2,
+            -47.5,
+            22.2
+          ],
+          "yaw": -178.1,
+          "pitch": 33.1
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 384942,
+      "label": "end of narration"
+    }
+  ]
+}

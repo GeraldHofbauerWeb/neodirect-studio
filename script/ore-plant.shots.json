@@ -1,146 +1,170 @@
 {
-  "_what": "The shot list for the ore plant: how each assembly is filmed, and how long it takes to go up. Lived in tools/mk-build-take.mjs as a table in the source until the studio needed to edit it. tools/mk-build-take.mjs reads this and writes the take.",
-  "_style": "Two ways of filming an assembly. `arc` swings past while its blocks appear somewhere in frame, and shares the cue out by `pace` — right for the housing, where nobody is watching an individual stone. `follow` stands close, points at the face the next block goes against and drifts from one to the next — right for the machinery, which is what somebody is trying to copy. A shot may name its own style; otherwise it takes the default, flipped for anything in `except`.",
-  "_bearing": "Where the camera stands, measured the way Minecraft measures yaw: 0 is south, 90 is west. Chosen so consecutive shots do not repeat an angle, and so the camera is on the open side of each assembly rather than behind the wall it is bolted to. Lift is for the parts no compass point helps: the sorter and the vault wall sit under the display boards and cannot be read from anywhere at eye level.",
-  "schematic": "ore_plant.nbt",
-  "parts": "ore_plant.groups.json",
-  "origin": [
-    0,
-    -61,
-    0
+ "_what": "The shot list for the ore plant: how each assembly is filmed, and how long it takes to go up. Lived in tools/mk-build-take.mjs as a table in the source until the studio needed to edit it. tools/mk-build-take.mjs reads this and writes the take.",
+ "_style": "Two ways of filming an assembly. `arc` swings past while its blocks appear somewhere in frame, and shares the cue out by `pace` — right for the housing, where nobody is watching an individual stone. `follow` stands close, points at the face the next block goes against and drifts from one to the next — right for the machinery, which is what somebody is trying to copy. A shot may name its own style; otherwise it takes the default, flipped for anything in `except`.",
+ "_bearing": "Where the camera stands, measured the way Minecraft measures yaw: 0 is south, 90 is west. Chosen so consecutive shots do not repeat an angle, and so the camera is on the open side of each assembly rather than behind the wall it is bolted to. Lift is for the parts no compass point helps: the sorter and the vault wall sit under the display boards and cannot be read from anywhere at eye level.",
+ "schematic": "ore_plant.nbt",
+ "parts": "ore_plant.groups.json",
+ "origin": [
+  0,
+  -61,
+  0
+ ],
+ "defaults": {
+  "style": "follow",
+  "except": [
+   "shell"
   ],
-  "defaults": {
-    "style": "follow",
-    "except": [
-      "shell"
-    ],
-    "msPerBlock": 300,
-    "_glideShare": "How much of a block's interval is spent gliding to the next standpoint. The rest is hold: a beat on the block just placed, and a beat sitting still before the next one appears — which is what makes it read as somebody watching rather than as a camera on rails.",
-    "glideShare": 0.62
+  "msPerBlock": 300,
+  "_glideShare": "How much of a block's interval is spent gliding to the next standpoint. The rest is hold: a beat on the block just placed, and a beat sitting still before the next one appears — which is what makes it read as somebody watching rather than as a camera on rails.",
+  "glideShare": 0.62
+ },
+ "_bulk": "The blocks nobody is watching go down: the floor, the walls it is lit and decorated with, and the vault bank, which is twenty-seven identical boxes in a row. Everything else in this machine is a component that does something, and those are what the shot is for.",
+ "bulk": [
+  "minecraft:stone",
+  "minecraft:deepslate",
+  "minecraft:deepslate_bricks",
+  "minecraft:cracked_deepslate_bricks",
+  "minecraft:deepslate_brick_stairs",
+  "minecraft:smooth_stone",
+  "minecraft:cobblestone",
+  "minecraft:cobbled_deepslate",
+  "minecraft:infested_stone",
+  "minecraft:iron_ore",
+  "minecraft:deepslate_iron_ore",
+  "minecraft:redstone_ore",
+  "minecraft:glowstone",
+  "minecraft:spruce_trapdoor",
+  "minecraft:water",
+  "create:cut_deepslate_bricks",
+  "create:item_vault"
+ ],
+ "_pace": "Six to one. Not a speed but a share: a cue still ends when it said it would, and this decides how its time is split between the stone and the machinery standing on it.",
+ "paceDefault": 6,
+ "paceBulk": 1,
+ "_timing": "How long an assembly takes to go up, for the arc style: a glance for each bulk block, a beat for each component, clamped. Derived rather than typed, so a re-cut schematic re-times itself instead of quietly speeding up.",
+ "timing": {
+  "bulkMs": 12,
+  "partMs": 240,
+  "roundTo": 500,
+  "minMs": 3000,
+  "maxMs": 12000,
+  "gapMs": 4200,
+  "startMs": 500
+ },
+ "shots": [
+  {
+   "part": "shell",
+   "bearing": 180,
+   "lift": 0,
+   "what": "floor and the walls things hang on"
   },
-  "_bulk": "The blocks nobody is watching go down: the floor, the walls it is lit and decorated with, and the vault bank, which is twenty-seven identical boxes in a row. Everything else in this machine is a component that does something, and those are what the shot is for.",
-  "bulk": [
-    "minecraft:stone",
-    "minecraft:deepslate",
-    "minecraft:deepslate_bricks",
-    "minecraft:cracked_deepslate_bricks",
-    "minecraft:deepslate_brick_stairs",
-    "minecraft:smooth_stone",
-    "minecraft:cobblestone",
-    "minecraft:cobbled_deepslate",
-    "minecraft:infested_stone",
-    "minecraft:iron_ore",
-    "minecraft:deepslate_iron_ore",
-    "minecraft:redstone_ore",
-    "minecraft:glowstone",
-    "minecraft:spruce_trapdoor",
-    "minecraft:water",
-    "create:cut_deepslate_bricks",
-    "create:item_vault"
-  ],
-  "_pace": "Six to one. Not a speed but a share: a cue still ends when it said it would, and this decides how its time is split between the stone and the machinery standing on it.",
-  "paceDefault": 6,
-  "paceBulk": 1,
-  "_timing": "How long an assembly takes to go up, for the arc style: a glance for each bulk block, a beat for each component, clamped. Derived rather than typed, so a re-cut schematic re-times itself instead of quietly speeding up.",
-  "timing": {
-    "bulkMs": 12,
-    "partMs": 240,
-    "roundTo": 500,
-    "minMs": 3000,
-    "maxMs": 12000,
-    "gapMs": 4200,
-    "startMs": 500
+  {
+   "part": "boiler",
+   "bearing": 45,
+   "lift": 0,
+   "what": "tanks, magma, engines, pumps, wheels",
+   "beat": "b1",
+   "beatAt": 0.0
   },
-  "shots": [
-    {
-      "part": "shell",
-      "bearing": 180,
-      "lift": 0,
-      "what": "floor and the walls things hang on"
-    },
-    {
-      "part": "boiler",
-      "bearing": 45,
-      "lift": 0,
-      "what": "tanks, magma, engines, pumps, wheels"
-    },
-    {
-      "part": "drive",
-      "bearing": 200,
-      "lift": 0,
-      "what": "chain drives, gearboxes, the speed controller"
-    },
-    {
-      "part": "dock",
-      "bearing": 120,
-      "lift": 0,
-      "what": "belt, chutes, the interface the train unloads through"
-    },
-    {
-      "part": "crushing",
-      "bearing": 60,
-      "lift": 0,
-      "what": "two wheels, the controller, the belt loop"
-    },
-    {
-      "part": "washing",
-      "bearing": 60,
-      "lift": 3,
-      "what": "fan, leaf, water wheel, and the clay pair"
-    },
-    {
-      "part": "sorting",
-      "bearing": 210,
-      "lift": 3,
-      "what": "six belts, six funnels"
-    },
-    {
-      "part": "compacting",
-      "bearing": 45,
-      "lift": 0,
-      "what": "three basins, three presses"
-    },
-    {
-      "part": "storage",
-      "bearing": 60,
-      "lift": 3,
-      "what": "27 vaults, 12 chests"
-    },
-    {
-      "part": "readout",
-      "bearing": 330,
-      "lift": 0,
-      "what": "observers, links, sixteen boards"
-    }
-  ],
-  "_finish": "The lever is on one side of a block and a redstone torch is on the other. Off, the torch burns, the wire carries fifteen, the clutch is powered and a powered clutch is a disengaged one. Throwing it puts current into the block, the torch goes out, and everything after it comes alive at once. Only then the kinetic blocks, bare: setBlock returns early when handed the state already there, and a cloned water wheel is right in every way except which kinetic network it believes it is on.",
-  "finish": {
-    "lever": [
-      7,
-      5,
-      19
-    ],
-    "reseat": [
-      "create:andesite_encased_cogwheel",
-      "create:andesite_encased_large_cogwheel",
-      "create:andesite_encased_shaft",
-      "create:clutch",
-      "create:crushing_wheel",
-      "create:crushing_wheel_controller",
-      "create:encased_chain_drive",
-      "create:encased_fan",
-      "create:gearbox",
-      "create:large_cogwheel",
-      "create:mechanical_press",
-      "create:mechanical_pump",
-      "create:powered_shaft",
-      "create:shaft",
-      "create:steam_engine",
-      "create:stressometer",
-      "create:water_wheel"
-    ],
-    "holdPart": "readout",
-    "holdMs": 12000,
-    "tailMs": 16000
+  {
+   "part": "drive",
+   "bearing": 200,
+   "lift": 0,
+   "what": "chain drives, gearboxes, the speed controller",
+   "beat": "b2",
+   "beatAt": 0.0
+  },
+  {
+   "part": "dock",
+   "bearing": 120,
+   "lift": 0,
+   "what": "belt, chutes, the interface the train unloads through",
+   "beat": "b3",
+   "beatAt": 0.0
+  },
+  {
+   "part": "crushing",
+   "bearing": 60,
+   "lift": 0,
+   "what": "two wheels, the controller, the belt loop",
+   "beat": "b4",
+   "beatAt": 0.0
+  },
+  {
+   "part": "washing",
+   "bearing": 60,
+   "lift": 3,
+   "what": "fan, leaf, water wheel, and the clay pair",
+   "beat": "b5",
+   "beatAt": 0.0
+  },
+  {
+   "part": "sorting",
+   "bearing": 210,
+   "lift": 3,
+   "what": "six belts, six funnels",
+   "beat": "b6",
+   "beatAt": 0.0
+  },
+  {
+   "part": "compacting",
+   "bearing": 45,
+   "lift": 0,
+   "what": "three basins, three presses",
+   "beat": "b7",
+   "beatAt": 0.0
+  },
+  {
+   "part": "storage",
+   "bearing": 60,
+   "lift": 3,
+   "what": "27 vaults, 12 chests",
+   "beat": "b8",
+   "beatAt": 0.0
+  },
+  {
+   "part": "readout",
+   "bearing": 330,
+   "lift": 0,
+   "what": "observers, links, sixteen boards",
+   "beat": "b8",
+   "beatAt": 0.5
   }
+ ],
+ "_finish": "The lever is on one side of a block and a redstone torch is on the other. Off, the torch burns, the wire carries fifteen, the clutch is powered and a powered clutch is a disengaged one. Throwing it puts current into the block, the torch goes out, and everything after it comes alive at once. Only then the kinetic blocks, bare: setBlock returns early when handed the state already there, and a cloned water wheel is right in every way except which kinetic network it believes it is on.",
+ "finish": {
+  "lever": [
+   7,
+   5,
+   19
+  ],
+  "reseat": [
+   "create:andesite_encased_cogwheel",
+   "create:andesite_encased_large_cogwheel",
+   "create:andesite_encased_shaft",
+   "create:clutch",
+   "create:crushing_wheel",
+   "create:crushing_wheel_controller",
+   "create:encased_chain_drive",
+   "create:encased_fan",
+   "create:gearbox",
+   "create:large_cogwheel",
+   "create:mechanical_press",
+   "create:mechanical_pump",
+   "create:powered_shaft",
+   "create:shaft",
+   "create:steam_engine",
+   "create:stressometer",
+   "create:water_wheel"
+  ],
+  "holdPart": "readout",
+  "holdMs": 12000,
+  "tailMs": 16000
+ },
+ "_beat": "Which beat of the narration an assembly is built under, and where inside it the building starts. Two assemblies can share a beat — storage and the wall that reads it are one paragraph — in which case beatAt splits it. tools/mk-episode.mjs works the per-block interval out backwards from the measured length of that beat.",
+ "episode": {
+  "_what": "Bounds on the pace when an assembly is fitted to a beat. Outside them the placement is clamped and the camera arcs around the finished assembly for whatever is left of the narration — better than seven blocks crawling across forty seconds.",
+  "minMsPerBlock": 220,
+  "maxMsPerBlock": 900
+ }
 }

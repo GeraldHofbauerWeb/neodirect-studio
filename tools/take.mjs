@@ -9,6 +9,7 @@
  */
 
 import { spawn } from 'node:child_process';
+import { request as httpRequest } from 'node:http';
 import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { Obs } from './obs.mjs';
@@ -64,13 +65,33 @@ function parseArgs(argv) {
   return args;
 }
 
-async function control(path, { method = 'GET', body } = {}) {
-  const response = await fetch(`${CONTROL}${path}`, {
-    method,
-    body,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+/**
+ * A take is answered when it is over, which for a narrated episode is six and a half minutes after
+ * the request goes out. Node's fetch gives up on a response after five, and it gave up in the
+ * middle of one — the recorder stopped, the game carried on building, and the only sign was a
+ * HeadersTimeoutError with nothing in it about takes. node:http has no such clock unless one is
+ * set, so the long request goes through that instead.
+ */
+function requestWithoutDeadline(url, { method, body }) {
+  return new Promise((resolve, reject) => {
+    const request = httpRequest(url, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    }, (response) => {
+      let text = '';
+      response.setEncoding('utf8');
+      response.on('data', (chunk) => (text += chunk));
+      response.on('end', () => resolve({ ok: response.statusCode < 400, status: response.statusCode, text }));
+    });
+    request.on('error', reject);
+    if (body) request.write(body);
+    request.end();
   });
-  const text = await response.text();
+}
+
+async function control(path, { method = 'GET', body } = {}) {
+  const response = await requestWithoutDeadline(`${CONTROL}${path}`, { method, body });
+  const text = response.text;
   let parsed;
   try {
     parsed = JSON.parse(text);
@@ -79,6 +100,18 @@ async function control(path, { method = 'GET', body } = {}) {
   }
   if (!response.ok) throw new Error(`${path} failed (${response.status}): ${parsed.error ?? text}`);
   return parsed;
+}
+
+/** Like run(), but hands back what the command said — ffmpeg reports measurements on stderr. */
+function saidBy(command, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let output = '';
+    child.stdout.on('data', (d) => (output += d));
+    child.stderr.on('data', (d) => (output += d));
+    child.on('error', reject);
+    child.on('close', () => resolve(output));
+  });
 }
 
 function run(command, args) {
@@ -92,30 +125,68 @@ function run(command, args) {
   });
 }
 
+/** What a beat measures, in LUFS, when the levelling is done. Roughly where streaming sits. */
+const NARRATION_TARGET = -16;
+
 /**
- * Lays the narration over the recording. Video is copied, not re-encoded — this step should cost
- * seconds, and the recording is already in its final quality.
+ * How far under the voice the game's own sounds sit. Fifteen is enough to hear a block land and a
+ * belt turn without competing with a sentence — and the game audio is already recorded at about
+ * that distance below a speaking voice, so most of the time this changes very little.
+ */
+const GAME_BELOW = 15;
+
+/** Integrated loudness of a file, in LUFS. */
+async function loudness(path) {
+  const output = await saidBy('ffmpeg', ['-nostats', '-hide_banner', '-i', path,
+    '-map', '0:a:0', '-filter:a', 'ebur128', '-f', 'null', '-']);
+  // The last one, not the first. ebur128 prints a running value as it goes and the very first is
+  // -70 — silence before the first sound. Reading that as the file's loudness asks for fifty-four
+  // decibels of gain, which the limiter then flattens into a wall.
+  const all = [...output.matchAll(/I:\s+(-?[\d.]+)\s+LUFS/g)];
+  if (!all.length) throw new Error(`could not measure the loudness of ${path}`);
+  return Number(all[all.length - 1][1]);
+}
+
+/**
+ * Lays the narration over the recording — over, not instead of.
  *
- * The offset is the point. Recording starts before the take does, so dropping the narration in at
- * zero puts every word a second and a half ahead of the block it describes. `leadMs` is measured,
- * not assumed: the wall clock between the recorder reporting "rolling" and the run request going
- * out.
+ * This used to map the voice in and drop the recording's own audio on the floor, which threw away
+ * every sound the machine makes: the block landing, the belt turning, the water wheel. Both are
+ * kept now, the voice on top and the game underneath it.
  *
- * No `-shortest` either — that trimmed the video down to the narration and threw away the tail
+ * Levels are measured rather than assumed. ElevenLabs returns audio around -29 LUFS and the game
+ * capture sits near -32, and both are far below where anything else a viewer watches is; guessing
+ * a gain would have meant guessing again the next time either changed.
+ *
+ * The offset is the point of the delay. Recording starts before the take does, so dropping the
+ * narration in at zero puts every word a second and a half ahead of the block it describes.
+ * `leadMs` is measured, not assumed: the wall clock between the recorder reporting "rolling" and
+ * the run request going out. adelay pads with real silence rather than shifting with `-itsoffset`,
+ * which leaves the audio starting at a non-zero timestamp — players that ignore an edit list then
+ * play the video silently, which is exactly what happened in the Claude phone app.
+ *
+ * No `-shortest` either: that trimmed the video down to the narration and threw away the tail
  * where the finished contraption is actually on screen.
  */
 async function mux({ video, voice, out, leadMs }) {
   await mkdir(dirname(out), { recursive: true });
+  const voiceGain = NARRATION_TARGET - await loudness(voice);
+  const gameGain = (NARRATION_TARGET - GAME_BELOW) - await loudness(video);
+  console.log(`levelling: voice ${voiceGain >= 0 ? '+' : ''}${voiceGain.toFixed(1)} dB, `
+    + `game ${gameGain >= 0 ? '+' : ''}${gameGain.toFixed(1)} dB`);
+
   await run('ffmpeg', [
     '-y', '-hide_banner', '-loglevel', 'error',
     '-i', video,
     '-i', voice,
-    '-map', '0:v:0', '-map', '1:a:0',
-    // adelay pads the audio with real silence rather than shifting it with `-itsoffset`. Both
-    // line the narration up, but -itsoffset leaves the audio track starting at a non-zero
-    // timestamp, and players that ignore an edit list then play the video silently — which is
-    // exactly what happened in the Claude phone app.
-    '-af', `adelay=delays=${Math.round(leadMs)}:all=1`,
+    '-filter_complex',
+    `[1:a]adelay=delays=${Math.round(leadMs)}:all=1,volume=${voiceGain.toFixed(2)}dB[speech];`
+    + `[0:a]volume=${gameGain.toFixed(2)}dB[room];`
+    + `[speech][room]amix=inputs=2:duration=first:normalize=0,`
+    // A limiter rather than another loudnorm pass: the two tracks are already where they should
+    // be, and all that is left is to stop a press and a consonant landing together from clipping.
+    + `alimiter=limit=0.89:level=disabled[mixed]`,
+    '-map', '0:v:0', '-map', '[mixed]',
     '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k',
     out,
   ]);
