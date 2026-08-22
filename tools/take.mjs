@@ -41,10 +41,11 @@ function parseArgs(argv) {
   // Wayland it records 1920x1080 of pure black: XWayland does not hand one client's pixels to
   // another. It fails silently — the take runs, the file is written, and only watching it reveals
   // there is nothing in it. Left available with --capture x11 for an X11 session, where it works.
-  const args = { timeline: null, capture: 'obs', out: null, voice: null };
+  const args = { timeline: null, capture: 'obs', out: null, voice: null, clearFirst: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--capture') args.capture = argv[++i];
+    if (a === '--clear-first') args.clearFirst = true;
+    else if (a === '--capture') args.capture = argv[++i];
     else if (a === '--no-capture') args.capture = 'none';
     else if (a === '--out') args.out = argv[++i];
     else if (a === '--voice') args.voice = argv[++i];
@@ -52,7 +53,7 @@ function parseArgs(argv) {
     else throw new Error(`unexpected argument: ${a}`);
   }
   if (!args.timeline) {
-    throw new Error('usage: node tools/take.mjs <timeline.json> [--capture x11|obs|none] [--out file.mp4] [--voice audio.mp3]');
+    throw new Error('usage: node tools/take.mjs <timeline.json> [--capture x11|obs|none] [--out file.mp4] [--voice audio.mp3] [--clear-first]');
   }
   if (!['x11', 'obs', 'none'].includes(args.capture)) {
     throw new Error(`unknown capture mode: ${args.capture}`);
@@ -206,6 +207,26 @@ let recording = null;
 // Wall clock at the moment frames start landing in the file. Everything the narration has to line
 // up against is measured from here.
 let recordingStarted = null;
+
+// The first second and a half of a recording is the world as it was, because OBS is rolling
+// before the take's own clear step has run. On a stage that already has a build standing, that is
+// the *previous* take flashing up before this one wipes it — the opening frame of the episode
+// showing the thing the episode is about to construct. Wiping first costs one round trip and
+// removes the whole class of problem.
+if (args.clearFirst) {
+  const scene = JSON.parse(timeline);
+  await control('/run', { method: 'POST', body: JSON.stringify({
+    take: `${take}-clear`,
+    _what: 'Nothing but the clear step. Run before the recorder starts, so the opening frames are '
+         + 'bare ground rather than whatever the last take left standing.',
+    schematic: scene.schematic,
+    parts: scene.parts,
+    origin: scene.origin,
+    clearStage: true,
+    cues: [{ type: 'marker', atMs: 0, label: 'stage cleared' }],
+  }) });
+  console.log('stage cleared before rolling');
+}
 
 if (args.capture === 'obs') {
   obs = await Obs.connect();

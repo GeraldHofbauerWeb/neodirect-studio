@@ -807,7 +807,9 @@ public final class Director {
                         // Only when the item actually changes. Handing the player the same block
                         // thirty times in a row is thirty item-name labels flashing across the
                         // bottom of the shot.
-                        Item want = block.state().getBlock().asItem();
+                        // Ask the same question equip() will, or a run of water blocks looks like
+                        // one item change per block and re-equips the bucket twenty-one times.
+                        Item want = heldFor(block.state());
                         if (presentation.heldItem() && want != held) {
                             held = want;
                             steps.add(new Step(Math.max(0, at - EQUIP_LEAD_MS), "equip",
@@ -1371,8 +1373,34 @@ public final class Director {
         return list;
     }
 
-    private static void equip(ServerPlayer player, BlockState state) {
+    /**
+     * Puts in the player's hand the thing somebody would be holding to place this block.
+     *
+     * <p>Usually that is the block's own item. Some blocks have none — {@code Blocks.WATER.asItem()}
+     * is air — and the hand came up empty in a shot of somebody filling a boiler pool. What places
+     * water is a bucket, so a block with no item of its own is asked what fluid it is and the
+     * fluid is asked for its bucket. Derived rather than listed, so Create's fluids work the same
+     * way without anybody adding them to a table.
+     *
+     * <p>Redstone dust is the other one in this build, and it is not a fluid: it is reached
+     * through the item it drops, which is what a player would have picked up.
+     */
+    private static Item heldFor(BlockState state) {
         Item item = state.getBlock().asItem();
+        if (item != Items.AIR) {
+            return item;
+        }
+        if (!state.getFluidState().isEmpty()) {
+            return state.getFluidState().getType().getBucket();
+        }
+        return switch (BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString()) {
+            case "minecraft:redstone_wire" -> Items.REDSTONE;
+            default -> Items.AIR;
+        };
+    }
+
+    private static void equip(ServerPlayer player, BlockState state) {
+        Item item = heldFor(state);
         if (item == Items.AIR) {
             return;
         }

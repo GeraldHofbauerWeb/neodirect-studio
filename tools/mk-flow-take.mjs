@@ -14,6 +14,7 @@
 import { readFile } from 'node:fs/promises';
 import { bounds, moveFor, occupancy, visibility, insideMove, vantages } from './frame-parts.mjs';
 import { aim } from './aim.mjs';
+import { stationShot } from './station-shots.mjs';
 
 // The stations, the filters and the load are a document — script/ore-plant.stations.json by
 // default. They are decisions about the episode rather than facts about the generator, and the
@@ -39,20 +40,7 @@ const STATIONS = list.stations;
 // good detector of "there is a wall in the way" and a poor judge of a shot — it rotated all four
 // of these off angles that read perfectly. It is still worth printing: a number that collapses
 // after the schematic is re-cut is the wall having moved.
-function shotFor(station) {
-  if (station.inside) {
-    const world = (p) => [p[0] + ORIGIN[0], p[1] + ORIGIN[1], p[2] + ORIGIN[2]];
-    const move = insideMove(station.blocks.map(world), occupied,
-        { ...station.inside, minY: ORIGIN[1] + 1, lookAt: (station.lookAt ?? station.blocks).map(world) });
-    const targets = (station.lookAt ?? station.blocks).map(world);
-    return { keyframes: move.keyframes, seen: visibility(move.end.pos, targets, occupied) };
-  }
-  const { lo, size } = bounds(station.blocks);
-  const keyframes = moveFor(lo, size, ORIGIN, station.bearing - ARC, occupied, station.lift ?? 0);
-  const targets = station.blocks.map((p) => [p[0] + ORIGIN[0], p[1] + ORIGIN[1], p[2] + ORIGIN[2]]);
-  const seen = visibility(keyframes[keyframes.length - 1].pos, targets, occupied);
-  return { keyframes, seen };
-}
+const shotFor = (station) => stationShot(station, occupied, ORIGIN, list.framing);
 
 // Ore, raw ore and the spoil that comes up the shaft with it. The spoil is the point of the two
 // chutes: half of what a mining train brings back is stone, and the machine has to be told which

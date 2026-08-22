@@ -102,17 +102,45 @@ public final class ClientDirector {
             handle(command, player);
         }
 
+        // Handing the player a block unlocks its recipe, which pops a "New Recipes Unlocked!" toast
+        // over the top-right of the shot. Emptied every tick, running or not: the recorder starts a
+        // second and a half before the take does, and a toast raised by whatever ran last — the
+        // clear pass, say — was still on screen for the opening frames of the episode. This client
+        // exists to record; there is no moment in it when a toast is wanted.
+        mc.getToasts().clear();
+
         if (running) {
-            // Handing the player a block unlocks its recipe, which pops a "New Recipes Unlocked!"
-            // toast over the top-right of the shot. Nothing may overlay a take, so the toast queue
-            // is emptied every tick while one is running.
-            mc.getToasts().clear();
+            parkCursor(mc);
             if (rig != null) {
                 applyPose(player, rig.sample());
             }
         }
 
         grabScreenshotIfRequested(mc);
+    }
+
+    /**
+     * Moves the mouse out of the shot whenever a take has a screen open.
+     *
+     * <p>Minecraft draws a tooltip under the pointer, and the pointer is wherever the person who
+     * started the take happened to leave it. A materials chest opened on camera came out with
+     * "Large Cogwheel — Hold [W] to Ponder" floating across the middle of it, which is not
+     * something a viewer is meant to see and not something anybody would think to check.
+     *
+     * <p>Only while a screen is up. With none open the cursor is grabbed for looking, and nudging
+     * it there would turn the camera for a frame before the next tick puts the rotation back.
+     */
+    private static void parkCursor(Minecraft mc) {
+        if (mc.screen == null || mc.getWindow() == null) {
+            return;
+        }
+        // Minecraft's own pointer, not the operating system's. glfwSetCursorPos was the obvious
+        // way to do this and it silently does nothing: GLFW only honours it for a window with
+        // input focus, and the studio window rarely has focus while a take is running — the
+        // tooltip came out in the recording anyway. These two fields are opened by the access
+        // transformer for exactly this.
+        mc.mouseHandler.xpos = 0.0;
+        mc.mouseHandler.ypos = 0.0;
     }
 
     private static void grabScreenshotIfRequested(Minecraft mc) {

@@ -17,6 +17,7 @@
 import { readFile } from 'node:fs/promises';
 import { bounds, moveFor, occupancy, waterReach } from './frame-parts.mjs';
 import { followCues, unitsFor } from './follow-shots.mjs';
+import { stationShot } from './station-shots.mjs';
 
 const argv = process.argv.slice(2);
 const arg = (name, fallback) => {
@@ -132,23 +133,40 @@ cues.push({ type: 'use', atMs: Math.round(b9.startMs + 0.04 * b9.measuredMs), po
 // so it has to go to air and come back with none of its saved data.
 cues.push({ type: 'reseat', atMs: Math.round(b9.startMs + 0.09 * b9.measuredMs), ofType: finish.reseat,
             _what: 'every pure kinetic block, bare, so it finds the network it is actually on' });
-for (const [at, station] of [[0.16, 'crusher'], [0.24, 'washer'], [0.34, 'press']]) {
-  const def = stations.stations.find((s) => s.name === station);
-  if (!def) continue;
-  cues.push({ type: 'marker', atMs: Math.round(b9.startMs + at * b9.measuredMs), label: `b9 · ${station}` });
-}
 cues.push({ type: 'fill', atMs: Math.round(b9.startMs + 0.14 * b9.measuredMs), pos: stations.dock.fillPos,
             items: stations.load, _what: 'a train-load: ore, raw ore, and the stone that came up with it' });
 // Spectator for the last stretch: nothing after this places a block or opens a screen, and it
 // takes the hand and the hotbar out of every remaining frame.
 cues.push({ type: 'gameMode', atMs: Math.round(b9.startMs + 0.12 * b9.measuredMs), mode: 'spectator' });
 
-const readout = bounds(groups.parts[finish.holdPart]);
-cues.push({ type: 'camera', atMs: Math.round(b9.startMs + 0.42 * b9.measuredMs),
-            durationMs: Math.round(0.58 * b9.measuredMs) + 4000,
-            _what: 'the wall, once it is running',
-            keyframes: moveFor(readout.lo, readout.size, ORIGIN,
-                               list.shots.find((s) => s.part === finish.holdPart).bearing, occupied, 0) });
+// And then the point of the beat: the ore going through. This used to write markers and no
+// cameras, so the last minute of the episode sat on the display wall while the narration talked
+// about a crusher nobody was being shown. One shot per station, the same framing the live-flow
+// take uses, and the wall gets what is left.
+const walk = [['crusher', 0.18], ['washer', 0.38], ['press', 0.58], [finish.holdPart, 0.78]];
+for (let i = 0; i < walk.length; i++) {
+  const [name, at] = walk[i];
+  const until = i + 1 < walk.length ? walk[i + 1][1] : 1;
+  const atMs = Math.round(b9.startMs + at * b9.measuredMs);
+  const window = Math.round((until - at) * b9.measuredMs);
+  const station = stations.stations.find((s) => s.name === name);
+  const keyframes = station
+      ? stationShot(station, occupied, ORIGIN, stations.framing).keyframes
+      : (() => {
+          const box = bounds(groups.parts[name]);
+          return moveFor(box.lo, box.size, ORIGIN,
+                         list.shots.find((s) => s.part === name).bearing, occupied, 0);
+        })();
+  cues.push({ type: 'marker', atMs, label: `b9 · ${name}` });
+  // The move takes most of the window and then holds, so each station is arrived at and looked at
+  // rather than swept past.
+  cues.push({ type: 'camera', atMs, durationMs: Math.round(window * 0.7),
+              _what: `b9 — ${name}, working`, keyframes });
+  const last = keyframes[keyframes.length - 1];
+  cues.push({ type: 'camera', atMs: atMs + Math.round(window * 0.7),
+              durationMs: Math.round(window * 0.3) + (i === walk.length - 1 ? 4000 : 0),
+              _what: `b9 — ${name}, held`, keyframes: [last, last] });
+}
 
 cues.sort((a, b) => a.atMs - b.atMs);
 process.stdout.write(JSON.stringify({

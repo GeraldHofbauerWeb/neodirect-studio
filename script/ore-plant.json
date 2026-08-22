@@ -5932,24 +5932,212 @@
     },
     {
       "type": "marker",
-      "atMs": 351198,
+      "atMs": 352002,
       "label": "b9 · crusher"
     },
     {
-      "type": "marker",
-      "atMs": 354412,
-      "label": "b9 · washer"
+      "type": "camera",
+      "atMs": 352002,
+      "durationMs": 5624,
+      "_what": "b9 — crusher, working",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -53.5,
+            1.5
+          ],
+          "yaw": -27.3,
+          "pitch": 20.2
+        },
+        {
+          "pos": [
+            7.5,
+            -54.5,
+            3
+          ],
+          "yaw": -34.9,
+          "pitch": 15
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 357626,
+      "durationMs": 2410,
+      "_what": "b9 — crusher, held",
+      "keyframes": [
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        },
+        {
+          "pos": [
+            7.5,
+            -55.5,
+            4.5
+          ],
+          "yaw": -47,
+          "pitch": 5.6
+        }
+      ]
     },
     {
       "type": "marker",
-      "atMs": 358429,
+      "atMs": 360036,
+      "label": "b9 · washer"
+    },
+    {
+      "type": "camera",
+      "atMs": 360036,
+      "durationMs": 5624,
+      "_what": "b9 — washer, working",
+      "keyframes": [
+        {
+          "pos": [
+            20,
+            -52.9,
+            10.4
+          ],
+          "yaw": 130.1,
+          "pitch": 18.7
+        },
+        {
+          "pos": [
+            19.7,
+            -52.9,
+            7.8
+          ],
+          "yaw": 116.2,
+          "pitch": 22.5
+        },
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 365660,
+      "durationMs": 2410,
+      "_what": "b9 — washer, held",
+      "keyframes": [
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        },
+        {
+          "pos": [
+            18.6,
+            -52.9,
+            5.7
+          ],
+          "yaw": 102.1,
+          "pitch": 28.4
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 368070,
       "label": "b9 · press"
     },
     {
       "type": "camera",
-      "atMs": 361643,
-      "durationMs": 27299,
-      "_what": "the wall, once it is running",
+      "atMs": 368070,
+      "durationMs": 5624,
+      "_what": "b9 — press, working",
+      "keyframes": [
+        {
+          "pos": [
+            14.8,
+            -52.5,
+            21.2
+          ],
+          "yaw": 163.4,
+          "pitch": 17.3
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            18.9
+          ],
+          "yaw": 149.3,
+          "pitch": 21.7
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 373694,
+      "durationMs": 2410,
+      "_what": "b9 — press, held",
+      "keyframes": [
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        },
+        {
+          "pos": [
+            15.7,
+            -52.5,
+            16.7
+          ],
+          "yaw": 135,
+          "pitch": 28.9
+        }
+      ]
+    },
+    {
+      "type": "marker",
+      "atMs": 376104,
+      "label": "b9 · readout"
+    },
+    {
+      "type": "camera",
+      "atMs": 376104,
+      "durationMs": 6187,
+      "_what": "b9 — readout, working",
       "keyframes": [
         {
           "pos": [
@@ -5968,6 +6156,32 @@
           ],
           "yaw": -164,
           "pitch": 25.3
+        },
+        {
+          "pos": [
+            9.2,
+            -47.5,
+            22.2
+          ],
+          "yaw": -178.1,
+          "pitch": 33.1
+        }
+      ]
+    },
+    {
+      "type": "camera",
+      "atMs": 382291,
+      "durationMs": 6651,
+      "_what": "b9 — readout, held",
+      "keyframes": [
+        {
+          "pos": [
+            9.2,
+            -47.5,
+            22.2
+          ],
+          "yaw": -178.1,
+          "pitch": 33.1
         },
         {
           "pos": [

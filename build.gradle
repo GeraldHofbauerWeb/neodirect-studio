@@ -10,6 +10,16 @@ base {
     archivesName = mod_id
 }
 
+// Minecraft keeps its mouse position private and exposes only a getter. A take that opens a
+// container on camera has to be able to move that pointer off the slots, or it records whatever
+// tooltip it was resting on. Declared rather than left to convention: NeoGradle did not pick the
+// file up on its own here, and the failure was a compile error at one in the morning.
+minecraft {
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
+}
+
 // Mojang ships Java 21 with 1.21, so the mod targets Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
