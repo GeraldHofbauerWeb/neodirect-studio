@@ -35,6 +35,7 @@ const TYPES = {
   '.mp3': 'audio/mpeg',
   '.srt': 'text/plain; charset=utf-8',
   '.woff2': 'font/woff2',
+  '.webmanifest': 'application/manifest+json',
 };
 
 const json = (response, status, body) => {

@@ -158,7 +158,8 @@ Three files, in order of authority:
 actually produced. Text-to-speech is not deterministic, so `render` takes an optional beat id and
 re-speaks only that beat, rebuilding the offsets and subtitles for the rest from the alignments it
 keeps beside each mp3. Fixing one sentence otherwise rerolls every other beat's phrasing and
-length for nothing.
+length for nothing. Rebuilding the subtitle track alone needs no key and no network — the
+alignments hold everything it is made of (`neodirect_subtitles_build`).
 
 **`script/episode.storyboard.json`** — what happens *inside* a beat, written as a fraction of it:
 "at 0.28 of the closing beat, the vaults go down". Fractions rather than timestamps, because the
@@ -191,9 +192,26 @@ pipeline with a face on it — and, more to the point, with an API, so an agent 
 
 ```bash
 cd studio && npm install
-npm run build && node ../studio/server.mjs     # 127.0.0.1:8778
+npm start                                      # build if needed, then a window of its own
+npm run serve                                  # or just the server, on 127.0.0.1:8778
 npm run dev                                    # or Vite on 5173, proxying to it
 ```
+
+`npm start` — equally `./gradlew studio` — opens the studio as an application window rather than a
+tab: no address bar, its own entry in the window list, its own icon. It is still a web app, and
+that is the point of the arrangement; a browser is simply the only thing on the machine that
+already draws a thousand voxels and a spline without being asked twice. The launcher starts the
+server if nothing is serving, so the window is the only thing to think about.
+
+The window needs a Chromium-family browser, which is what `--app=` is; the default browser is
+preferred when it is one, `NEODIRECT_BROWSER` overrides, and Firefox alone gets a tab and is told
+so rather than being pretended at. It runs on a profile of its own under `~/.local/state`, because
+a browser that is already open would otherwise hand the request to itself and draw the window under
+its own name.
+
+`node studio/desktop-entry.mjs` puts it in the application menu, and `--remove` takes it out. That
+is deliberately not part of starting it: a program that installs itself into a menu the first time
+it runs is a program nobody asked for.
 
 One core, three ways in. `studio/lib/ops.mjs` defines every operation once — what it takes, whether
 it writes anything, whether it needs the game running — and the browser front end, the MCP server
@@ -205,9 +223,10 @@ one and not the others, which is what stops the button and the tool from driftin
 | Projects | an episode as one thing: prose, beats, storyboard, schematic, parts, and every take that comes out of them. Snapshots to come back to, and `.ndproj` to hand to somebody |
 | Dashboard | what is stale and the button that fixes it — asked of content rather than of modification times |
 | Text & voice | beats, what the voice measured, which beats have been rewritten since they were spoken, and where the voice actually paused |
-| Timeline | cues on the narration's clock, dragged as fractions of a beat; an inspector for each of the twelve cue types; the blocks a `place` cue resolves to, and the blocks no cue claims |
+| Timeline | four lanes on one clock — the sentences being spoken, the camera moves, what is being built, what happens to the world — with a playhead that builds the plant in the viewport under it. Cues drag as fractions of a beat; an inspector for each of the twelve cue types |
 | Camera | both styles, the curve the game will fly, and the camera's own body rather than a point. `follow` shots list where the camera had to cut and where nothing could see the block |
 | Parts | the manifest as rules, resolved on save, with the build in three dimensions and each assembly in its own colour |
+| Viewport | the build in the game's own textures, or tinted by assembly, or by when each block goes down — four ways to look at the same thousand cubes, because no one of them answers every question |
 | Shot list | style, bearing and pacing per assembly, and the take variants side by side |
 | Record & verify | the take, its drift per cue, the verifier's report, and how far the camera strayed from its curve |
 
@@ -217,6 +236,12 @@ one and not the others, which is what stops the button and the tool from driftin
 repository root. Every tool in `tools/` has one, so a change to an episode need not go through a
 shell at all: `neodirect_beat_set`, `neodirect_voice_render`, `neodirect_scrub`,
 `neodirect_camera_set`, `neodirect_screenshot`, `neodirect_take_run`, `neodirect_verify`.
+
+`neodirect_timeline_track` is the same four lanes the timeline panel draws, which means the episode
+can be read without looking at it: which sentence is being spoken at two minutes thirteen, which
+camera move is flying then, and which assembly is going up under it. `neodirect_placement_times`
+goes further and says when each individual block appears — the director's own spreading arithmetic,
+ported, and held against `POST /scrub` by a test that runs whenever the game is open.
 
 Three things are shaped for a reader rather than a renderer. A screenshot comes back as an image
 rather than a path, so framing can actually be judged. A take returns a job handle immediately —
@@ -381,6 +406,7 @@ ships with zero dependencies and no classpath risk inside the mod loader.
 | `POST /path` | sample a camera move along the curve it will fly, with clearance per sample |
 | `POST /abort` | stop the take that is running |
 | `GET /blockcolors` | the colour the map would paint each block. Doubles as the list of blocks this instance knows, which is how a missing mod is caught before a take rather than after |
+| `GET /blocktextures?ids=` | those blocks' actual top, side and bottom faces, cut out of the game's own atlas and packed into a small one. One state per block id, so a piston's face does not follow where it points — the same approximation the map colours make |
 
 **Director** (server side) — flattens cues into a time-ordered list of steps and runs them off
 `ServerTickEvent`. One `place` cue becomes up to three steps — equip, swing, set — because that is

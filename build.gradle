@@ -120,7 +120,16 @@ tasks.register('installPilotSchematic') {
 // dependency-free, so the pipeline still runs on a machine that has never seen npm.
 tasks.register('studio', Exec) {
     group = 'neodirect'
-    description = 'Build the studio front end and serve it on 127.0.0.1:8778'
+    description = 'Build the studio front end and open it in a window of its own'
+    workingDir = layout.projectDirectory.dir('studio').asFile
+    // open.mjs starts the server itself if nothing is serving yet, detached, so this task finishes
+    // once the window is up rather than holding a terminal for the rest of the session.
+    commandLine 'sh', '-c', 'npm install --silent && npm run build --silent && node open.mjs'
+}
+
+tasks.register('studioServe', Exec) {
+    group = 'neodirect'
+    description = 'Serve the studio on 127.0.0.1:8778 in the foreground, without opening a window'
     workingDir = layout.projectDirectory.dir('studio').asFile
     commandLine 'sh', '-c', 'npm install --silent && npm run build --silent && node server.mjs'
 }

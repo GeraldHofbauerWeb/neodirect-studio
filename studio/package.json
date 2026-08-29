@@ -6,11 +6,13 @@
   "description": "The studio: a browser front end and an MCP server over one core.",
   "scripts": {
     "dev": "vite --config web/vite.config.js",
+    "start": "node open.mjs",
     "build": "vite build --config web/vite.config.js",
     "serve": "node server.mjs",
     "mcp": "node mcp.mjs",
     "test": "node --test 'test/**/*.test.mjs'",
-    "typecheck": "tsc -p web/tsconfig.json --noEmit"
+    "typecheck": "tsc -p web/tsconfig.json --noEmit",
+    "desktop-entry": "node desktop-entry.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0"

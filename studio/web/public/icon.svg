@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="NeoDirect Studio">
+  <!--
+    What the studio does, in one picture: a camera flying a curve around a block that is being
+    built. The arc behind the cube is dim and the arc in front is bright, so the path reads as
+    going around rather than through — the same distinction the viewport has to make.
+  -->
+  <rect width="256" height="256" rx="56" fill="#14161a"/>
+  <rect x="1.5" y="1.5" width="253" height="253" rx="54.5" fill="none" stroke="#272b33" stroke-width="3"/>
+
+  <g fill="none" stroke="#7dd3fc" stroke-width="8" stroke-linecap="round">
+    <path d="M 30 150 C 30 126 74 108 128 108 C 182 108 226 126 226 150" opacity="0.28"/>
+  </g>
+
+  <g>
+    <polygon points="128,91 182,122 128,153 74,122" fill="#f0a868"/>
+    <polygon points="74,122 128,153 128,209 74,178" fill="#8a5a34"/>
+    <polygon points="128,153 182,122 182,178 128,209" fill="#c07a45"/>
+  </g>
+
+  <g fill="none" stroke="#7dd3fc" stroke-width="8" stroke-linecap="round">
+    <path d="M 30 150 C 30 174 74 192 128 192 C 182 192 226 174 226 150"/>
+  </g>
+
+  <circle cx="200" cy="176" r="17" fill="#14161a"/>
+  <circle cx="200" cy="176" r="11" fill="#f87171"/>
+</svg>
