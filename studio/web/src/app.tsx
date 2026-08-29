@@ -10,6 +10,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { useStudio } from './store';
 import { op } from './api';
+import { Boundary } from './lib/boundary';
 
 import { Projects } from './panels/projects';
 import { Dashboard } from './panels/dashboard';
@@ -72,7 +73,10 @@ export function App() {
           </div>
         </nav>
         <div className={`panel ${['timeline', 'camera', 'parts'].includes(current.id) ? 'flush' : ''}`}>
-          <Panel />
+          {/* Keyed by panel, so leaving a broken one and coming back is a fresh try. */}
+          <Boundary key={current.id} what={current.label.toLowerCase()}>
+            <Panel />
+          </Boundary>
         </div>
       </div>
       {toast && <div className={`toast ${toast.kind}`}>{toast.text}</div>}

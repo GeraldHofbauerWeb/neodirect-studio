@@ -85,15 +85,21 @@ async function durationMs(path) {
 }
 
 /**
- * Character-level alignment folded into readable subtitle lines.
+ * Character-level alignment folded into readable lines, with the time each was spoken.
+ *
+ * <p>Pulled out of {@link toSrt} because a subtitle track is not the only thing that wants this:
+ * the studio's timeline draws a lane of sentences under the cues, and it has to be the *same*
+ * sentences at the *same* times as the ones the viewer will read. Two implementations of "where
+ * does this sentence end" would drift, and the drift would only ever be visible in a finished
+ * video.
  *
  * @param offsetSeconds where this beat starts in the finished episode — each beat's alignment is
- *                      relative to its own audio file, so without this every beat's subtitles
- *                      would start at zero and stack on top of one another
- * @param firstIndex    running cue number, since .srt numbering is continuous across the file
+ *                      relative to its own audio file, so without this every beat's lines would
+ *                      start at zero and stack on top of one another
+ * @returns `[{fromMs, toMs, text}]`, in order
  */
-export function toSrt(alignment, { maxChars = 90, offsetSeconds = 0, firstIndex = 1 } = {}) {
-  if (!alignment) return '';
+export function lines(alignment, { maxChars = 90, offsetSeconds = 0 } = {}) {
+  if (!alignment) return [];
   const chars = alignment.characters;
   const starts = alignment.character_start_times_seconds;
   const ends = alignment.character_end_times_seconds;
@@ -131,17 +137,61 @@ export function toSrt(alignment, { maxChars = 90, offsetSeconds = 0, firstIndex 
   }
   flush(ends[ends.length - 1] ?? 0);
 
-  const stamp = (s) => {
-    const ms = Math.max(0, Math.round(s * 1000));
+  return cues.map((cue) => ({
+    fromMs: Math.max(0, Math.round((cue.start + offsetSeconds) * 1000)),
+    toMs: Math.max(0, Math.round((cue.end + offsetSeconds) * 1000)),
+    text: cue.text,
+  }));
+}
+
+/**
+ * The same lines, as an .srt file.
+ *
+ * @param firstIndex running cue number, since .srt numbering is continuous across the file
+ */
+export function toSrt(alignment, { maxChars = 90, offsetSeconds = 0, firstIndex = 1 } = {}) {
+  const stamp = (ms) => {
     const h = String(Math.floor(ms / 3600000)).padStart(2, '0');
     const m = String(Math.floor(ms / 60000) % 60).padStart(2, '0');
     const sec = String(Math.floor(ms / 1000) % 60).padStart(2, '0');
     return `${h}:${m}:${sec},${String(ms % 1000).padStart(3, '0')}`;
   };
 
-  return cues
-    .map((c, i) => `${firstIndex + i}\n${stamp(c.start + offsetSeconds)} --> ${stamp(c.end + offsetSeconds)}\n${c.text}\n`)
+  return lines(alignment, { maxChars, offsetSeconds })
+    .map((line, i) => `${firstIndex + i}\n${stamp(line.fromMs)} --> ${stamp(line.toMs)}\n${line.text}\n`)
     .join('\n');
+}
+
+/**
+ * The whole episode's subtitle track, and where each beat starts within it.
+ *
+ * Assembling it needs nothing but the alignments already on disk — no key, no network, no audio —
+ * which is why it is a function rather than a step buried in the render: a subtitle file can be
+ * rebuilt long after the voice was paid for.
+ *
+ * Mutates `beats` with the offsets it works out, because those are the same numbers the beats
+ * document carries and computing them twice is how two clocks come apart.
+ */
+export async function subtitlesFor(beats, dir) {
+  let srt = '';
+  let offsetMs = 0;
+  let cueIndex = 1;
+  for (const beat of beats.beats) {
+    const alignmentPath = `${dir}/${beat.id}.alignment.json`;
+    const alignment = JSON.parse(await readFile(alignmentPath, 'utf8').catch(() => {
+      throw new Error(`${alignmentPath} is missing — run a full render (no beat id) once`);
+    }));
+    beat.startMs = offsetMs;
+    const block = toSrt(alignment, { offsetSeconds: offsetMs / 1000, firstIndex: cueIndex });
+    cueIndex += countSrtCues(block);
+    // A blank line between beats as well as between cues. Without it the first cue of every beat
+    // is glued to the last cue of the one before — nine of a hundred and three in the ore plant,
+    // and strictly not an .srt file at all, however forgiving most players happen to be.
+    srt += (srt ? '\n' : '') + block;
+    offsetMs += beat.measuredMs;
+  }
+  beats.totalMs = offsetMs;
+  return { srt, totalMs: offsetMs };
 }
 
 /**
@@ -271,21 +321,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
     // Offsets and subtitles are rebuilt across every beat, rendered or not: one beat growing by a
     // second moves everything after it.
-    let srt = '';
-    let offsetMs = 0;
-    let cueIndex = 1;
-    for (const beat of beats.beats) {
-      const alignmentPath = `${dir}/${beat.id}.alignment.json`;
-      const alignment = JSON.parse(await readFile(alignmentPath, 'utf8').catch(() => {
-        throw new Error(`${alignmentPath} is missing — run a full render (no beat id) once`);
-      }));
-      beat.startMs = offsetMs;
-      const block = toSrt(alignment, { offsetSeconds: offsetMs / 1000, firstIndex: cueIndex });
-      cueIndex += countSrtCues(block);
-      srt += block;
-      offsetMs += beat.measuredMs;
-    }
-    beats.totalMs = offsetMs;
+    const { srt, totalMs: offsetMs } = await subtitlesFor(beats, dir);
     console.log(`\ntotal narration: ${offsetMs} ms`);
 
     // One continuous track, so the take can be muxed in a single ffmpeg call.

@@ -159,13 +159,15 @@ export async function beats(beatsPath) {
   for (const beat of value.beats ?? []) {
     const alignment = await readJsonIfPresent(`${dir}/${beat.id}.alignment.json`);
     if (!alignment) {
-      out.push({ id: beat.id, state: 'missing', why: 'never spoken', measuredMs: beat.measuredMs ?? null });
+      out.push({ id: beat.id, text: beat.text, state: 'missing', why: 'never spoken',
+        measuredMs: beat.measuredMs ?? null, plannedMs: beat.plannedMs ?? null });
       continue;
     }
     const spoken = (alignment.value.characters ?? []).join('');
     if (spoken !== beat.text) {
       out.push({
         id: beat.id,
+        text: beat.text,
         state: 'stale',
         why: 'the text has been rewritten since it was spoken',
         measuredMs: beat.measuredMs ?? null,
@@ -175,10 +177,12 @@ export async function beats(beatsPath) {
       continue;
     }
     if (typeof beat.measuredMs !== 'number' || typeof beat.startMs !== 'number') {
-      out.push({ id: beat.id, state: 'stale', why: 'spoken, but the beats file has no measurement', measuredMs: null });
+      out.push({ id: beat.id, text: beat.text, state: 'stale',
+        why: 'spoken, but the beats file has no measurement', measuredMs: null });
       continue;
     }
-    out.push({ id: beat.id, state: 'fresh', why: 'spoken and measured', measuredMs: beat.measuredMs, startMs: beat.startMs });
+    out.push({ id: beat.id, text: beat.text, state: 'fresh', why: 'spoken and measured',
+      measuredMs: beat.measuredMs, startMs: beat.startMs });
   }
   const measured = out.every((b) => b.state === 'fresh');
   return {

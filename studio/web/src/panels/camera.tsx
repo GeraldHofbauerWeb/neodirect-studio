@@ -14,9 +14,10 @@ import { useEffect, useState } from 'react';
 import { op, screenshotUrl } from '../api';
 import { useStudio } from '../store';
 import { Viewport } from '../viewport/viewport';
+import { ShadingSwitch } from '../viewport/shading';
 
 export function Camera() {
-  const { project, blocks, colors, parts, selection, select, director, say } = useStudio();
+  const { project, blocks, colors, parts, selection, select, director, say, atlas, shading } = useStudio();
   const [part, setPart] = useState<string>('');
   const [style, setStyle] = useState<'arc' | 'inside' | 'follow' | 'vantages'>('arc');
   const [bearing, setBearing] = useState(215);
@@ -96,8 +97,9 @@ export function Camera() {
   return (
     <div className="split" style={{ height: '100%' }}>
       <div style={{ position: 'relative', minHeight: 0 }}>
+        <ShadingSwitch />
         <Viewport
-          blocks={blocks} colors={colors} parts={parts} colourBy="part"
+          blocks={blocks} colors={colors} parts={parts} atlas={atlas} shading={shading}
           selection={selection}
           origin={project.origin}
           water={water}

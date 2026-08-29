@@ -22,9 +22,12 @@ import * as pipeline from './pipeline.mjs';
 import * as schematic from './schematic.mjs';
 import * as snapshot from './snapshot.mjs';
 import * as bundle from './bundle.mjs';
+import * as narration from './narration.mjs';
+import * as tracks from './tracks.mjs';
+import * as placements from './placements.mjs';
 import { parseSelector, resolveSelector, resolveTimeline, describeSelector } from './selector.mjs';
 import { resolve as resolvePath, relative as relativePath } from './paths.mjs';
-import { voiceDir, AUDITION_VOICES, pauses } from '../../tools/render-voice.mjs';
+import { voiceDir, AUDITION_VOICES, pauses, subtitlesFor } from '../../tools/render-voice.mjs';
 import { aim } from '../../tools/aim.mjs';
 import {
   bounds, occupancy, visibility, moveFor, bestBearing, vantages, insideMove,
@@ -71,6 +74,48 @@ function worldPositions(groups, name, origin) {
 }
 
 /* ── the table ──────────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * A storyboard with everything resolved against the episode: which millisecond each cue lands on,
+ * and which blocks a placement claims.
+ *
+ * Shared by `cues_list` and `timeline_track` rather than written twice — a second copy is where a
+ * list and a picture start disagreeing about the same document.
+ */
+async function storyboardOf(project) {
+  const { value: storyboard } = await docs.readJson(project.documents.storyboard);
+  const beats = await pipeline.beats(project.documents.beats);
+  const byId = new Map(beats.beats.map((b) => [b.id, b]));
+  let resolved = null;
+  if (project.derived?.schematic) {
+    const blocks = await schematic.load(project.derived.schematic);
+    const parts = project.derived.groups
+      ? (await schematic.groups(project.derived.groups, project.derived.schematic)).parts : {};
+    resolved = resolveTimeline(storyboard.cues ?? [], { blockList: blocks.blockList, parts });
+  }
+  const cues = (storyboard.cues ?? []).map((cue, index) => {
+    const beat = cue.beat ? byId.get(cue.beat) : null;
+    const place = resolved?.perCue.find((p) => p.cue === index);
+    return {
+      index,
+      ...cue,
+      atMsResolved: cue.atMs ?? (beat && typeof beat.startMs === 'number' && typeof cue.at === 'number'
+        ? Math.round(beat.startMs + cue.at * beat.measuredMs) : null),
+      blocksResolved: place ? { count: place.indices.length, describe: place.describe, error: place.error } : undefined,
+    };
+  });
+  const placedByCue = {};
+  for (const place of resolved?.perCue ?? []) placedByCue[place.cue] = place.indices;
+  return {
+    path: project.documents.storyboard,
+    take: storyboard.take,
+    beats: beats.beats,
+    cues,
+    placedByCue,
+    unplaced: resolved ? resolved.unplaced.length : null,
+    unplacedByType: resolved ? resolved.unplacedByType : null,
+  };
+}
 
 export const ops = {
 
@@ -288,9 +333,18 @@ export const ops = {
   doc_read: {
     group: 'documents',
     describe: 'A document, as text and as a value.',
-    input: obj({ path: str('Repository-relative path'), pointer: str('A JSON pointer, to read one field') }, ['path']),
+    input: obj({
+      path: str('Repository-relative path'),
+      pointer: str('A JSON pointer, to read one field'),
+      optional: bool('True for a document that may legitimately not exist yet, such as a cache — '
+        + 'missing then reads as a null value rather than as a failure'),
+    }, ['path']),
     sideEffects: 'none',
-    async run({ path: file, pointer }) {
+    async run({ path: file, pointer, optional }) {
+      if (optional) {
+        const present = await docs.readJsonIfPresent(file);
+        return present ?? { path: file, missing: true, value: null };
+      }
       if (pointer) return { path: file, pointer, value: await docs.readPointer(file, pointer) };
       const { text, modified } = await docs.readText(file);
       const value = file.endsWith('.json') ? JSON.parse(text) : undefined;
@@ -430,6 +484,37 @@ export const ops = {
     },
   },
 
+  subtitles_build: {
+    group: 'narration',
+    describe: 'Rebuilds the subtitle track from the alignments already on disk — no key, no '
+      + 'network, no re-rendering. What to run after a subtitle file has been found wanting.',
+    input: obj({ ...slugArg }),
+    sideEffects: 'files',
+    async run(params) {
+      const project = await projectFor(params);
+      const { value: beats } = await docs.readJson(project.documents.beats);
+      const dir = voiceDir(project.documents.beats);
+      // Absolute, because the studio's working directory is wherever it was started from while a
+      // tool run from the command line has the repository root under its feet.
+      const { srt, totalMs } = await subtitlesFor(beats, resolvePath(dir));
+      const file = `${dir}/subtitles.srt`;
+      await docs.writeGenerated(file, srt);
+      return { path: file, cues: srt.split('\n\n').filter((block) => block.trim()).length, totalMs };
+    },
+  },
+
+  narration_track: {
+    group: 'narration',
+    describe: 'Every sentence of the episode with the millisecond it is spoken, taken from the '
+      + 'alignments — the same lines, at the same times, as the subtitle track.',
+    input: obj({ ...slugArg }),
+    sideEffects: 'none',
+    async run(params) {
+      const project = await projectFor(params);
+      return narration.track(project.documents.beats);
+    },
+  },
+
   subtitles_read: {
     group: 'narration',
     describe: 'The subtitle track built from the alignments.',
@@ -452,36 +537,68 @@ export const ops = {
     input: obj({ ...slugArg }),
     sideEffects: 'none',
     async run(params) {
+      return storyboardOf(await projectFor(params));
+    },
+  },
+
+  timeline_track: {
+    group: 'storyboard',
+    describe: 'The episode as four lanes on one clock: the sentences being spoken, the camera '
+      + 'moves, what is being built, and what happens to the world — each with the millisecond it '
+      + 'starts and how long it lasts.',
+    input: obj({ ...slugArg }),
+    sideEffects: 'none',
+    async run(params) {
       const project = await projectFor(params);
-      const { value: storyboard } = await docs.readJson(project.documents.storyboard);
-      const beats = await pipeline.beats(project.documents.beats);
-      const byId = new Map(beats.beats.map((b) => [b.id, b]));
-      let resolved = null;
-      if (project.derived?.schematic) {
-        const blocks = await schematic.load(project.derived.schematic);
-        const parts = project.derived.groups
-          ? (await schematic.groups(project.derived.groups, project.derived.schematic)).parts : {};
-        resolved = resolveTimeline(storyboard.cues ?? [], { blockList: blocks.blockList, parts });
-      }
-      const cues = (storyboard.cues ?? []).map((cue, index) => {
-        const beat = cue.beat ? byId.get(cue.beat) : null;
-        const place = resolved?.perCue.find((p) => p.cue === index);
-        return {
-          index,
-          ...cue,
-          atMsResolved: cue.atMs ?? (beat && typeof beat.startMs === 'number' && typeof cue.at === 'number'
-            ? Math.round(beat.startMs + cue.at * beat.measuredMs) : null),
-          blocksResolved: place ? { count: place.indices.length, describe: place.describe, error: place.error } : undefined,
-        };
-      });
+      const board = await storyboardOf(project);
+      const sentences = await narration.track(project.documents.beats);
       return {
         path: project.documents.storyboard,
-        take: storyboard.take,
-        beats: beats.beats,
-        cues,
-        unplaced: resolved ? resolved.unplaced.length : null,
-        unplacedByType: resolved ? resolved.unplacedByType : null,
+        take: board.take,
+        ...tracks.lanes({ cues: board.cues, beats: board.beats, sentences }),
+        unplaced: board.unplaced,
+        unplacedByType: board.unplacedByType,
       };
+    },
+  },
+
+  placement_times: {
+    group: 'storyboard',
+    describe: 'When each block of the build appears, in milliseconds of the episode — the '
+      + 'director\'s own spreading arithmetic, so a playhead can show the build going up without '
+      + 'the game being open.',
+    input: obj({ ...slugArg, take: str('A compiled take, rather than the storyboard it came from') }),
+    sideEffects: 'none',
+    async run(params) {
+      const project = await projectFor(params);
+      const blocks = await schematic.load(project.derived.schematic);
+
+      // A take is what actually gets recorded and scrubbed, and its cues carry absolute
+      // milliseconds; the storyboard carries fractions of a beat. Both resolve to the same shape.
+      if (params.take) {
+        const take = projects.takeNamed(project, params.take);
+        const { value: timeline } = await docs.readJson(take.out);
+        const parts = project.derived.groups
+          ? (await schematic.groups(project.derived.groups, project.derived.schematic)).parts : {};
+        const resolved = resolveTimeline(timeline.cues ?? [], { blockList: blocks.blockList, parts });
+        const placedByCue = {};
+        for (const place of resolved.perCue) placedByCue[place.cue] = place.indices;
+        return {
+          take: take.name,
+          ...placements.times({
+            cues: (timeline.cues ?? []).map((cue, index) => ({ ...cue, index, atMsResolved: cue.atMs ?? null })),
+            placedByCue,
+            blocks: blocks.blockList,
+          }),
+        };
+      }
+
+      const board = await storyboardOf(project);
+      return placements.times({
+        cues: board.cues,
+        placedByCue: board.placedByCue,
+        blocks: blocks.blockList,
+      });
     },
   },
 
@@ -806,6 +923,57 @@ export const ops = {
     },
   },
 
+  block_appearance: {
+    group: 'schematic',
+    describe: 'Asks the running instance what the blocks of this build look like — the colour the '
+      + 'map would paint each one, and their actual top, side and bottom faces packed into a small '
+      + 'atlas — and caches both so the viewport keeps them after the game is closed.',
+    input: obj({ ...slugArg, coloursOnly: bool('Skip the textures and refresh only the colours') }),
+    sideEffects: 'files',
+    needsDirector: true,
+    async run(params) {
+      const project = await projectFor(params);
+      const summary = await schematic.summary(project.derived.schematic);
+      const ids = Object.keys(summary.types);
+
+      // Colours first, and for every block rather than only these: the doctor reads the same file
+      // to tell whether the instance has Create loaded at all, and that question is about the
+      // registry, not about this contraption.
+      const colours = await director.blockColors();
+      await docs.writeGenerated('studio/blockcolors.json', JSON.stringify(colours, null, 0) + '\n');
+      if (params.coloursOnly) {
+        return { colours: Object.keys(colours).length, textures: null };
+      }
+
+      const atlas = await director.blockTextures(ids);
+      // The atlas travels inside its own index as a data URL. One file to cache, one file to read,
+      // and no second route to serve a picture that is thirty kilobytes long.
+      const cache = {
+        schematic: project.derived.schematic,
+        tile: atlas.tile,
+        columns: atlas.columns,
+        rows: atlas.rows,
+        blocks: atlas.blocks,
+        missing: atlas.missing,
+        // Blocks the game draws with nothing at all — Create's crushing wheel controller is a
+        // block of behaviour with no model. Carried so the viewport's map-colour fallback is a
+        // documented choice rather than a mystery.
+        untextured: atlas.untextured ?? [],
+        atlas: `data:image/png;base64,${atlas.png}`,
+      };
+      const file = `studio/blocktextures/${project.slug}.json`;
+      await docs.writeGenerated(file, JSON.stringify(cache) + '\n');
+      return {
+        path: file,
+        colours: Object.keys(colours).length,
+        types: ids.length,
+        tiles: atlas.tiles,
+        missing: atlas.missing,
+        untextured: atlas.untextured ?? [],
+      };
+    },
+  },
+
   schematic_report: {
     group: 'schematic',
     describe: 'The census written when the build was cut out of the world, and whether it still '
@@ -1094,7 +1262,21 @@ export const ops = {
       const { value: timeline } = await docs.readJson(take.out);
       const game = await director.health();
       if (game.running) throw new Error('a take is running — stopping it first would ruin the recording');
-      return director.scrub(timeline, params.ms);
+      const done = await director.scrub(timeline, params.ms);
+
+      // The director reports every step it ran, which for a scrub deep into a build is three
+      // thousand of them — more than any reader wants and more than a tool call can carry. What
+      // the question actually is: how far did it get, and what kind of thing did it do. The tail
+      // is kept because the last few steps are the ones that explain what the world looks like now.
+      const events = done.events ?? [];
+      const byKind = {};
+      for (const event of events) byKind[event.kind] = (byKind[event.kind] ?? 0) + 1;
+      return {
+        ...done,
+        events: events.slice(-20),
+        eventsOmitted: Math.max(0, events.length - 20),
+        byKind,
+      };
     },
   },
 

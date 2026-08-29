@@ -19,10 +19,32 @@ import type { Keyframe } from '../lib/cameraPath';
 import { samplePath, CAMERA_BOX } from '../lib/cameraPath';
 import { colourOf, PART_COLOURS, type Block } from '../store';
 
+/** What the game said its blocks look like, cached by `block_appearance`. */
+export type Atlas = {
+  tile: number;
+  columns: number;
+  rows: number;
+  blocks: Record<string, { top: number; side: number; bottom: number }>;
+  atlas: string;
+};
+
+/**
+ * How the cubes are painted.
+ *
+ * Texture and grouping are not a choice between two pictures — a machine you cannot recognise and
+ * a grouping you cannot see are both useless — so `part` keeps both: the real faces, tinted in the
+ * colour of the assembly that owns them.
+ */
+export type Shading = 'texture' | 'part' | 'part-flat' | 'time';
+
 export type ViewportProps = {
   blocks: Block[];
   colors: Record<string, string>;
   parts?: Record<string, number[]>;
+  atlas?: Atlas | null;
+  shading?: Shading;
+  /** When each block is placed, by block index — what `time` shades by. */
+  times?: Record<number, number> | null;
   colourBy?: 'block' | 'part';
   selection?: number[];
   ghost?: number[];
@@ -44,7 +66,8 @@ export function Viewport(props: ViewportProps) {
     return () => view.dispose();
   }, []);
 
-  useEffect(() => { scene.current?.setBlocks(props); }, [props.blocks, props.colors, props.colourBy, props.parts]);
+  useEffect(() => { scene.current?.setBlocks(props); },
+    [props.blocks, props.colors, props.colourBy, props.parts, props.atlas, props.shading, props.times]);
   useEffect(() => { scene.current?.setHighlight(props.selection ?? [], props.ghost ?? []); }, [props.selection, props.ghost]);
   useEffect(() => { scene.current?.setPath(props.path ?? null); }, [props.path]);
   useEffect(() => { scene.current?.setStandpoints(props.standpoints ?? []); }, [props.standpoints]);
@@ -65,6 +88,7 @@ class Scene3D {
   private line: THREE.Line | null = null;
   private markers: THREE.Group = new THREE.Group();
   private waterMesh: THREE.InstancedMesh | null = null;
+  private atlasCache: { source: string; texture: THREE.Texture } | null = null;
   private frame = 0;
   private raycaster = new THREE.Raycaster();
 
@@ -108,7 +132,7 @@ class Scene3D {
     this.renderer.render(this.scene, this.camera);
   };
 
-  setBlocks({ blocks, colors, parts, colourBy }: ViewportProps) {
+  setBlocks({ blocks, colors, parts, colourBy, atlas, shading, times }: ViewportProps) {
     if (this.mesh) {
       this.scene.remove(this.mesh);
       this.mesh.geometry.dispose();
@@ -116,11 +140,16 @@ class Scene3D {
     }
     if (!blocks.length) return;
 
+    // `colourBy` came first and said only block-or-part; `shading` says the same thing and two
+    // more. One is derived from the other so every panel keeps working while they converge.
+    const mode: Shading = shading ?? (colourBy === 'part' ? 'part' : 'texture');
+    const textured = mode !== 'part-flat' && !!atlas;
+
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     // Not `vertexColors`: that asks the shader for a per-vertex colour attribute a box geometry
     // does not carry, and what comes back is black with no complaint. Per-instance colours are a
     // separate mechanism and need no flag — setColorAt is enough.
-    const material = new THREE.MeshLambertMaterial();
+    const material = textured ? this.atlasMaterial(atlas!) : new THREE.MeshLambertMaterial();
     const mesh = new THREE.InstancedMesh(geometry, material, blocks.length);
     const matrix = new THREE.Matrix4();
     const partOf = new Map<number, number>();
@@ -128,20 +157,42 @@ class Scene3D {
       Object.values(parts).forEach((indices, n) => indices.forEach((i) => partOf.set(i, n)));
     }
 
+    // The tile each face samples, per instance. −1 means "this block is not in the atlas" — the
+    // shader then leaves the instance colour alone, so a block the game did not know still lands
+    // in its map colour instead of in whatever tile zero happens to be.
+    const tiles = new Float32Array(blocks.length * 3);
+    const shadeByTime = timeSpread(blocks, times);
+
     this.indexFor = [];
     this.baseColour = [];
     const centre = new THREE.Vector3();
+    const white = new THREE.Color('#ffffff');
     blocks.forEach((block, n) => {
       matrix.setPosition(block.pos[0] + 0.5, block.pos[1] + 0.5, block.pos[2] + 0.5);
       mesh.setMatrixAt(n, matrix);
-      const colour = new THREE.Color(colourBy === 'part' && partOf.has(block.i)
-        ? PART_COLOURS[partOf.get(block.i)! % PART_COLOURS.length]
-        : colourOf(block.id, colors));
+
+      const faces = atlas?.blocks[block.id];
+      tiles.set(faces ? [faces.top, faces.side, faces.bottom] : [-1, -1, -1], n * 3);
+
+      const part = partOf.has(block.i)
+        ? new THREE.Color(PART_COLOURS[partOf.get(block.i)! % PART_COLOURS.length])
+        : null;
+      const flat = new THREE.Color(colourOf(block.id, colors));
+      let colour: THREE.Color;
+      if (mode === 'part-flat') colour = part ?? flat;
+      else if (mode === 'time') colour = shadeByTime(block.i);
+      else if (mode === 'part' && part) {
+        // Lightened before it multiplies: a tint over a texture darkens, and an assembly colour
+        // applied at full strength turns a machine into a silhouette of itself.
+        colour = textured && faces ? part.clone().lerp(white, 0.45) : part;
+      } else colour = textured && faces ? white.clone() : flat;
+
       mesh.setColorAt(n, colour);
       this.baseColour[n] = colour;
       this.indexFor[n] = block.i;
       centre.add(new THREE.Vector3(...block.pos));
     });
+    geometry.setAttribute('tile', new THREE.InstancedBufferAttribute(tiles, 3));
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     this.mesh = mesh;
@@ -151,6 +202,63 @@ class Scene3D {
     this.controls.target.copy(centre);
     const spread = Math.max(...blocks.map((b) => Math.hypot(b.pos[0] - centre.x, b.pos[2] - centre.z))) || 20;
     this.camera.position.set(centre.x + spread * 1.6, centre.y + spread * 1.1, centre.z + spread * 1.6);
+  }
+
+  /**
+   * A Lambert material that reads its colour out of the packed atlas.
+   *
+   * Three tiles per instance and one draw call for the whole build: the face is chosen in the
+   * shader from the cube's own normal rather than by splitting the mesh per material, because a
+   * thousand blocks in six materials is six thousand draws and a thousand blocks in one is one.
+   *
+   * The instance colour still multiplies over the sample, which is what makes `part` shading a
+   * tint rather than a replacement — and what lets a selection glow without a second mesh.
+   */
+  private atlasMaterial(atlas: Atlas) {
+    const material = new THREE.MeshLambertMaterial({ map: this.atlasTexture(atlas) });
+    // Cutouts — panes, ladders, anything with holes in its texture — rather than blending, which
+    // would need sorting for a thousand cubes and buy nothing on a diagram.
+    material.alphaTest = 0.35;
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.atlasGrid = { value: new THREE.Vector2(atlas.columns, atlas.rows) };
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', `#include <common>
+          attribute vec3 tile;
+          varying vec3 vTile;
+          varying vec3 vFace;`)
+        .replace('#include <begin_vertex>', `#include <begin_vertex>
+          vTile = tile;
+          vFace = normal;`);
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', `#include <common>
+          varying vec3 vTile;
+          varying vec3 vFace;
+          uniform vec2 atlasGrid;`)
+        .replace('#include <map_fragment>', `
+          float tileIndex = vFace.y > 0.5 ? vTile.x : (vFace.y < -0.5 ? vTile.z : vTile.y);
+          if (tileIndex >= 0.0) {
+            vec2 cell = vec2(mod(tileIndex, atlasGrid.x), floor(tileIndex / atlasGrid.x));
+            // Pulled a hair inside the tile: sampling exactly on the seam picks up the neighbour,
+            // and one bright pixel along every cube edge reads as a grid drawn on the build.
+            vec2 within = clamp(vMapUv, 0.001, 0.999);
+            diffuseColor *= texture2D(map, (cell + within) / atlasGrid);
+          }`);
+    };
+    return material;
+  }
+
+  /** Decoded once per atlas: switching shading modes should not re-decode a PNG. */
+  private atlasTexture(atlas: Atlas) {
+    if (this.atlasCache?.source === atlas.atlas) return this.atlasCache.texture;
+    this.atlasCache?.texture.dispose();
+    const texture = new THREE.TextureLoader().load(atlas.atlas);
+    // Minecraft's pixels stay pixels, and without mipmaps no neighbouring tile can bleed in.
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.NearestFilter;
+    texture.generateMipmaps = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    this.atlasCache = { source: atlas.atlas, texture };
+    return texture;
   }
 
   /** Selected blocks glow; ghosted ones fade back, which is how "not yet placed" reads. */
@@ -163,7 +271,7 @@ class Scene3D {
       const index = this.indexFor[n];
       let colour = this.baseColour[n];
       if (selected.has(index)) colour = this.baseColour[n].clone().lerp(white, 0.65);
-      else if (faded.has(index)) colour = this.baseColour[n].clone().multiplyScalar(0.22);
+      else if (faded.has(index)) colour = this.baseColour[n].clone().multiplyScalar(0.13);
       this.mesh.setColorAt(n, colour);
     }
     if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
@@ -258,4 +366,27 @@ class Scene3D {
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }
+}
+
+/**
+ * A colour per block for `time` shading: early is cool, late is warm.
+ *
+ * The build order is a fact about the take that is otherwise only visible by dragging the playhead
+ * across the whole episode. As a gradient it is one glance — and it is the same arithmetic the
+ * playhead uses, so the two cannot disagree.
+ */
+function timeSpread(blocks: Block[], times: Record<number, number> | null | undefined) {
+  const known = blocks.map((b) => times?.[b.i]).filter((ms): ms is number => typeof ms === 'number');
+  if (!known.length) return () => new THREE.Color('#4b5563');
+  const first = Math.min(...known);
+  const last = Math.max(...known);
+  const span = Math.max(1, last - first);
+  const early = new THREE.Color('#38bdf8');
+  const late = new THREE.Color('#fb923c');
+  return (index: number) => {
+    const ms = times?.[index];
+    // A block no cue places is not early — it is never, and it should not read as the beginning.
+    if (typeof ms !== 'number') return new THREE.Color('#3f3f46');
+    return early.clone().lerp(late, (ms - first) / span);
+  };
 }

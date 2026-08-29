@@ -13,6 +13,8 @@ const TIMEOUTS = {
   health: 1500,
   screenshot: 20_000,
   block: 15_000,
+  // Cutting two hundred tiles out of the atlas, with a cold model cache on the first call.
+  textures: 60_000,
   verify: 120_000,
   scrub: 120_000,
   path: 30_000,
@@ -137,10 +139,26 @@ export async function blockColors() {
 }
 
 /** The screenshot as bytes, for handing to a browser or to an MCP image block. */
+/**
+ * The faces of the named blocks, packed into a small atlas.
+ *
+ * The ids travel in the query string rather than a body because the endpoint is a GET — it reads
+ * the game's textures and changes nothing — and because a list of fifty block names is short.
+ */
+export async function blockTextures(ids) {
+  const query = encodeURIComponent(ids.join(','));
+  return call(`/blocktextures?ids=${query}`, { kind: 'textures' });
+}
+
 export async function screenshotBytes() {
   const { path: file } = await screenshot();
   const { readFile } = await import('node:fs/promises');
-  return { path: file, bytes: await readFile(file) };
+  const bytes = await readFile(file);
+  // An empty file is the shape this fails in — the client used to answer before the game had
+  // finished writing the picture — and an empty picture that reports success is worse than an
+  // error, because the framing it shows is nothing at all.
+  if (!bytes.length) throw new Error(`${file} is empty — the game answered before it had written it`);
+  return { path: file, bytes };
 }
 
 export const controlUrl = CONTROL;

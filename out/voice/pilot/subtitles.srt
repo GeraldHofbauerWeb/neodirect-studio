@@ -33,6 +33,7 @@ Nothing here is expensive.
 9
 00:00:22,337 --> 00:00:23,916
 There is just a lot of it.
+
 10
 00:00:23,917 --> 00:00:25,275
 Start with the cart assembler.
@@ -52,6 +53,7 @@ actually drives.
 14
 00:00:36,200 --> 00:00:41,286
 Rail either side of it, and a linear chassis to hang the rest of the build on.
+
 15
 00:00:41,286 --> 00:00:47,219
 Now the working head: a mechanical drill to cut the stone, and a deployer behind it.
@@ -83,6 +85,7 @@ Extend the chassis to match, because anything not attached to it stays behind wh
 22
 00:01:16,429 --> 00:01:17,463
 train leaves.
+
 23
 00:01:17,463 --> 00:01:22,107
 Every deployer carries a filter, and this is what most of them are set to: cobblestone,
@@ -118,6 +121,7 @@ One deployer is different: the one pointing straight down, filtered to rail.
 31
 00:01:45,152 --> 00:01:48,670
 That is the one laying track in front of the minecart.
+
 32
 00:01:48,671 --> 00:01:52,943
 This is the chest in the middle, and it is the one everybody forgets to load.
@@ -137,6 +141,7 @@ what that downward deployer hands out until the vaults start supplying the rest.
 36
 00:02:06,492 --> 00:02:11,937
 Load it once, and the machine feeds itself from the chest and the vaults from there on.
+
 37
 00:02:11,937 --> 00:02:15,072
 Storage goes on last, and you can have as much of it as you like.

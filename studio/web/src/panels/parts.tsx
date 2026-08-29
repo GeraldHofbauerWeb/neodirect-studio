@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react';
 import { op } from '../api';
 import { useStudio, PART_COLOURS } from '../store';
 import { Viewport } from '../viewport/viewport';
+import { ShadingSwitch } from '../viewport/shading';
 
 export function Parts() {
-  const { project, blocks, colors, parts, selection, select, say } = useStudio();
+  const { project, blocks, colors, parts, selection, select, say, atlas, shading } = useStudio();
   const [manifest, setManifest] = useState<any>(null);
   const [chosen, setChosen] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -54,7 +55,8 @@ export function Parts() {
   return (
     <div className="split" style={{ height: '100%' }}>
       <div style={{ position: 'relative', minHeight: 0 }}>
-        <Viewport blocks={blocks} colors={colors} parts={parts} colourBy="part"
+        <ShadingSwitch />
+        <Viewport blocks={blocks} colors={colors} parts={parts} atlas={atlas} shading={shading}
           selection={selection} origin={project.origin}
           onPick={(index) => {
             select(index === null ? [] : [index]);

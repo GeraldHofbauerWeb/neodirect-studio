@@ -59,7 +59,7 @@ export function Shots() {
           <table>
             <thead><tr><th>Assembly</th><th>Style</th><th>Bearing</th><th>Lift</th><th>What</th></tr></thead>
             <tbody>
-              {shots.shots.map((shot: any, index: number) => {
+              {(shots.shots ?? []).map((shot: any, index: number) => {
                 const effective = shot.style
                   ?? ((shots.defaults?.except ?? []).includes(shot.part)
                     ? (shots.defaults?.style === 'follow' ? 'arc' : 'follow')
@@ -100,7 +100,7 @@ export function Shots() {
           <tr><th>Take</th><th>From</th><th>Cues</th><th>Keyframes</th><th>Linear</th><th>Length</th><th /></tr>
         </thead>
         <tbody>
-          {compare?.takes.map((take: any) => (
+          {(compare?.takes ?? []).map((take: any) => (
             <tr key={take.name}>
               <td className="mono">{take.name}</td>
               <td className="faint mono">
@@ -125,18 +125,25 @@ export function Shots() {
         <>
           <h2>Stations · the flow take</h2>
           <p className="lede">
-            {list.stations.stations.length} stations, {list.stations.filters.length} filters, a
-            {' '}{list.stations.load.length}-stack load. A station with a bearing is filmed from
-            outside; one with an inside range is filmed from within the plant.
+            {/*
+              Counted defensively, and not because a document might be malformed: `filters` is
+              absent from this one on purpose — a filter is set when its funnel goes down, not in a
+              second pass — and the generator has always read it as `?? []`. A panel that assumed
+              otherwise took the whole studio down with it.
+            */}
+            {(list.stations.stations ?? []).length} stations,
+            {' '}{(list.stations.filters ?? []).length} filters, a
+            {' '}{(list.stations.load ?? []).length}-stack load. A station with a bearing is filmed
+            from outside; one with an inside range is filmed from within the plant.
           </p>
           <table>
             <thead><tr><th>Station</th><th>How</th><th>Blocks</th><th>What</th></tr></thead>
             <tbody>
-              {list.stations.stations.map((station: any) => (
+              {(list.stations.stations ?? []).map((station: any) => (
                 <tr key={station.name}>
                   <td className="mono">{station.name}</td>
                   <td>{station.inside ? `inside ${station.inside.near}–${station.inside.far}` : `bearing ${station.bearing}°`}</td>
-                  <td>{station.blocks.length}</td>
+                  <td>{(station.blocks ?? []).length}</td>
                   <td className="dim">{station.what}</td>
                 </tr>
               ))}

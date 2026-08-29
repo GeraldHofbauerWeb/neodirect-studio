@@ -8,6 +8,7 @@
 
 import { create } from 'zustand';
 import { listen, op } from './api';
+import type { Atlas, Shading } from './viewport/viewport';
 
 export type Project = {
   slug: string;
@@ -35,6 +36,10 @@ type Store = {
   blocks: Block[];
   parts: Record<string, number[]>;
   colors: Record<string, string>;
+  atlas: Atlas | null;
+  shading: Shading;
+  /** When each block appears, by block index, for the take that is selected. */
+  times: Record<number, number> | null;
   director: DirectorState;
   jobs: Record<string, JobLine>;
   selection: number[];
@@ -51,7 +56,9 @@ type Store = {
   select: (indices: number[]) => void;
   hover: (index: number | null) => void;
   setScrub: (ms: number) => void;
+  setShading: (shading: Shading) => void;
   setTake: (take: string) => void;
+  loadTimes: () => Promise<void>;
   connect: () => () => void;
 };
 
@@ -62,6 +69,9 @@ export const useStudio = create<Store>((set, get) => ({
   blocks: [],
   parts: {},
   colors: {},
+  atlas: null,
+  shading: 'texture',
+  times: null,
   director: { up: false },
   jobs: {},
   selection: [],
@@ -85,7 +95,7 @@ export const useStudio = create<Store>((set, get) => ({
 
   async openProject(slug) {
     const project = await op<Project>('project_open', { slug });
-    set({ project, take: project.takes[0]?.name ?? null, selection: [], scrubMs: 0 });
+    set({ project, take: project.takes[0]?.name ?? null, selection: [], scrubMs: 0, atlas: null, times: null });
     if (project.derived?.schematic) {
       const loaded = await op('schematic_blocks', { slug });
       set({ blocks: loaded.blockList ?? [] });
@@ -101,16 +111,37 @@ export const useStudio = create<Store>((set, get) => ({
       }));
       set({ parts: resolved });
     }
-    // Colours are a nicety: without the game the viewport falls back to its own palette.
-    op('doc_read', { path: 'studio/blockcolors.json' })
+    // Both are niceties cached from a running game: without them the viewport falls back to its
+    // own palette and to flat cubes, which is the normal state of a machine that has never had the
+    // instance open. Asked as optional so a missing cache is an answer rather than an error.
+    op('doc_read', { path: 'studio/blockcolors.json', optional: true })
       .then((doc) => set({ colors: doc.value ?? {} }))
       .catch(() => {});
+    op('doc_read', { path: `studio/blocktextures/${slug}.json`, optional: true })
+      .then((doc) => set({ atlas: doc.value ?? null }))
+      .catch(() => {});
+    get().loadTimes().catch(() => {});
   },
 
   select: (selection) => set({ selection }),
   hover: (hovered) => set({ hovered }),
   setScrub: (scrubMs) => set({ scrubMs }),
-  setTake: (take) => set({ take }),
+  setShading: (shading) => set({ shading }),
+  // Changing take changes when every block appears, so the two travel together.
+  setTake: (take) => { set({ take }); get().loadTimes().catch(() => {}); },
+
+  async loadTimes() {
+    const { project, take } = get();
+    if (!project) return;
+    try {
+      const timed = await op('placement_times', { slug: project.slug, take: take ?? undefined });
+      set({ times: timed.times ?? null });
+    } catch {
+      // A project with no compiled take has no placement times, and that is not a failure —
+      // the build lane and the playhead simply have nothing to colour by.
+      set({ times: null });
+    }
+  },
 
   connect() {
     return listen({
