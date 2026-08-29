@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import net.geraldhofbauer.neodirect.NeoDirect;
+import net.geraldhofbauer.neodirect.client.BlockTextures;
 import net.geraldhofbauer.neodirect.client.ClientBridge;
 import net.geraldhofbauer.neodirect.client.Screenshots;
 import net.geraldhofbauer.neodirect.timeline.Cue;
@@ -70,6 +71,7 @@ import java.util.concurrent.TimeoutException;
  *   <li>{@code POST /path} — sample a camera move along the curve it will fly, with clearance</li>
  *   <li>{@code POST /abort} — stop the take that is running</li>
  *   <li>{@code GET  /blockcolors} — the colour the map would paint each block, for a viewport</li>
+ *   <li>{@code GET  /blocktextures?ids=} — those blocks' actual faces, packed into a small atlas</li>
  * </ul>
  */
 @EventBusSubscriber(modid = NeoDirect.MOD_ID)
@@ -107,6 +109,7 @@ public final class ControlServer {
             server.createContext("/path", ControlServer::handlePath);
             server.createContext("/abort", ControlServer::handleAbort);
             server.createContext("/blockcolors", ControlServer::handleBlockColors);
+            server.createContext("/blocktextures", ControlServer::handleBlockTextures);
             // A small pool: takes are serialised by the director anyway, this is only so a /health
             // probe is not stuck behind a running take.
             server.setExecutor(Executors.newFixedThreadPool(2));
@@ -622,6 +625,52 @@ public final class ControlServer {
             respond(exchange, 200, body.toString());
         } catch (Exception e) {
             respondError(exchange, 500, String.valueOf(e.getMessage()));
+        }
+    }
+
+    /**
+     * The faces of the named blocks, cut out of the game's own atlas.
+     *
+     * <p>Asks for ids rather than exporting the registry: a contraption uses fifty block types and
+     * the registry holds thousands, and an atlas of the fifty travels inside its own JSON.
+     *
+     * <p>Served by the render thread, so this waits on a future the way {@code /screenshot} does.
+     * Longer, though — cutting two hundred tiles is more work than grabbing one framebuffer, and a
+     * cold model cache makes the first call the slow one.
+     */
+    private static void handleBlockTextures(HttpExchange exchange) throws IOException {
+        String query = exchange.getRequestURI().getQuery();
+        List<String> ids = new java.util.ArrayList<>();
+        if (query != null) {
+            for (String part : query.split("&")) {
+                if (part.startsWith("ids=")) {
+                    for (String id : java.net.URLDecoder.decode(part.substring(4), StandardCharsets.UTF_8).split(",")) {
+                        if (!id.isBlank()) {
+                            ids.add(id.trim());
+                        }
+                    }
+                }
+            }
+        }
+        if (ids.isEmpty()) {
+            respondError(exchange, 400, "name the blocks: /blocktextures?ids=minecraft:stone,create:cogwheel");
+            return;
+        }
+
+        var pending = BlockTextures.request(ids);
+        if (pending == null) {
+            respondError(exchange, 409, "a texture export is already queued");
+            return;
+        }
+        try {
+            respond(exchange, 200, pending.get(30, TimeUnit.SECONDS));
+        } catch (TimeoutException e) {
+            respondError(exchange, 504, "render thread did not deliver the textures — is the game window open?");
+        } catch (ExecutionException e) {
+            respondError(exchange, 500, String.valueOf(e.getCause()));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            respondError(exchange, 500, "interrupted");
         }
     }
 

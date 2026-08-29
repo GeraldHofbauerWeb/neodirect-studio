@@ -117,6 +117,7 @@ public final class ClientDirector {
         }
 
         grabScreenshotIfRequested(mc);
+        exportTexturesIfRequested();
     }
 
     /**
@@ -150,11 +151,27 @@ public final class ClientDirector {
         }
         try {
             String name = "neodirect-" + mc.level.getGameTime() + ".png";
-            Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(), message -> {
-            });
-            pending.complete(new File(new File(mc.gameDirectory, "screenshots"), name).getAbsolutePath());
+            File file = new File(new File(mc.gameDirectory, "screenshots"), name);
+            // Completed from the callback, not after the call. Screenshot.grab hands the encoding
+            // and the write to a worker thread and returns immediately, so answering here gave the
+            // control server a path to a file that did not exist yet — and a reader that opened it
+            // in that window got zero bytes and an empty picture, with nothing anywhere saying so.
+            Screenshot.grab(mc.gameDirectory, name, mc.getMainRenderTarget(),
+                    message -> pending.complete(file.getAbsolutePath()));
         } catch (RuntimeException e) {
             pending.completeExceptionally(e);
+        }
+    }
+
+    /**
+     * Cutting the block atlas has to happen here for the same reason a screenshot does: the models
+     * and their sprites belong to the render thread, and the control server's HTTP thread may not
+     * touch them.
+     */
+    private static void exportTexturesIfRequested() {
+        var pending = BlockTextures.take();
+        if (pending != null) {
+            BlockAtlas.serve(pending);
         }
     }
 

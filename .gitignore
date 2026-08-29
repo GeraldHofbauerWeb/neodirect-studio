@@ -17,6 +17,7 @@ out/voice/*/*
 studio/node_modules/
 studio/web/dist/
 studio/blockcolors.json
+studio/blocktextures/
 libs/*.jar
 libs/create-nested/
 scratch/
