@@ -27,3 +27,6 @@ scratch/
 snapshots/
 __pycache__/
 ffmpeg2pass-0.log*
+
+# Claude Code: lokale Freigaben können Befehle samt Zugangsdaten enthalten (SEC-8)
+.claude/settings.local.json
